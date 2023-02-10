@@ -1,7 +1,7 @@
 class Review():
-    def __init__(self) -> None:
-        self._user_name = ''
-        self._head_of_review = ''
+    def __init__(self, user_name, head_of_review, comment, date_of_review) -> None:
+        self._user_name = user_name
+        self._head_of_review = head_of_review
         self._rating = 0.00
-        self._comment = ''
-        self._date_of_review = ''
+        self._comment = comment
+        self._date_of_review = date_of_review
