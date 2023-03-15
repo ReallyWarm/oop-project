@@ -2,6 +2,8 @@ import shoppingcart
 
 class Order:
     def __init__(self, orders, price, shipping, status, delivery_time) -> None:
+# order is list of the tool that customer bought combine with the price of that tool
+# price 
           self._orders = orders
           self._price = price
           self._shipping = shipping
