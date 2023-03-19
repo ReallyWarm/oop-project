@@ -12,4 +12,3 @@ class Order:
           self._shipping = shipping
           self._status = status
           self._delivery_time = delivery_time
-          
