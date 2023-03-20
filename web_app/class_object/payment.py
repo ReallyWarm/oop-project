@@ -7,5 +7,6 @@ class Payment :
 
     def make_payment(self):
         pass
+
     def perform_payment(self):
         pass

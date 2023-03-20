@@ -11,3 +11,32 @@ class CustomerInfo:
         self.my_review = my_review
         self.used_coupon = used_coupon
 
+    def check_coupon(self,coupon):
+        pass
+
+    def store_use_coupon(self,coupon):
+        pass
+
+    def store_order(self,order):
+        pass
+
+    def store_review(self,review):
+        pass
+
+    def add_addresse(self):    
+        pass
+
+    def get_address(self):
+        pass
+
+    def delete_address(self):
+        pass
+
+    def find_user(self,username):
+        pass
+
+    def create_review(self):
+        pass
+        
+
+

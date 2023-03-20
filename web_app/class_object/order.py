@@ -12,3 +12,12 @@ class Order:
           self._shipping = shipping
           self._status = status
           self._delivery_time = delivery_time
+
+    def get_value(self):
+         pass
+
+    def  set_value(self):
+         pass
+
+    def update_order(self):
+         pass   
