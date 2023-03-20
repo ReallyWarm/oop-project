@@ -19,5 +19,3 @@ class Address:
     def update_address(self):
         pass
 
-    def delete_address(self):
-        pass
