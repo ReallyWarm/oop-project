@@ -16,8 +16,5 @@ class Order:
     def get_value(self):
          pass
 
-    def  set_value(self):
-         pass
-
     def update_order(self):
          pass   
