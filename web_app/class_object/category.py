@@ -10,4 +10,4 @@ class TypeOfTool:
 class SubtypeOfTool:
     def __init__(self, name) -> None:
         self._subtypename = name
-        self._tools = [ ]
+        self._tools = []
