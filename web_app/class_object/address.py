@@ -11,3 +11,13 @@ class Address:
         self._address = address
         self._phone_number = phone_number
         self._postal_code = postal_code
+
+    def get_address(self):
+        pass
+
+    
+    def edit_address(self):
+        pass
+
+    def update_address(self):
+        pass
