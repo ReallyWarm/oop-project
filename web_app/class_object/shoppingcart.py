@@ -6,6 +6,17 @@ class ShoppingCart:
         self._discount_value = 0.00
         self._total_price = 0.00
 
-    def remove(self) -> bool:
+    def add_item(self):
         pass
-        return True
+
+    def set_item(self):
+        pass
+
+    def get_item(self):
+        pass
+
+    def delete_item(self):
+        pass
+
+    def clear_cart(self):
+        pass
