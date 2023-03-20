@@ -4,10 +4,18 @@ class Wishlist:
         self._quantity = 0
         self._price = 0.00
 
-        def remove(self) -> bool:
-            pass
-            return True
+    def add_item(self):
+        pass
 
-        def add_to_cart(self) -> bool:
-            pass
-            return True
+    def set_item(self):
+        pass
+
+    def get_items(self):
+        pass
+
+    def delete_item(self):
+        pass
+
+    def send_to_cart(self):
+        pass
+
