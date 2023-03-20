@@ -15,7 +15,6 @@ class Address:
     def get_address(self):
         pass
 
-    
     def edit_address(self):
         pass
 
