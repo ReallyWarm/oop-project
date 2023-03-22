@@ -1,21 +1,34 @@
 class Category:
     def __init__(self) -> None:
-        self._categories = [ ]
+        self._types_of_tool = [ ]
 
-    def get_type_of_tool(self):
-        pass    
+    @property
+    def types_of_tool(self):
+        return self._types_of_tool
+
+    def add_type_of_tool(self, type_of_tool):
+        self._types_of_tool.append(type_of_tool)
 
 class TypeOfTool:
     def __init__(self, name) -> None:
         self._typename = name
-        self._subtype_of_tools = [ ]
+        self._subtypes_of_tool = [ ]
 
-    def get_subtype_of_tool(self):
-        pass
+    @property
+    def subtypes_of_tool(self):
+        return self._subtypes_of_tool
+
+    def add_subtype(self, subtype_of_tool):
+        self._subtypes_of_tool.append(subtype_of_tool)
+
 class SubtypeOfTool:
     def __init__(self, name) -> None:
         self._subtypename = name
         self._tools_list = []
 
-    def get_tools_list(self):
-        pass
+    @property
+    def tools_list(self):
+        return self._tools_list
+
+    def add_tool(self, tool):
+        self._tools_list.append(tool)
