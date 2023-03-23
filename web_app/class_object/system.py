@@ -1,6 +1,7 @@
 from category import Category
 from shoppingcart import ShoppingCart
-from tool import Item
+from tool import Item 
+from customerinfo import CustomerInfo
 
 class System():
     #Data of coupon and wholesale
@@ -60,5 +61,7 @@ class System():
         pass
 
     def delete_tool(self):
-        pass
+        pass 
+    
+
 
