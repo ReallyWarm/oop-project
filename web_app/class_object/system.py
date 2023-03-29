@@ -1,4 +1,4 @@
-from category import Category
+from category import Category,SubtypeOfTool,TypeOfTool
 from shoppingcart import ShoppingCart
 from tool import Item
 from discount import Coupon
@@ -83,6 +83,4 @@ class System():
 
     def delete_tool(self):
         pass 
-    
-
-
+        
