@@ -13,21 +13,20 @@ if __name__ == '__main__':
     nothing = SubtypeOfTool(name='None')
 
     # Create test Tool objects in Catalog
-    category.add_type_of_tool(hand_tools_type)
-    hand_tools_type.add_subtype(drills_type)
-    hand_tools_type.add_subtype(nothing)
+    category.add_type(hand_tools_type)
+    category.type_add_subtype(hand_tools_type, drills_type)
+    category.type_add_subtype(hand_tools_type, nothing)
     test_drill = Tool('01x', 'Testing drill', 'POWER', 'idk', 10, None, 1000.00, 'Drills')
     faifa_drill = Tool('02x', 'faifa drill', 'POWER', 'idk', 12, None, 800.00, 'Drills')
     sawaan = Tool('03x', 'Sawaan', 'go to hell', 'HEAVEN', 15, None, 2000.00, 'Drills')
-    drills_type.add_tool(test_drill)
-    drills_type.add_tool(faifa_drill)
-    drills_type.add_tool(sawaan)
+    category.subtype_add_tool(drills_type, test_drill)
+    category.subtype_add_tool(drills_type, faifa_drill)
+    category.subtype_add_tool(drills_type, sawaan)
     print(test_drill)
 
     # Search tool
-    ht = category.types_of_tool[0]
-    dr = ht.subtypes_of_tool[0]
-    tdr = dr.tools_list[1]
+    search = category.search_by_name('test')
+    tdr = search['Testing drill']
 
     # Add to Cart
     system.add_to_cart(tdr, 10)
