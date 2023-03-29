@@ -10,9 +10,14 @@ class ShoppingCart:
     def carts(self):
         return self._cart
 
-    def add_item(self, item):
-        self._cart.append(item)
-
+    def add_item(self, item): 
+        if item not in self._cart:
+            self._cart.append(item)
+        else : 
+            for i in self._cart: 
+                if i._name == item._name : 
+                    i = item 
+                break
     def set_item(self):
         pass
 
