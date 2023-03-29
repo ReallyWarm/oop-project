@@ -2,8 +2,9 @@ from category import Category
 from shoppingcart import ShoppingCart
 from tool import Item
 
+
 class System():
-    #Data of coupon and wholesale
+    # Data of coupon and wholesale
     def __init__(self):
         self._category = Category()
         self._system_cart = ShoppingCart()
@@ -14,22 +15,25 @@ class System():
     @property
     def category(self):
         return self._category
-    
+
     @property
     def system_cart(self):
         return self._system_cart
-    
+
     def add_to_cart(self, tool, amount):
         item = Item(tool, amount)
         self._system_cart.add_item(item)
 
+    def add_customerinfo(self, customer):
+        self._customerinfo.append(customer)
+
     def vertify_user(self):
         pass
 
-    def find_coupon (self):
-        pass  
+    def find_coupon(self):
+        pass
 
-    def login(self,username,password):
+    def login(self, username, password):
         pass
 
     def create_wholesale(self):
@@ -61,4 +65,3 @@ class System():
 
     def delete_tool(self):
         pass
-
