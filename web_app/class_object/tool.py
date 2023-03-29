@@ -20,7 +20,39 @@ class Tool:
         return self.__dict__[attr]
 
     def modify_tool(self):
-        pass
+        print(self)
+        a = input('Choose modify infomation: \n 1 = name \n 2 = description \n 3 = brand \n 4 = price \n your input:::')
+
+        def modify_name(new_name):
+            self._name = new_name
+        def modify_description(new_description):
+            self._description = new_description
+        def modify_brand(new_brand):
+            self._brand = new_brand
+        def modify_price(new_price):
+            self._price = new_price
+        # print(a)  
+        if (int(a) == 1):
+            new_name = input('Enter new name:')
+            modify_name(new_name)
+            print('changing success')
+        elif ( int(a) == 2 ):
+            new_description = input('Enter new description:')
+            modify_description(new_description)
+            print('changing success')
+        elif (int(a) == 3 ):
+            new_brand = input('Enter new brand:')
+            modify_brand(new_brand)
+            print('changing success')
+        elif (int(a) == 4):
+            new_price = input('Enter new price:')
+            modify_price(new_price)
+            print('changing success')
+
+        
+
+        print(self)
+
 
     def add_review(self):
         pass
