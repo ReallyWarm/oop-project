@@ -1,5 +1,9 @@
+
+# manage the address
+
+
 class Address:
-    def __init__(self, name, company, country, /
+    def __init__(self, name, company, country,
                  state, city, address, phone_number, postal_code) -> None:
         self._name = name
         self._company = company
@@ -10,11 +14,15 @@ class Address:
         self._phone_number = phone_number
         self._postal_code = postal_code
 
-    def get_address(self):
-        pass
+    
+    def get_addresse(self,name,company,country,state,city,address,phone_number,postal_code):
+        return Address(name,company,country,state,city,address,phone_number,postal_code)
 
-    def edit_address(self):
-        pass
+    def update_addresse(self):
+        return print('Address has updated')
 
-    def update_address(self):
-        pass
+    def edit_addresse(self, name, company, country, state, city , address, phone_number, postal_code):
+        if  Address(name,company,country,state,city,address,phone_number,postal_code)._name == self._name:
+            return Address(name,company,country,state,city,address,phone_number,postal_code)
+        
+    
