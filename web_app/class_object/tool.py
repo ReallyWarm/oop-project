@@ -13,6 +13,10 @@ class Tool:
           self._wholesale = [ ]
 
     @property
+    def name(self):
+        return self._name
+
+    @property
     def price(self):
         return self._price
     
