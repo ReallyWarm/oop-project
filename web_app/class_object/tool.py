@@ -11,6 +11,9 @@ class Tool:
           self._reviews = [ ]
           self._image = [image]
           self._wholesale = [ ]
+          self._rating = 0.00
+          self.__n_review = 0.00
+          self.__rated_review = 0.00
 
     @property
     def price(self):
@@ -48,14 +51,23 @@ class Tool:
             new_price = input('Enter new price:')
             modify_price(new_price)
             print('changing success')
-
-        
-
         print(self)
 
+    def add_review(self, review):
+        self.get_review_list.append(review)
+        print(self.get_review_list)
+        self.__n_review += 1
+        self.__rated_review += review._rating
+        self._rating = self.__rated_review / self.__n_review
+        print("Now rating is {}".format(self.get_rating))
+        print("update review success")
 
-    def add_review(self):
-        pass
+    @property
+    def get_review_list(self):
+        return self._reviews
+    @property
+    def get_rating(self):
+        return self._rating
 
     def __str__(self) -> str:
         return str(self.__class__)+'\n'+', '.join(f'{key} : {value}' for key, value in self.__dict__.items())
