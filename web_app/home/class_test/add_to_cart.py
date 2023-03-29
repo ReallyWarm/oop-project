@@ -2,7 +2,7 @@ import sys
 sys.path.append('./web_app/class_object/')
 from category import TypeOfTool, SubtypeOfTool
 from tool import Tool
-from system import System
+from system import System 
 
 if __name__ == '__main__':
     # Set up the class object
@@ -32,4 +32,7 @@ if __name__ == '__main__':
     # Add to Cart
     system.add_to_cart(tdr, 10)
     print(system.system_cart.carts[0].tool.price)
-    print(system.system_cart)
+    print(system.system_cart) 
+
+
+
