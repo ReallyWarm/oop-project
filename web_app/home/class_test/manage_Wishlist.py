@@ -18,12 +18,13 @@ if __name__ == '__main__':
     nothing = SubtypeOfTool(name='None') 
 
     # Create test Tool objects in Catalog
-    category.add_type_of_tool(hand_tools_type)
-    hand_tools_type.add_subtype(drills_type)
-    hand_tools_type.add_subtype(nothing)
+    category.add_type(hand_tools_type)
+    category.type_add_subtype(hand_tools_type, drills_type)
+    category.type_add_subtype(hand_tools_type, nothing)
 
+    # Create test Tool
     test_drill = Tool('01x', 'Testing drill', 'POWER', 'idk', 10, None, 1000.00, 'Drills')
-    drills_type.add_tool(test_drill)
+    category.subtype_add_tool(drills_type, test_drill)
 
     # add to wishlist
     wishlist.add_item(test_drill)
