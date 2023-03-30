@@ -27,34 +27,27 @@ if __name__ == '__main__':
     category.subtype_add_tool(drills_type, test_drill)
 
     # add to wishlist
-    wishlist.add_item(test_drill)
-    print(wishlist._wish_product) 
+
+    wishlist.add_item(test_drill, 10)
+    print(wishlist.wish_product)
 
     # add to cart 
-    shoppingcart.add_item(wishlist.get_items(test_drill)) 
-    print(shoppingcart._cart)
-    wishlist.delete_item(test_drill) 
-    print(wishlist._wish_product)
+    wishlist.add_item(wishlist.get_items(test_drill).tool, 20) 
+    print(wishlist.wish_product)
 
-    # remove product 
-    wishlist.add_item(test_drill)
-    print(wishlist._wish_product) 
+     # remove product 
     wishlist.delete_item(test_drill) 
-    print(wishlist._wish_product)
+    print(wishlist.wish_product)
 
     # ------------- manage wishlist by customer ------------- # 
     customer = CustomerInfo("kelvin","Lim","Kelvin1521@gmail.com","holly wood")
     # add to wishlist
-    customer.my_wishlist.add_item(test_drill) 
+    customer.my_wishlist.add_item(test_drill, 5) 
 
     # add to cart
-    customer.my_shoppingcart.add_item(customer.my_wishlist.get_items(test_drill))
-    print(customer.my_shoppingcart._cart[0])
-    customer.my_wishlist.delete_item(test_drill)
-    print(customer.my_wishlist._wish_product)
+    customer.my_wishlist.add_item(customer.my_wishlist.get_items(test_drill).tool, 1)
+    print(customer.my_wishlist.wish_product[0])
 
     # remove product 
-    customer.my_wishlist.add_item(test_drill) 
-    print(customer.my_wishlist._wish_product) 
-    customer.my_wishlist.delete_item(test_drill) 
+    customer.my_wishlist.delete_item(test_drill)
     print(customer.my_wishlist._wish_product)
