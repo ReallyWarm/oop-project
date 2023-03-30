@@ -34,7 +34,7 @@ class CustomerInfo:
             if self.my_review[i] == review:
                 return self.my_review[i]
 
-    def add_addresse(self,address):
+    def add_address(self,address):
         if address._name not in self._addresses:
             self._addresses.append(address)
         else:
@@ -43,19 +43,19 @@ class CustomerInfo:
                     i = address
                 break
 
-    def get_addresse(self, address):
+    def get_address(self, address):
         for i in range(len(self._addresses)):
             if self._addresses[i]._name == address._name:
                 return self._addresses[i]
                 break
 
-    def update_edit_addresse(self, address):
+    def update_edit_address(self, address):
         for i in range(len(self._addresses)):
             if self._addresses[i]._name == address._name:
                 self._addresses[i] = address
                 break
             
-    def delete_addresse(self, address):
+    def delete_address(self, address):
         self._addresses.remove(address)
 
 
@@ -68,8 +68,7 @@ class CustomerInfo:
     def create_review(self):
         pass
     
-    def __str__(self):
+    def __repr__(self):
         return "{}".format(self._addresses)
     
-    def __repr__(self) -> str:
-        return "{}".format(self._addresses)
+ 
