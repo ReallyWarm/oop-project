@@ -32,12 +32,16 @@ class Tool:
 
         def modify_name(new_name):
             self._name = new_name
+            
         def modify_description(new_description):
             self._description = new_description
+            
         def modify_brand(new_brand):
             self._brand = new_brand
+            
         def modify_price(new_price):
             self._price = new_price
+            
         # print(a)  
         if (int(a) == 1):
             new_name = input('Enter new name:')
@@ -55,6 +59,7 @@ class Tool:
             new_price = input('Enter new price:')
             modify_price(new_price)
             print('changing success')
+            
         print(self)
 
     def add_review(self, review):
