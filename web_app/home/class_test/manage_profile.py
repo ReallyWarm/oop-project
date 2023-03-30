@@ -62,7 +62,7 @@ if __name__ == '__main__':
     print(check_review1)
     
     for i in range(len(customer)):
-        print(customer[i],end=' ')
+        print(customer[i],end=',')
  
   
     
