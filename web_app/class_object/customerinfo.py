@@ -68,7 +68,7 @@ class CustomerInfo:
     def create_review(self):
         pass
     
-    def __repr__(self):
+    def __repr__(self) -> str: 
         return "{}".format(self._addresses)
     
  
