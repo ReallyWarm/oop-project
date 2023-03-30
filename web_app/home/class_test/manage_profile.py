@@ -9,60 +9,60 @@ from review import Review
 if __name__ == '__main__':
     # Set up the clss object
     Sys = System()
-    customer1 = CustomerInfo('Pornthep', 'Thammawong',
-                             'firm@gmail.com', 'Kmitl')
-    customer2 = CustomerInfo('NorNor', 'Sawongnam',
-                             'NorNor@gmail.com', 'Kmitl')
-    customer3 = CustomerInfo('พรี่โอมใจเกเร', 'สองศรี',
-                             'Thanasak@gmail.com', 'Kmitl')
     
-    adderess1 = Address('Pornthep', 'Kmitl', 'Thailand',
+    customer = [CustomerInfo('Pornthep', 'Thammawong',
+                             'firm@gmail.com', 'Kmitl')
+                ,CustomerInfo('NorNor', 'Sawongnam',
+                             'NorNor@gmail.com', 'Kmitl')
+                ,CustomerInfo('พรี่โอมใจเกเร', 'สองศรี',
+                             'Thanasak@gmail.com', 'Kmitl')]
+    
+    address = [ Address('Pornthep', 'Kmitl', 'Thailand',
                           '-', 'Phathumtani', '-', '0412320412', '12304')
-    adderess2 = Address('NorNor', 'Kmitl', 'Thailand',
+   ,Address('NorNor', 'Kmitl', 'Thailand',
                           '-', 'Udontani', '-', '06341321321', '423423')
-    adderess3 = Address('พรี่โอมใจเกเร', 'Kmitl', 'Thailand',
-                          '-', 'Udontani', '-', '0512859258', '12000')
+    ,Address('พรี่โอมใจเกเร', 'Kmitl', 'Thailand',
+                          '-', 'Udontani', '-', '0512859258', '12000')]
+
 
     order1 = Order('ad12','34000','Pronthep','Success','12.00')
     review1 = Review('Pornthep','Good Product','-','12/11/2023')
 
     # add customer information to system
-    Sys.add_customerinfo(customer1)
-    Sys.add_customerinfo(customer2)
-    Sys.add_customerinfo(customer3)
+    for i in range (len(customer)):
+        Sys.add_customerinfo(customer[i])
+    
 
     # add address in customerinfo
-    adderess1_adderess = customer1.add_addresse(adderess1)
-    adderess2_adderess = customer2.add_addresse(adderess2)
-    adderess3_adderess = customer3.add_addresse(adderess3)
+    for i in range (len(address)):
+        customer[i].add_address(address[i])
+        
     
-    print(Sys._customerinfo)
-    print(customer1._addresses[0])
-    print(customer2._addresses[0])
-    print(customer3._addresses[0])
+    print(Sys._customerinfo,end=' ')
+
+    for i in range(len(customer)):
+        print(customer[i]._addresses,end=' ')
     
     #edit address
-    edit_add1 = adderess1.edit_addresse('Pornthep', 'CU', 'Thailand',
+    edit_add1 = address[0].edit_address('Pornthep', 'CU', 'Thailand',
                           '-', 'Phathumtani', '-', '0412320412', '12304')
-    customer1.update_edit_addresse(edit_add1)
-    print(customer1._addresses[0])
+    customer[0].update_edit_address(edit_add1)
+    print(customer[0]._addresses[0])
     
-    #delete address
-    del_add3 = customer3.delete_addresse(adderess3)
-    print(customer3._addresses)
+    #delete address 3 in list of customer 
+    del_add3 = customer[2].delete_address(address[2])
+    print(customer[2]._addresses)
     
     #check order
-    check_order1 =customer1.store_order(order1)
+    check_order1 =customer[0].store_order(order1)
     print(check_order1)
     
     #check review
-    check_review1 = customer1.store_review(review1)
+    check_review1 = customer[0].store_review(review1)
     print(check_review1)
     
-    print(customer1)
-    print(customer2)
-    print(customer3)
-  
+    for i in range(len(customer)):
+        print(customer[i],end=' ')
  
   
     
