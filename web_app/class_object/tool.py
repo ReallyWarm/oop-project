@@ -91,8 +91,23 @@ class Item:
     def tool(self):
         return self._tool
     
-    def set_amount(self):
-        pass
+    @property
+    def buy_amount(self):
+        return self._buy_amount
+    
+    @property
+    def items_price(self):
+        return self._items_price
+    
+    def set_buy_amount(self, amount):
+        self._buy_amount = amount
+        self.update_item()
 
     def update_item(self):
-        pass
+        self._items_price = self.tool.price * self.buy_amount
+
+    def __str__(self) -> str:
+        return str(self.__class__)+'\n'+', '.join(f'{key} : {value}' for key, value in self.__dict__.items())
+
+    def __repr__(self):
+        return f'\"{self.__str__()}\"'
