@@ -1,9 +1,9 @@
-
 from wishlish import Wishlist
 from shoppingcart import ShoppingCart
+from tool import Item,Tool
 from address import Address
 from order import Order
-# manage addresss
+from review import Review
 
 class CustomerInfo:
     def __init__(self, first_name, last_name, email, company_name) -> None:
@@ -65,10 +65,32 @@ class CustomerInfo:
     def find_user(self, username):
         pass
 
-    def create_review(self):
-        pass
-    
+    def create_review(self, tool):
+        head_of_review = input('Enter head of review:')
+        comment = input('Enter comment: ')
+        rating = float(input('Enter rating: '))
+        date_of_review = str(input('Enter date of review: '))
+        review = Review(self.get_username, head_of_review, comment, date_of_review, rating)
+        print("--------------------------------------------")
+        print("creat review success")
+        print("'id of review is ")
+        print(id(review))
+        print(review)
+        print("--------------------------------------")
+        print("review information is \n reviewed user:{} \n head of review: {} \n comment review: {} \n date of review: {} \n rating: {}".\
+              format(review._user_name, review._head_of_review, review._comment, review._date_of_review, review._rating))
+        self.get_my_reviewed.append(review)
+        print("---------------------------------------------")
+        print("My reviewed: {}".format(self.get_my_reviewed))
+        tool.add_review(review)
+
+    @property
+    def get_username(self):
+        return self._first_name
+        
+    @property
+    def get_my_reviewed(self):
+        return self._my_review
+        
     def __repr__(self) -> str: 
         return "{}".format(self._addresses)
-    
- 
