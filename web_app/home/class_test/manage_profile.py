@@ -1,5 +1,5 @@
 import sys
-sys.path.append('./oop-project/web_app/class_object/')
+sys.path.append('./web_app/class_object/')
 from tool import Tool
 from order import Order
 from customerinfo import CustomerInfo
