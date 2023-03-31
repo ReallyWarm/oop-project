@@ -47,7 +47,7 @@ if __name__ == '__main__':
 
     # edit address
     address[0].edit_address('Pornthep', 'CU', 'Thailand',
-                            '-', 'Phathumtani', '-', '0412320412', '12304')
+                            '-', 'Phathumtani', '-', '051751855', '101121')
     print(customer[0]._addresses[0])
 
     print()
