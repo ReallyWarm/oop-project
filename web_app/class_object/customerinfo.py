@@ -1,8 +1,6 @@
 from wishlish import Wishlist
 from shoppingcart import ShoppingCart
 from tool import Item,Tool
-from address import Address
-from order import Order
 from review import Review
 
 class CustomerInfo:
@@ -15,7 +13,7 @@ class CustomerInfo:
         self.my_wishlist = Wishlist()
         self.my_shoppingcart = ShoppingCart()
         self.my_order = []
-        self.my_review = []
+        self._my_review = []
         self.used_coupon = []
 
     def check_coupon(self, coupon):
@@ -29,10 +27,10 @@ class CustomerInfo:
             if self.my_order[i] == order:
                 return self.my_order[i]
 
-    def store_review(self, review):
-        for i in self.my_review:
-            if self.my_review[i] == review:
-                return self.my_review[i]
+    def store_review(self,first_name) :
+        for i in range(len(self._my_review)):
+            if self._my_review[i]._user_name == first_name  :
+                return self._my_review[i]
 
     def add_address(self,address):
         if address._name not in self._addresses:
@@ -49,11 +47,6 @@ class CustomerInfo:
                 return self._addresses[i]
                 break
 
-    def update_edit_address(self, address):
-        for i in range(len(self._addresses)):
-            if self._addresses[i]._name == address._name:
-                self._addresses[i] = address
-                break
             
     def delete_address(self, address):
         self._addresses.remove(address)
