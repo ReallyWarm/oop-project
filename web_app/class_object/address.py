@@ -15,23 +15,30 @@ class Address:
         self._postal_code = postal_code
 
     
-    def get_address(self,name,company,country,state,city,address,phone_number,postal_code):
-        return Address(name,company,country,state,city,address,phone_number,postal_code)
+    def get_address(self):
+        pass
 
     def update_address(self):
-        return print('Address has updated')
+        pass
 
-    def edit_address(self, name, company, country, state, city , address, phone_number, postal_code):
-        if  Address(name,company,country,state,city,address,phone_number,postal_code)._name == self._name:
+    def edit_address(self, name=None, company=None, country=None, state=None, city=None , address=None, phone_number=None, postal_code=None):
+        if name is not None :
             self._name = name
+        if company is not None :
             self._company = company
+        if country is not None :
             self._country = country
+        if state is not None :
             self._state = state
+        if city is not None :
             self._city = city
+        if address is not None :
             self._address = address
+        if phone_number is not None :
             self._phone_number = phone_number
+        if postal_code is not None :
             self._postal_code = postal_code
-        
+            
     def __repr__(self) -> str:
         return "{}".format(self._name +','+"{}".format(self._company)+','+"{}".format(self._country)+','+"{}".format(self._state)+
                            ','+"{}".format(self._city)+','+"{}".format(self._phone_number)+
