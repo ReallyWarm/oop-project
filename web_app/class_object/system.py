@@ -20,20 +20,17 @@ class System():
     def system_cart(self):
         return self._system_cart
     
-    def search_coupon(self): 
-        return self._server_coupon
+    def search_coupon(self,coupon_code): 
+        for coupon in self._server_coupon:
+            if coupon._code == coupon_code: 
+                return coupon
+            
     def add_to_cart(self, tool, amount):
         item = Item(tool, amount)
         self._system_cart.add_item(item)
 
     def vertify_user(self):
         pass
-
-    def find_coupon (self,search_coupon):
-        for coupon in self._server_coupon: 
-            if coupon._name == search_coupon : 
-                return coupon 
-            break
 
     def login(self,username,password):
         pass
@@ -48,41 +45,28 @@ class System():
         pass
 
     def update_wholesale(self):
-        pass
-    @staticmethod
-    def create_coupon(code,discount_value,name):
-        return Coupon(code,discount_value,name)
+        pass 
 
-    def modify_coupon(self,modify_coupon,code,discount_value,name):
-        for i in range(len(self._server_coupon)):  
-            if (self._server_coupon[i])._name == modify_coupon._name : 
-                return Coupon(code,discount_value,name)
-            break
+    def add_coupon(self,code,discount_value,name):  
+        new_coupon = Coupon(code,discount_value,name)
+        self._server_coupon.append(new_coupon)
 
-    def delete_coupon(self,coupon):
-        for i in self._server_coupon: 
-            if i._name == coupon._name:  
-                return i
-                #self._server_coupon.remove(i)
-            break
+    def modify_coupon(self,coupon_code,new_discount_value = None,new_name = None):
+        for coupon in self._server_coupon :
+            if coupon._code == coupon_code:  
+                if coupon.name is not None : 
+                    coupon.name = new_name
+                if coupon.discount_value is not None :
+                    coupon.discount_value= new_discount_value
+                return 
 
-    def update_coupon(self,task,coupon,modify_coupon = None):
-        if task == "modify": 
-            for i in range(len(self._server_coupon)):
-                if (self._server_coupon[i])._name == coupon._name : 
-                    self._server_coupon[i] = modify_coupon
-                break
-        elif task == "add": 
-            self._server_coupon.append(coupon)
-
-        elif task == "delete":
-            self._server_coupon.remove(coupon)
-
+    def delete_coupon(self,coupon_code):
+        for coupon in self._server_coupon: 
+            if coupon._code == coupon_code:
+                self._server_coupon.remove(coupon) 
+                return
     def add_tool(self):
         pass
 
     def delete_tool(self):
         pass 
-    
-
-
