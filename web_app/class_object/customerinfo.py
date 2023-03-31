@@ -1,5 +1,6 @@
 from wishlish import Wishlist
 from shoppingcart import ShoppingCart
+from address import Address
 from tool import Item,Tool
 from review import Review
 
@@ -24,15 +25,16 @@ class CustomerInfo:
 
     def store_order(self,order):
         for i in self.my_order:
-            if self.my_order[i] == order:
-                return self.my_order[i]
+            if i == order:
+                return i
 
     def store_review(self,first_name) :
-        for i in range(len(self._my_review)):
-            if self._my_review[i]._user_name == first_name  :
-                return self._my_review[i]
+        for i in self._my_review:
+            if i._user_name == first_name  :
+                return i
 
-    def add_address(self,address):
+    def create_address(self,name,company,country,state,city,address,phone_number,postal_code):
+        address = Address(name,company,country,state,city,address,phone_number,postal_code)
         if address._name not in self._addresses:
             self._addresses.append(address)
         else:
@@ -42,9 +44,9 @@ class CustomerInfo:
                 break
 
     def get_address(self, address):
-        for i in range(len(self._addresses)):
-            if self._addresses[i]._name == address._name:
-                return self._addresses[i]
+        for i in self._addresses:
+            if i._name == address._name:
+                return i
                 break
 
             
