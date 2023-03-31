@@ -25,13 +25,19 @@ if __name__ == '__main__':
     print(test_drill)
 
     # Search tool
-    search = category.search_by_name('test')
-    tdr = search['Testing drill']
+    search = category.search_by_name('')
+    testing = search['Testing drill']
+    faifa = search['faifa drill']
 
     # Add to Cart
-    system.add_to_cart(tdr, 10)
-    print(system.system_cart.carts[0].tool.price)
-    print(system.system_cart) 
+    system.add_to_cart(testing, 10)
+    system.add_to_cart(faifa, 20)
+    print(system.system_cart.cart[0].tool.price)
+    print(system.system_cart)
+    print('----------------------------------------------------------------')
+    # Add same tool, but with different amount
+    system.add_to_cart(testing, 20)
+    print(system.system_cart)
 
 
 

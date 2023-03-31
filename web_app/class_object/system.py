@@ -26,9 +26,8 @@ class System():
             if coupon._code == coupon_code: 
                 return coupon
 
-    def add_to_cart(self, tool, amount):
-        item = Item(tool, amount)
-        self._system_cart.add_item(item)
+    def add_to_cart(self, tool, buy_amount):
+        self._system_cart.add_item(tool, buy_amount)
 
     def add_customerinfo(self, customer):
         self._customerinfo.append(customer)
