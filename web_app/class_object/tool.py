@@ -18,6 +18,19 @@ class Tool:
     @property
     def name(self):
         return self._name
+    
+    @property
+    def wholesale(self):
+        return self._wholesale
+    
+    def add_wholesale(self,wholesale):
+        self._wholesale.append(wholesale)
+
+    def delete_wholesale(self,code): 
+        for wholesale in self._wholesale : 
+            if wholesale.code == code : 
+                self._wholesale.remove(wholesale) 
+                return
 
     @property
     def price(self):

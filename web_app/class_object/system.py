@@ -1,7 +1,7 @@
 from category import Category,SubtypeOfTool,TypeOfTool
 from shoppingcart import ShoppingCart
 from tool import Item, Tool
-from discount import Coupon
+from discount import Coupon,Wholesale
 
 
 class System():
@@ -20,6 +20,11 @@ class System():
     @property
     def system_cart(self):
         return self._system_cart
+    
+    def search_wholesale(self,code):
+        for wholesale in self._wholesale:
+            if wholesale._code == code : 
+                return wholesale
 
     def search_coupon(self,coupon_code): 
         for coupon in self._server_coupon:
@@ -38,17 +43,24 @@ class System():
     def login(self,username,password):
         pass
 
-    def create_wholesale(self):
-        pass
+    def add_wholesale(self,code,amount,discount_value): 
+        wholesale = Wholesale(code,amount,discount_value)
+        self._wholesale.append(wholesale)
 
-    def modify_wholesale(self):
-        pass
+    def modify_wholesale(self,wholesale_code,new_amount = None,new_discount_value = None):
+        for wholesale in self._wholesale : 
+            if wholesale.code == wholesale_code: 
+                if new_amount is not None : 
+                    wholesale.amount = new_amount 
+                if new_discount_value is not None : 
+                    wholesale.discount_value = new_discount_value
+                return
 
-    def delete_wholesale(self):
-        pass
-
-    def update_wholesale(self):
-        pass 
+    def delete_wholesale(self,wholesale_code):
+        for wholesale in self._wholesale : 
+            if wholesale.code == wholesale_code : 
+                self._wholesale.remove(wholesale) 
+                return
 
     def add_coupon(self,code,discount_value,name):  
         new_coupon = Coupon(code,discount_value,name)
@@ -56,7 +68,7 @@ class System():
 
     def modify_coupon(self,coupon_code,new_discount_value = None,new_name = None):
         for coupon in self._server_coupon :
-            if coupon._code == coupon_code:  
+            if coupon.code == coupon_code:  
                 if coupon.name is not None : 
                     coupon.name = new_name
                 if coupon.discount_value is not None :
@@ -65,7 +77,7 @@ class System():
 
     def delete_coupon(self,coupon_code):
         for coupon in self._server_coupon: 
-            if coupon._code == coupon_code:
+            if coupon.code == coupon_code:
                 self._server_coupon.remove(coupon) 
                 return
     def add_tool(self):
