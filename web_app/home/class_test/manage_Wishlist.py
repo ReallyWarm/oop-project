@@ -8,7 +8,7 @@ from customerinfo import CustomerInfo
 from shoppingcart import ShoppingCart
 if __name__ == '__main__':  
 
-    # ----------- manage wishlist by guest ----------- #
+    # # ----------- manage wishlist by guest ----------- #
     system = System() 
     wishlist = Wishlist() 
     shoppingcart = ShoppingCart()
@@ -41,6 +41,7 @@ if __name__ == '__main__':
 
     # ------------- manage wishlist by customer ------------- # 
     customer = CustomerInfo("kelvin","Lim","Kelvin1521@gmail.com","holly wood")
+
     # add to wishlist
     customer.my_wishlist.add_item(test_drill, 5) 
 

@@ -44,3 +44,4 @@ class Wishlist:
 
     def calculate_price(self):
         pass
+        
