@@ -42,8 +42,13 @@ class Item:
     def tool(self):
         return self._tool
     
-    def set_amount(self):
-        pass
+    @property
+    def amount(self):
+        pass 
+
+    @amount.setter
+    def amount(self,value):
+        self.buy_amount = value
 
     def update_item(self):
         pass
