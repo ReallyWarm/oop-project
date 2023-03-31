@@ -1,3 +1,4 @@
+from tool import Item
 class ShoppingCart: 
     def __init__(self) -> None:
         self._cart = [ ]
@@ -10,22 +11,26 @@ class ShoppingCart:
     def carts(self):
         return self._cart
 
-    def add_item(self, item): 
-        if item not in self._cart:
-            self._cart.append(item)
-        else : 
-            for i in self._cart: 
-                if i._name == item._name : 
-                    i = item 
-                break
+    def add_item(self, item_tool,buy_amount = 1): 
+        for item in self._cart: 
+            if item._tool == item_tool : 
+                if item._buy_amount is not buy_amount: 
+                    item.buy_amount = buy_amount
+                return 
+        new_item = Item(item_tool,buy_amount)
+        self._cart.append(new_item)
+
     def set_item(self):
         pass
 
     def get_item(self):
         pass
 
-    def delete_item(self):
-        pass
+    def delete_item(self,item_tool):
+        for item in self._cart: 
+            if item._tool == item_tool : 
+                self._cart.remove(item) 
+                return
 
     def clear_cart(self):
         pass
