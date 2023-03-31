@@ -1,8 +1,7 @@
 import sys
-sys.path.append('./web_app/class_object/')
+sys.path.append('./oop-project/web_app/class_object/')
 from tool import Tool
 from order import Order
-from address import Address
 from customerinfo import CustomerInfo
 from system import System
 
@@ -16,10 +15,6 @@ if __name__ == '__main__':
                                                                                                                  'Thanasak@gmail.com', 'Kmitl'),
                 CustomerInfo("Prakrittipon", "Sommool", "korphaisk@gmail.com", "KMITL")]
 
-    address = [Address('Pornthep', 'Kmitl', 'Thailand',
-                       '-', 'Phathumtani', '-', '0412320412', '12304'), Address('NorNor', 'Kmitl', 'Thailand',
-                                                                                '-', 'Udontani', '-', '06341321321', '423423'), Address('พรี่โอมใจเกเร', 'Kmitl', 'Thailand',
-                                                                                                                                        '-', 'Udontani', '-', '0512859258', '12000')]
 
     # create the example review and order
     order1 = Order('ad12', '34000', 'Pronthep', 'Success', '12.00')
@@ -32,9 +27,13 @@ if __name__ == '__main__':
     for i in range(len(customer)):
         Sys.add_customerinfo(customer[i])
 
-    # add address in customerinfo
-    for i in range(len(address)):
-        customer[i].add_address(address[i])
+    # create address in customerinfo
+    customer[0].create_address('Pornthep','สำรวยกล้วย','Thailand','Phathumtani','Bangkuwat','sol.9/3 100/72','0982845321','12000')
+    customer[1].create_address('NorNor','จารย์แดง จำกัด','Thailand','Udon Thani','-','-','0210567473','10010')
+
+    customer[2].create_address('พรี่โอมใจเกเร','ใจเกเร จำกัด','Thailand','Udon Thani','-','-','0810567473','10010')
+    customer[3].create_address('Prakrittipon','KMIL','Thailand','Bangkok','Pha ya tai','sol.12 24/89','0901276842','11120')
+
 
     print(Sys._customerinfo, end='\n')
 
@@ -45,17 +44,18 @@ if __name__ == '__main__':
 
     print()
 
-    # edit address
-    address[0].edit_address('Pornthep', 'CU', 'Thailand',
-                            '-', 'Phathumtani', '-', '051751855', '101121')
-    print(customer[0]._addresses[0])
+    #edit address
+    customer[0]._addresses[0].edit_address(country='England',phone_number='0900563573')
+    print(customer[0]._addresses)
 
     print()
-    # delete address 3 in list of customer
-    print(customer[2].delete_address(address[2]))
+    
+    # # delete address 3 in list of customer
+    customer[2].delete_address(customer[2]._addresses[0])
+    print(customer[2]._addresses)
     print()
 
-    # check order
+    # # check order
     print(customer[0].store_order(order1))
     print('--------------------------------------')
 
