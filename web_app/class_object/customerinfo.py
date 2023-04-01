@@ -29,30 +29,26 @@ class CustomerInfo:
                 return i
 
     def store_review(self,first_name) :
-        for i in self._my_review:
+        for i in self.get_my_reviewed:
             if i._user_name == first_name  :
                 return i
 
     def create_address(self,name,company,country,state,city,address,phone_number,postal_code):
-        address = Address(name,company,country,state,city,address,phone_number,postal_code)
-        if address._name not in self._addresses:
-            self._addresses.append(address)
-        else:
-            for i in self._addresses:
-                if i.name == address.name:
-                    i = address
-                break
-
-    def get_address(self, address):
-        for i in self._addresses:
-            if i._name == address._name:
-                return i
-                break
-
+        new_address = Address(name,company,country,state,city,address,phone_number,postal_code)
+        for address in self.address:
+            if address.name == new_address.name:
+                return print('Unvailable to create a new address. Please check your name isn\'t duplicate.')
             
-    def delete_address(self, address):
-        self._addresses.remove(address)
+        self.address.append(new_address)        
+            
+    def get_address(self, name):
+        for i in self.address:
+            if i.name == name:
+                return i
+         
 
+    def delete_address(self, address):
+        self.address.remove(address)
 
     def get_ShoppingCart(self):
         return self.my_shoppingcart
@@ -86,6 +82,10 @@ class CustomerInfo:
     @property
     def get_my_reviewed(self):
         return self._my_review
+    
+    @property
+    def address(self):
+        return self._addresses
         
     def __repr__(self) -> str: 
         return "{}".format(self._addresses)
