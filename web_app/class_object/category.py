@@ -1,5 +1,4 @@
 from tool import Tool
-
 class Category:
     _all_types = [ ]
     _all_subtypes = [ ]
@@ -19,6 +18,8 @@ class Category:
     @staticmethod
     def get_tools_list(subtype_of_tool:'SubtypeOfTool') -> list:
         return subtype_of_tool.tools_list
+    
+
 
     def add_type(self, type_of_tool:'TypeOfTool') -> None:
         self.types_of_tool.append(type_of_tool)

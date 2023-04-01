@@ -1,7 +1,7 @@
 from category import Category,SubtypeOfTool,TypeOfTool
 from shoppingcart import ShoppingCart
 from tool import Item, Tool
-from discount import Coupon
+from discount import Coupon,Wholesale
 
 
 class System():
@@ -12,7 +12,9 @@ class System():
         self._server_coupon = []
         self._wholesale = []
         self._customerinfo = []
-
+    @property 
+    def wholesales(self):
+        return self._wholesale
     @property
     def category(self):
         return self._category
@@ -20,6 +22,11 @@ class System():
     @property
     def system_cart(self):
         return self._system_cart
+    
+    def search_wholesale(self,code):
+        for wholesale in self._wholesale:
+            if wholesale.code == code : 
+                return wholesale
 
     def search_coupon(self,coupon_code): 
         for coupon in self._server_coupon:
@@ -38,17 +45,30 @@ class System():
     def login(self,username,password):
         pass
 
-    def create_wholesale(self):
-        pass
+    def add_wholesale(self,code,amount,discount_value): 
+        wholesale = Wholesale(code,amount,discount_value)
+        self._wholesale.append(wholesale)
 
-    def modify_wholesale(self):
-        pass
+    def modify_wholesale(self,wholesale_code,new_amount = None,new_discount_value = None):
+        for wholesale in self.wholesales : 
+            if wholesale.code == wholesale_code: 
+                if new_amount is not None : 
+                    wholesale.amount = new_amount 
+                if new_discount_value is not None : 
+                    wholesale.discount_value = new_discount_value
+                return
 
-    def delete_wholesale(self):
-        pass
-
-    def update_wholesale(self):
-        pass 
+    def delete_wholesale(self,wholesale_code):
+        tools = self._category.search_by_name('')
+        for key,value in tools.items(): 
+            for wholesale in value.wholesales : 
+                if wholesale.code == wholesale_code: 
+                    value.wholesales.remove(wholesale)
+        for wholesale in self._wholesale : 
+            if wholesale.code == wholesale_code :
+                self.wholesales.remove(wholesale)
+                del wholesale 
+                return
 
     def add_coupon(self,code,discount_value,name):  
         new_coupon = Coupon(code,discount_value,name)

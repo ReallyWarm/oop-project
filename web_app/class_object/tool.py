@@ -18,6 +18,13 @@ class Tool:
     @property
     def name(self):
         return self._name
+    
+    @property
+    def wholesales(self):
+        return self._wholesale
+    
+    def add_wholesale(self,wholesale):
+        self._wholesale.append(wholesale)
 
     @property
     def price(self):
