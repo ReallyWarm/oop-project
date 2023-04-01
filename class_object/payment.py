@@ -1,7 +1,7 @@
 class Payment : 
-    def __init__(self,total_amount,date_creat,id,status):
+    def __init__(self, total_amount:float, date_create:str, id:str, status:str) -> None:
         self.total_amount = total_amount
-        self.date_creat = date_creat
+        self.date_creat = date_create
         self.status = status
         self.id = id
 

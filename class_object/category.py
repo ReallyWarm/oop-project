@@ -1,4 +1,7 @@
-from tool import Tool
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from tool import Tool
+
 class Category:
     _all_types = [ ]
     _all_subtypes = [ ]
@@ -18,8 +21,6 @@ class Category:
     @staticmethod
     def get_tools_list(subtype_of_tool:'SubtypeOfTool') -> list:
         return subtype_of_tool.tools_list
-    
-
 
     def add_type(self, type_of_tool:'TypeOfTool') -> None:
         self.types_of_tool.append(type_of_tool)
@@ -58,7 +59,7 @@ class Category:
     def __str__(self) -> str:
         return str(self.__class__)+f' -> types of tool : {len(self._all_types)}, subtypes of tool : {len(self._all_subtypes)}, tools : {len(self._all_tools)}'
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'\"{self.__str__()}\"'
     
 class TypeOfTool:
@@ -67,20 +68,20 @@ class TypeOfTool:
         self._subtypes_of_tool = [ ]
 
     @property
-    def typename(self):
+    def typename(self) -> str:
         return self._typename
 
     @property
-    def subtypes_of_tool(self):
+    def subtypes_of_tool(self) -> list:
         return self._subtypes_of_tool
 
-    def add_subtype(self, subtype_of_tool:'SubtypeOfTool'):
+    def add_subtype(self, subtype_of_tool:'SubtypeOfTool') -> None:
         self._subtypes_of_tool.append(subtype_of_tool)
 
     def __str__(self) -> str:
         return str(self.__class__)+f' -> name : {self.typename}, subtypes of tool : {len(self.subtypes_of_tool)}'
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'\"{self.__str__()}\"'
 
 class SubtypeOfTool:
@@ -89,18 +90,18 @@ class SubtypeOfTool:
         self._tools_list = []
 
     @property
-    def subtypename(self):
+    def subtypename(self) -> str:
         return self._subtypename
 
     @property
-    def tools_list(self):
+    def tools_list(self) -> list:
         return self._tools_list
 
-    def add_tool(self, tool:'Tool'):
+    def add_tool(self, tool:'Tool') -> list:
         self._tools_list.append(tool)
 
     def __str__(self) -> str:
         return str(self.__class__)+f' -> name : {self.subtypename}, subtypes of tool : {len(self.tools_list)}'
     
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f'\"{self.__str__()}\"'
