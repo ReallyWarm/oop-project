@@ -1,10 +1,6 @@
-
-# manage the address
-
-
 class Address:
-    def __init__(self, name, company, country,
-                 state, city, address, phone_number, postal_code) -> None:
+    def __init__(self, name:str, company:str, country:str, state:str,
+                 city:str, address:str, phone_number:str, postal_code:str) -> None:
         self._name = name
         self._company = company
         self._country = country
@@ -15,23 +11,23 @@ class Address:
         self._postal_code = postal_code
  
     @property
-    def name(self):
+    def name(self) -> str:
         return self._name 
     
     @property
-    def country(self):
+    def country(self) -> str:
         return self._country
     
     @property
-    def state(self):
+    def state(self) -> str:
         return self._state
     
     @property
-    def city(self):
+    def city(self) -> str:
         return self._city
     
     @property
-    def address(self):
+    def address(self) -> str:
         return self._address
     
     def get_address(self):
@@ -40,7 +36,7 @@ class Address:
     def update_address(self):
         pass
 
-    def edit_address(self, name=None, company=None, country=None, state=None, city=None , address=None, phone_number=None, postal_code=None):
+    def edit_address(self, name:str=None, company:str=None, country:str=None, state:str=None, city:str=None ,address:str=None, phone_number:str=None, postal_code:str=None) -> None:
         if name is not None :
             self._name = name
         if company is not None :

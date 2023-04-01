@@ -9,15 +9,13 @@ if __name__ == '__main__':
     # Set up the clss object
     Sys = System()
 
-    customer = [CustomerInfo('Pornthep', 'Thammawong',
-                             'firm@gmail.com', 'Kmitl'), CustomerInfo('NorNor', 'Sawongnam',
-                                                                      'NorNor@gmail.com', 'Kmitl'), CustomerInfo('พรี่โอมใจเกเร', 'สองศรี',
-                                                                                                                 'Thanasak@gmail.com', 'Kmitl'),
+    customer = [CustomerInfo('Pornthep', 'Thammawong', 'firm@gmail.com', 'Kmitl'), 
+                CustomerInfo('NorNor', 'Sawongnam', 'NorNor@gmail.com', 'Kmitl'), 
+                CustomerInfo('พรี่โอมใจเกเร', 'สองศรี', 'Thanasak@gmail.com', 'Kmitl'),
                 CustomerInfo("Prakrittipon", "Sommool", "korphaisk@gmail.com", "KMITL")]
 
-
     # create the example review and order
-    order1 = Order('ad12', '34000', 'Pronthep', 'Success', '12.00')
+    order1 = Order([], '34000', 'Pronthep', 'Success', '12.00')
     test_drill = Tool('01x', 'Testing drill', 'POWER',
                       'idk', 10, None, 1000.00, 'Drills')
     customer[3].create_review(test_drill, "test_review1", "good_tool", 4.5, "4/1/2023")

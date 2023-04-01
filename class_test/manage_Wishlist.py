@@ -32,7 +32,7 @@ if __name__ == '__main__':
     print(wishlist.wish_product)
 
     # add to cart 
-    wishlist.add_item(wishlist.get_items(test_drill).tool, 20) 
+    wishlist.add_item(wishlist.get_item(test_drill).tool, 20) 
     print(wishlist.wish_product)
 
      # remove product 
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     customer.my_wishlist.add_item(test_drill, 5) 
 
     # add to cart
-    customer.my_wishlist.add_item(customer.my_wishlist.get_items(test_drill).tool, 1)
+    customer.my_wishlist.add_item(customer.my_wishlist.get_item(test_drill).tool, 1)
     print(customer.my_wishlist.wish_product[0])
 
     # remove product 
