@@ -6,9 +6,7 @@ class Category:
 
     def __init__(self) -> None:
         self._types_of_tool = [ ]
-    @property
-    def tools(self): 
-        return self._all_tools
+
     @property
     def types_of_tool(self) -> list:
         return self._types_of_tool
