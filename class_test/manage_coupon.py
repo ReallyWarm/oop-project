@@ -1,5 +1,5 @@
 import sys
-sys.path.append('./web_app/class_object/')
+sys.path.append('./class_object/')
 from category import TypeOfTool, SubtypeOfTool
 from tool import Tool
 from system import System 
