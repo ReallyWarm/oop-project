@@ -16,6 +16,10 @@ class Tool:
           self.__rated_review = 0.00
 
     @property
+    def name(self):
+        return self._name
+
+    @property
     def price(self):
         return self._price
     
@@ -28,12 +32,16 @@ class Tool:
 
         def modify_name(new_name):
             self._name = new_name
+            
         def modify_description(new_description):
             self._description = new_description
+            
         def modify_brand(new_brand):
             self._brand = new_brand
+            
         def modify_price(new_price):
             self._price = new_price
+            
         # print(a)  
         if (int(a) == 1):
             new_name = input('Enter new name:')
@@ -51,6 +59,7 @@ class Tool:
             new_price = input('Enter new price:')
             modify_price(new_price)
             print('changing success')
+            
         print(self)
 
     def add_review(self, review):
@@ -79,8 +88,23 @@ class Item:
     def tool(self):
         return self._tool
     
-    def set_amount(self):
-        pass
+    @property
+    def buy_amount(self):
+        return self._buy_amount
+    
+    @property
+    def items_price(self):
+        return self._items_price
+    
+    def set_buy_amount(self, amount):
+        self._buy_amount = amount
+        self.update_item()
 
     def update_item(self):
-        pass
+        self._items_price = self.tool.price * self.buy_amount
+
+    def __str__(self) -> str:
+        return str(self.__class__)+'\n'+', '.join(f'{key} : {value}' for key, value in self.__dict__.items())
+
+    def __repr__(self):
+        return f'\"{self.__str__()}\"'
