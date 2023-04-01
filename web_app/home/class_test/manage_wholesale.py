@@ -33,17 +33,16 @@ if __name__ == "__main__":
     # update wholesale tool
     wholesale = system.search_wholesale("03x")
     testing.add_wholesale(wholesale)
-    print(testing._wholesale)
+    print(system.wholesales)
+    print(testing.wholesales)
 
     # modify wholesale
     system.modify_wholesale("03x",10,15) 
-    print(system._wholesale[0].amount)
-    print(testing._wholesale[0].amount)
+    print(system.wholesales[0].amount)
+    print(testing.wholesales[0].amount)
 
     # delete wholesale 
-    tools = category.search_by_name('') 
-    #print(tool)
-    system.delete_wholesale("03x",tools) 
+    system.delete_wholesale("03x") 
     print(system.wholesales) 
     # testing.delete_wholesale("03x") 
     print(testing.wholesales)
