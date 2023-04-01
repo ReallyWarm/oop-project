@@ -21,12 +21,6 @@ class Category:
     def get_tools_list(subtype_of_tool:'SubtypeOfTool') -> list:
         return subtype_of_tool.tools_list
     
-    def delete_wholesale(self,wholesale_code): 
-        for tool in self.tools: 
-            for wholesale in tool.wholesales : 
-                if wholesale.code == wholesale_code : 
-                    tool.wholesales.remove(wholesale)
-                    del wholesale 
 
 
     def add_type(self, type_of_tool:'TypeOfTool') -> None:

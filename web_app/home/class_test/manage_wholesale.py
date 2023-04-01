@@ -41,8 +41,9 @@ if __name__ == "__main__":
     print(testing._wholesale[0].amount)
 
     # delete wholesale 
-    category.delete_wholesale("03x")
-    system.delete_wholesale("03x") 
+    tools = category.search_by_name('') 
+    #print(tool)
+    system.delete_wholesale("03x",tools) 
     print(system.wholesales) 
     # testing.delete_wholesale("03x") 
     print(testing.wholesales)
