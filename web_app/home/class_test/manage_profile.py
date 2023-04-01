@@ -30,15 +30,22 @@ if __name__ == '__main__':
     # create address in customerinfo
     customer[0].create_address('Pornthep','สำรวยกล้วย','Thailand','Phathumtani','Bangkuwat','sol.9/3 100/72','0982845321','12000')
     customer[1].create_address('NorNor','จารย์แดง จำกัด','Thailand','Udon Thani','-','-','0210567473','10010')
-
     customer[2].create_address('พรี่โอมใจเกเร','ใจเกเร จำกัด','Thailand','Udon Thani','-','-','0810567473','10010')
     customer[3].create_address('Prakrittipon','KMIL','Thailand','Bangkok','Pha ya tai','sol.12 24/89','0901276842','11120')
+    
+    #test result name is duplicate
+    print()
+    customer[3].create_address('Prakrittipon','KU','Thailand','Bangkok','Sapan','sol.12 24/89','02012389089','10000')
 
-
+    print()
+    
     print(Sys._customerinfo, end='\n')
 
     print()
 
+    #get the addres in customerinfo
+    print(customer[3].get_address('Prakrittipon'))
+    
     for i in range(len(customer)):
         print(customer[i]._addresses, end='\n')
 
@@ -50,14 +57,14 @@ if __name__ == '__main__':
 
     print()
     
-    # # delete address 3 in list of customer
+    # delete address 3 in list of customer
     customer[2].delete_address(customer[2]._addresses[0])
     print(customer[2]._addresses)
     print()
 
-    # # check order
+    #  check order
     print(customer[0].store_order(order1))
     print('--------------------------------------')
 
-    # check review
+    # # check review
     print(customer_review)
