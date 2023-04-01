@@ -1,8 +1,7 @@
 from wishlish import Wishlist
 from shoppingcart import ShoppingCart
-from tool import Item,Tool
 from address import Address
-from order import Order
+from tool import Item,Tool
 from review import Review
 
 class CustomerInfo:
@@ -15,7 +14,7 @@ class CustomerInfo:
         self.my_wishlist = Wishlist()
         self.my_shoppingcart = ShoppingCart()
         self.my_order = []
-        self.my_review = []
+        self._my_review = []
         self.used_coupon = []
 
     def check_coupon(self, coupon):
@@ -26,38 +25,30 @@ class CustomerInfo:
 
     def store_order(self,order):
         for i in self.my_order:
-            if self.my_order[i] == order:
-                return self.my_order[i]
+            if i == order:
+                return i
 
-    def store_review(self, review):
-        for i in self.my_review:
-            if self.my_review[i] == review:
-                return self.my_review[i]
+    def store_review(self,first_name) :
+        for i in self.get_my_reviewed:
+            if i._user_name == first_name  :
+                return i
 
-    def add_address(self,address):
-        if address._name not in self._addresses:
-            self._addresses.append(address)
-        else:
-            for i in self._addresses:
-                if i.name == address.name:
-                    i = address
-                break
-
-    def get_address(self, address):
-        for i in range(len(self._addresses)):
-            if self._addresses[i]._name == address._name:
-                return self._addresses[i]
-                break
-
-    def update_edit_address(self, address):
-        for i in range(len(self._addresses)):
-            if self._addresses[i]._name == address._name:
-                self._addresses[i] = address
-                break
+    def create_address(self,name,company,country,state,city,address,phone_number,postal_code):
+        new_address = Address(name,company,country,state,city,address,phone_number,postal_code)
+        for address in self.address:
+            if address.name == new_address.name:
+                return print('Unvailable to create a new address. Please check your name isn\'t duplicate.')
             
-    def delete_address(self, address):
-        self._addresses.remove(address)
+        self.address.append(new_address)        
+            
+    def get_address(self, name):
+        for i in self.address:
+            if i.name == name:
+                return i
+         
 
+    def delete_address(self, address):
+        self.address.remove(address)
 
     def get_ShoppingCart(self):
         return self.my_shoppingcart
@@ -73,7 +64,11 @@ class CustomerInfo:
     @property
     def my_reviewed(self):
         return self._my_review
-    
+
+    @property
+    def address(self):
+        return self._addresses
+        
     def __str__(self) -> str:
         return str(self.__class__)+'\n'+', '.join(f'{key} : {value}' for key, value in self.__dict__.items())
         
