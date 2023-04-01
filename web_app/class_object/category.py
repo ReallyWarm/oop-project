@@ -1,5 +1,4 @@
 from tool import Tool
-
 class Category:
     _all_types = [ ]
     _all_subtypes = [ ]
@@ -7,7 +6,9 @@ class Category:
 
     def __init__(self) -> None:
         self._types_of_tool = [ ]
-
+    @property
+    def tools(self): 
+        return self._all_tools
     @property
     def types_of_tool(self) -> list:
         return self._types_of_tool
@@ -19,6 +20,14 @@ class Category:
     @staticmethod
     def get_tools_list(subtype_of_tool:'SubtypeOfTool') -> list:
         return subtype_of_tool.tools_list
+    
+    def delete_wholesale(self,wholesale_code): 
+        for tool in self.tools: 
+            for wholesale in tool.wholesales : 
+                if wholesale.code == wholesale_code : 
+                    tool.wholesales.remove(wholesale)
+                    del wholesale 
+
 
     def add_type(self, type_of_tool:'TypeOfTool') -> None:
         self.types_of_tool.append(type_of_tool)

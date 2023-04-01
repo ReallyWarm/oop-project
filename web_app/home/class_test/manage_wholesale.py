@@ -41,11 +41,10 @@ if __name__ == "__main__":
     print(testing._wholesale[0].amount)
 
     # delete wholesale 
+    category.delete_wholesale("03x")
     system.delete_wholesale("03x") 
-    print(system._wholesale) 
-    testing.delete_wholesale("03x") 
-    print(testing._wholesale)
+    print(system.wholesales) 
+    # testing.delete_wholesale("03x") 
+    print(testing.wholesales)
     # update tool 
     # print(system._wholesale) 
-
-

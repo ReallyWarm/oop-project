@@ -12,7 +12,9 @@ class System():
         self._server_coupon = []
         self._wholesale = []
         self._customerinfo = []
-
+    @property 
+    def wholesales(self):
+        return self._wholesale
     @property
     def category(self):
         return self._category
@@ -23,12 +25,12 @@ class System():
     
     def search_wholesale(self,code):
         for wholesale in self._wholesale:
-            if wholesale._code == code : 
+            if wholesale.code == code : 
                 return wholesale
 
     def search_coupon(self,coupon_code): 
         for coupon in self._server_coupon:
-            if coupon._code == coupon_code: 
+            if coupon.code == coupon_code: 
                 return coupon
 
     def add_to_cart(self, tool, buy_amount):
@@ -48,7 +50,7 @@ class System():
         self._wholesale.append(wholesale)
 
     def modify_wholesale(self,wholesale_code,new_amount = None,new_discount_value = None):
-        for wholesale in self._wholesale : 
+        for wholesale in self.wholesales : 
             if wholesale.code == wholesale_code: 
                 if new_amount is not None : 
                     wholesale.amount = new_amount 
@@ -58,8 +60,9 @@ class System():
 
     def delete_wholesale(self,wholesale_code):
         for wholesale in self._wholesale : 
-            if wholesale.code == wholesale_code : 
-                self._wholesale.remove(wholesale) 
+            if wholesale.code == wholesale_code :
+                self.wholesales.remove(wholesale)
+                del wholesale 
                 return
 
     def add_coupon(self,code,discount_value,name):  

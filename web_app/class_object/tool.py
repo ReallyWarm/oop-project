@@ -20,17 +20,11 @@ class Tool:
         return self._name
     
     @property
-    def wholesale(self):
+    def wholesales(self):
         return self._wholesale
     
     def add_wholesale(self,wholesale):
         self._wholesale.append(wholesale)
-
-    def delete_wholesale(self,code): 
-        for wholesale in self._wholesale : 
-            if wholesale.code == code : 
-                self._wholesale.remove(wholesale) 
-                return
 
     @property
     def price(self):
