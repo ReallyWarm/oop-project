@@ -13,7 +13,26 @@ class Address:
         self._address = address
         self._phone_number = phone_number
         self._postal_code = postal_code
-
+ 
+    @property
+    def name(self):
+        return self._name 
+    
+    @property
+    def country(self):
+        return self._country
+    
+    @property
+    def state(self):
+        return self._state
+    
+    @property
+    def city(self):
+        return self._city
+    
+    @property
+    def address(self):
+        return self._address
     
     def get_address(self):
         pass
@@ -38,8 +57,8 @@ class Address:
             self._phone_number = phone_number
         if postal_code is not None :
             self._postal_code = postal_code
+
             
     def __repr__(self) -> str:
         return "{}".format(self._name +','+"{}".format(self._company)+','+"{}".format(self._country)+','+"{}".format(self._state)+
-                           ','+"{}".format(self._city)+','+"{}".format(self._phone_number)+
-                           ','+"{}".format(self._address)+','+"{}".format(self._phone_number)+','+"{}".format(self._postal_code))
+                           ','+"{}".format(self._city)+','+"{}".format(self._address)+','+"{}".format(self._phone_number)+','+"{}".format(self._postal_code))
