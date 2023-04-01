@@ -58,7 +58,8 @@ class System():
                     wholesale.discount_value = new_discount_value
                 return
 
-    def delete_wholesale(self,wholesale_code,tools):
+    def delete_wholesale(self,wholesale_code):
+        tools = self._category.search_by_name('')
         for key,value in tools.items(): 
             for wholesale in value.wholesales : 
                 if wholesale.code == wholesale_code: 
