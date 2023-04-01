@@ -56,36 +56,21 @@ class CustomerInfo:
     def find_user(self, username):
         pass
 
-    def create_review(self, tool):
-        head_of_review = input('Enter head of review:')
-        comment = input('Enter comment: ')
-        rating = float(input('Enter rating: '))
-        date_of_review = str(input('Enter date of review: '))
-        review = Review(self.get_username, head_of_review, comment, date_of_review, rating)
-        print("--------------------------------------------")
-        print("creat review success")
-        print("'id of review is ")
-        print(id(review))
-        print(review)
-        print("--------------------------------------")
-        print("review information is \n reviewed user:{} \n head of review: {} \n comment review: {} \n date of review: {} \n rating: {}".\
-              format(review._user_name, review._head_of_review, review._comment, review._date_of_review, review._rating))
-        self.get_my_reviewed.append(review)
-        print("---------------------------------------------")
-        print("My reviewed: {}".format(self.get_my_reviewed))
+    def create_review(self, tool, head_of_review, comment, rating, date_of_review):
+        review = Review(self._first_name, head_of_review, comment, date_of_review, rating)
+        self._my_review.append(review)
         tool.add_review(review)
 
     @property
-    def get_username(self):
-        return self._first_name
-        
-    @property
-    def get_my_reviewed(self):
+    def my_reviewed(self):
         return self._my_review
-    
+
     @property
     def address(self):
         return self._addresses
+        
+    def __str__(self) -> str:
+        return str(self.__class__)+'\n'+', '.join(f'{key} : {value}' for key, value in self.__dict__.items())
         
     def __repr__(self) -> str: 
         return "{}".format(self._addresses)

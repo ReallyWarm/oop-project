@@ -63,19 +63,16 @@ class Tool:
         print(self)
 
     def add_review(self, review):
-        self.get_review_list.append(review)
-        print(self.get_review_list)
+        self._reviews.append(review)
         self.__n_review += 1
         self.__rated_review += review._rating
         self._rating = self.__rated_review / self.__n_review
-        print("Now rating is {}".format(self.get_rating))
-        print("update review success")
 
     @property
-    def get_review_list(self):
+    def review_list(self):
         return self._reviews
     @property
-    def get_rating(self):
+    def rating(self):
         return self._rating
 
     def __str__(self) -> str:
