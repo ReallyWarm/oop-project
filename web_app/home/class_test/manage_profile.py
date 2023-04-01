@@ -20,8 +20,7 @@ if __name__ == '__main__':
     order1 = Order('ad12', '34000', 'Pronthep', 'Success', '12.00')
     test_drill = Tool('01x', 'Testing drill', 'POWER',
                       'idk', 10, None, 1000.00, 'Drills')
-    customer[3].create_review(test_drill)
-    customer_review = customer[3].store_review('Prakrittipon')
+    customer[3].create_review(test_drill, "test_review1", "good_tool", 4.5, "4/1/2023")
 
     # add customer information to system
     for i in range(len(customer)):
@@ -47,24 +46,25 @@ if __name__ == '__main__':
     print(customer[3].get_address('Prakrittipon'))
     
     for i in range(len(customer)):
-        print(customer[i]._addresses, end='\n')
+        print(customer[i].address, end='\n')
 
     print()
 
     #edit address
-    customer[0]._addresses[0].edit_address(country='England',phone_number='0900563573')
-    print(customer[0]._addresses)
+    customer[0].get_address('Pornthep').edit_address(country='England',phone_number='0900563573')
+    print(customer[0].address)
 
     print()
     
     # delete address 3 in list of customer
-    customer[2].delete_address(customer[2]._addresses[0])
-    print(customer[2]._addresses)
+    customer[2].delete_address('พรี่โอมใจเกเร')
+    print(customer[2].address)
     print()
 
     #  check order
-    print(customer[0].store_order(order1))
+    customer[0].store_order(order1)
+    print(customer[0].my_order[0])
     print('--------------------------------------')
 
     # # check review
-    print(customer_review)
+    print(customer[3].my_reviewed[0])

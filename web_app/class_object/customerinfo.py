@@ -11,11 +11,11 @@ class CustomerInfo:
         self._email = email
         self._company_name = company_name
         self._addresses = []
-        self.my_wishlist = Wishlist()
-        self.my_shoppingcart = ShoppingCart()
-        self.my_order = []
+        self._my_wishlist = Wishlist()
+        self._my_shoppingcart = ShoppingCart()
+        self._my_order = []
         self._my_review = []
-        self.used_coupon = []
+        self._used_coupon = []
 
     def check_coupon(self, coupon):
         pass
@@ -24,14 +24,7 @@ class CustomerInfo:
         pass
 
     def store_order(self,order):
-        for i in self.my_order:
-            if i == order:
-                return i
-
-    def store_review(self,first_name) :
-        for i in self.get_my_reviewed:
-            if i._user_name == first_name  :
-                return i
+        self._my_order.append(order)
 
     def create_address(self,name,company,country,state,city,address,phone_number,postal_code):
         new_address = Address(name,company,country,state,city,address,phone_number,postal_code)
@@ -44,10 +37,10 @@ class CustomerInfo:
     def get_address(self, name):
         for i in self.address:
             if i.name == name:
-                return i
-         
+                return i        
 
-    def delete_address(self, address):
+    def delete_address(self, name):
+        address = self.get_address(name)
         self.address.remove(address)
 
     def get_ShoppingCart(self):
@@ -64,6 +57,22 @@ class CustomerInfo:
     @property
     def my_reviewed(self):
         return self._my_review
+    
+    @property
+    def my_order(self):
+        return self._my_order
+    
+    @property
+    def my_wishlist(self):
+        return self._my_wishlist
+    
+    @property
+    def my_shoppingcart(self):
+        return self._my_shoppingcart
+    
+    @property
+    def used_coupon(self):
+        return self._used_coupon
 
     @property
     def address(self):

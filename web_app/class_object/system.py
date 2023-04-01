@@ -23,7 +23,7 @@ class System():
 
     def search_coupon(self,coupon_code): 
         for coupon in self._server_coupon:
-            if coupon._code == coupon_code: 
+            if coupon.code == coupon_code: 
                 return coupon
 
     def add_to_cart(self, tool, buy_amount):
@@ -56,7 +56,7 @@ class System():
 
     def modify_coupon(self,coupon_code,new_discount_value = None,new_name = None):
         for coupon in self._server_coupon :
-            if coupon._code == coupon_code:  
+            if coupon.code == coupon_code:  
                 if coupon.name is not None : 
                     coupon.name = new_name
                 if coupon.discount_value is not None :
@@ -65,22 +65,23 @@ class System():
 
     def delete_coupon(self,coupon_code):
         for coupon in self._server_coupon: 
-            if coupon._code == coupon_code:
+            if coupon.code == coupon_code:
                 self._server_coupon.remove(coupon) 
                 return
+            
     def add_tool(self):
         tool_name = input('Enter tool name:')
-        self._tool_description = input('Enter tool_description:')
-        self._tool_brand = input('Enter tool_brane:')
-        self._tool_price = input('Enter tool price:')
-        self._tool_category = input('Enter tool_category:')
-        self._tool_review = []
-        self._tool_image = []
-        self._tool_wholesale = []
+        tool_description = input('Enter tool_description:')
+        tool_brand = input('Enter tool_brane:')
+        tool_price = input('Enter tool price:')
+        tool_category = input('Enter tool_category:')
+        tool_review = []
+        tool_image = []
+        tool_wholesale = []
         #type_of_tool = TypeOfTool(name=input('Enter type of tool:'))
         #subtype_of_tool = SubtypeOfTool(name=input('Enter subtype of tool:'))
-        tool_name = Tool(tool_name, self._tool_description, self._tool_brand, self._tool_price, self._tool_category, self._tool_review,\
-                          self._tool_image,self._tool_wholesale)
+        tool_name = Tool(tool_name, tool_description, tool_brand, tool_price, tool_category, tool_review,\
+                          tool_image,tool_wholesale)
         #self.category.add_type_of_tool(type_of_tool)
         #TypeOfTool.add_subtype(subtype_of_tool)
         #SubtypeOfTool.add_tool(tool_name)
