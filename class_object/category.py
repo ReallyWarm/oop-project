@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from tool import Tool
+    from .tool import Tool
 
 class Category:
     _all_types = [ ]
