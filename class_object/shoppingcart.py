@@ -1,7 +1,7 @@
-from tool import Item
+from .tool import Item
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from tool import Tool
+    from .tool import Tool
 
 class ShoppingCart: 
     def __init__(self) -> None:

@@ -1,8 +1,8 @@
-from category import Category
-from shoppingcart import ShoppingCart
-from discount import Coupon, Wholesale
-from tool import Tool
-from customerinfo import CustomerInfo
+from .category import Category
+from .shoppingcart import ShoppingCart
+from .discount import Coupon, Wholesale
+from .tool import Tool
+from .customerinfo import CustomerInfo
 
 class System():
     # Data of coupon and wholesale
