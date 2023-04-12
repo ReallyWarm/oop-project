@@ -14,6 +14,9 @@ class System():
         self._customerinfo = []
 
     @property 
+    def server_coupon (self) -> list : 
+        return self._server_coupon
+    @property 
     def wholesales(self) -> list:
         return self._wholesale
     
