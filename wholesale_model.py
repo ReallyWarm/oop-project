@@ -40,47 +40,50 @@ testing.add_wholesale(wholesale)
 
 
 
-def all_wholesale(tool) -> dict :  
+def all_wholesale(tool : Tool) -> dict :  
+    dict = {}
     for ws in tool.wholesales : 
-        dict ={}
-        dict["code"] = ws.code 
-        dict["amount"] = ws.amount
-        dict["discount_value"] = ws.discount_value 
-    return {tool.name:dict},tool.name
+        dict[ws.code]={"discount_value":ws.discount_value,"amount":ws.amount}
+    return dict
     
-DICT,name = all_wholesale(testing)
-print(DICT)
-
-@app.get("/wholesale/all",tags = ['wholesale'])
-async def show_wholesale()->dict :
-    return DICT
+@app.get("/wholesale/all",tags = ['wholesale']) 
+async def show_wholesale()->dict : 
+# def show_wholesale()->dict :
+    return all_wholesale(testing)
 
 @app.put("/wholesale/all",tags = ['wholesale']) 
-async def update_wholesale(code : str,amount : int, discount_value : int) ->dict :
-    for key in DICT.keys(): 
-        if DICT[key]["code"] == code : 
-            DICT[key]["amount"] = amount 
-            DICT[key]["discount_value"] = discount_value
-            return {"data":f"wholesale at code {code} has been update"} 
+async def update_wholesale(data : dict) ->dict :
+# def update_wholesale(data : dict) ->dict :
+    code = data["tool_modify"]["code"]
+    for key_sys in all_wholesale(testing).keys(): 
+        if key_sys == data["tool_modify"]["code"] : 
+                system.modify_wholesale(data["tool_modify"]["code"],data["tool_modify"]["amount"],data["tool_modify"]["discount_value"])
+                return {"data":f"wholesale at code {code} has been update"} 
+                   
     return {"data":f"wholesale at code {code} is not found"} 
 
 @app.post("/wholesale/all",tags = ['wholesale'])  
-async def add_wholesale(name : str,code : str,amount : int,discount_value : int): 
-    value = {} 
-    value["code"] = code 
-    value["amount"] = amount
-    value["discount_value"] = discount_value
-    for key in DICT.keys(): 
-        if DICT[key]["code"] == code :
-            return {"data" : f"wholesale have already in dict"}
-    DICT[name] = value
-    return {"data" : f"add new wholesale with code {code} successfully"}
+async def add_wholesale(data: dict) -> dict:  
+# def add_wholesale(data: dict) -> dict:  
+    for key_sys in all_wholesale(testing).keys(): 
+        if key_sys == data["tool_modify"]["code"] : 
+                return {"data" : f"wholesale have already in dict"}
+    for wholesale in system.wholesales : 
+        if data["tool_modify"]["code"] == wholesale.code :    
+            testing.add_wholesale(system.search_wholesale(wholesale.code))
+            return {"data" : f"add new wholesale with code {wholesale.code} successfully"}
+    code =  data["tool_modify"]["code"]
+    system.add_wholesale(data["tool_modify"]["code"],data["tool_modify"]["amount"],data["tool_modify"]["discount_value"])
+    added_wholesale = system.search_wholesale(data["tool_modify"]["code"])
+    testing.add_wholesale(added_wholesale)
+    return {"data" : f"add new wholesale with code  {code}  successfully"}
 
 @app.delete("/wholesale/all",tags = ['wholesale']) 
-async def delete_wholesale(code : str) ->dict: 
-    for key in DICT.keys(): 
-        if DICT[key]["code"] == code : 
-            DICT.pop(key)
-            return {"data":f"wholesale with code {code} have been deleted"}
+async def delete_wholesale(data : dict) ->dict: 
+# def delete_wholesale(data : dict) ->dict: 
+    code = data["code"]
+    for code in all_wholesale(testing) : 
+        if code == data["code"]: 
+            system.delete_wholesale(data["code"])
+            return {"data":f"wholesale with code {code} have been deleted"} 
     return {"data":f"wholesale with code {code} is not found"}
-
