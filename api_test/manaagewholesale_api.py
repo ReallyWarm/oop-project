@@ -1,23 +1,24 @@
-from fastapi import FastAPI
 import requests
 import json
-#r = requests.get("http://127.0.0.1:8000/wholesale/all ")
+input = {"tool_modify":{"code":"12x","amount":12,"discount_value":68}}
+update = {"tool_modify":{"code":"12x","amount":54,"discount_value":18}}
+delete = {"code":"12x"}   
 
+# get wholesale
+r = requests.get("http://127.0.0.1:8000/wholesale/all") 
+print(r.json())  
 
-wholesale =  {  "hammer":
-            {
-                "code":"099x", 
-                "amount": 45,
-                "discount_value": 80,
-            }
-}
+# add wholesale 
+r = requests.post("http://127.0.0.1:8000/wholesale/all",data = json.dumps(input))
+r = requests.get("http://127.0.0.1:8000/wholesale/all") 
+print(r.json()) 
 
+#update wholesale
+r = requests.put("http://127.0.0.1:8000/wholesale/all",data=json.dumps(update)) 
+r = requests.get("http://127.0.0.1:8000/wholesale/all") 
+print(r.json()) 
 
-
-r = requests.post("http://127.0.0.1:8000/wholesale/all", data = json.dumps(wholesale))
-print(r) 
-
-# x = requests.get("http://127.0.0.1:8000/wholesale/all")
-# print(x)
-
-
+# delete wholesale 
+r = requests.delete("http://127.0.0.1:8000/wholesale/all",data = json.dumps(delete))
+r = requests.get("http://127.0.0.1:8000/wholesale/all") 
+print(r.json()) 
