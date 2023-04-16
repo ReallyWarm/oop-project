@@ -15,7 +15,7 @@ r = requests.get("http://127.0.0.1:8000/coupons/all")
 print(r.json()) 
 
 # modify coupon
-r = requests.put("http://127.0.0.1:8000/coupons/all",data = json.dumps("12x"))
+r = requests.put("http://127.0.0.1:8000/coupons/all",data = json.dumps(coupon_modify))
 print(r.json()) 
 r = requests.get("http://127.0.0.1:8000/coupons/all")  
 print(r.json()) 
