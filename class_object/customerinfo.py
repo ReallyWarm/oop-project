@@ -68,7 +68,7 @@ class CustomerInfo:
     @property
     def my_wishlist(self) -> 'Wishlist':
         return self._my_wishlist
-    
+     
     @property
     def first_name(self) -> str:
         return self._first_name
