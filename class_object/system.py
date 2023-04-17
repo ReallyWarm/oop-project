@@ -13,6 +13,10 @@ class System():
         self._wholesale = []
         self._customerinfo = []
 
+    @property
+    def get_customerinfo(self)->list:
+        return self._customerinfo
+        
     @property 
     def wholesales(self) -> list:
         return self._wholesale
