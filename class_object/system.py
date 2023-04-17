@@ -24,7 +24,7 @@ class System():
     @property
     def category(self) -> 'Category':
         return self._category
-
+    
     @property
     def system_cart(self) -> 'ShoppingCart':
         return self._system_cart
