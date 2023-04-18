@@ -5,9 +5,9 @@ r = requests.get('http://127.0.0.1:8000/system/category/')
 print(r, r.json())
 print('-'*20)
 
-hand_tools_type = {'name':'Hand tools'}
-r = requests.post('http://127.0.0.1:8000/system/category/typeoftools/', data=json.dumps(hand_tools_type))
-print(r, r.json())
+# hand_tools_type = {'name':'Hand tools'}
+# r = requests.post('http://127.0.0.1:8000/system/category/typeoftools/', data=json.dumps(hand_tools_type))
+# print(r, r.json())
 garden_tools_type = {'name':'Garden tools'}
 r = requests.post('http://127.0.0.1:8000/system/category/typeoftools/', data=json.dumps(garden_tools_type))
 print(r, r.json())
@@ -20,12 +20,12 @@ r = requests.get('http://127.0.0.1:8000/system/category/')
 print(r, r.json())
 print('-'*20)
 
-drills_type = {'name':'Drills', 'type':'Hand tools'}
-r = requests.post('http://127.0.0.1:8000/system/category/subtypeoftools/', data=json.dumps(drills_type))
-print(r, r.json())
-saws_type = {'name':'Saws', 'type':'Hand tools'}
-r = requests.post('http://127.0.0.1:8000/system/category/subtypeoftools/', data=json.dumps(saws_type))
-print(r, r.json())
+# drills_type = {'name':'Drills', 'type':'Hand tools'}
+# r = requests.post('http://127.0.0.1:8000/system/category/subtypeoftools/', data=json.dumps(drills_type))
+# print(r, r.json())
+# saws_type = {'name':'Saws', 'type':'Hand tools'}
+# r = requests.post('http://127.0.0.1:8000/system/category/subtypeoftools/', data=json.dumps(saws_type))
+# print(r, r.json())
 hammers_type = {'name':'Hammers', 'type':'Hand tools'}
 r = requests.post('http://127.0.0.1:8000/system/category/subtypeoftools/', data=json.dumps(hammers_type))
 print(r, r.json())
@@ -44,18 +44,18 @@ r = requests.get('http://127.0.0.1:8000/system/category?search=d')
 print(r, r.json())
 print('-'*20)
 
-drill_1 = {'code':'01x', 'name':'Testing drill', 'description':'POWER', 'brand':'idk', 
-           'amount':10, 'image':None, 'price':1000.00, 'type_of_tool':'Drills'}
-r = requests.post('http://127.0.0.1:8000/system/category/tools/', data=json.dumps(drill_1))
-print(r, r.json())
-drill_2 = {'code':'02x', 'name':'faifa drill', 'description':'POWER', 'brand':'idk', 
-           'amount':12, 'image':None, 'price':800.00, 'type_of_tool':'Drills'}
-r = requests.post('http://127.0.0.1:8000/system/category/tools/', data=json.dumps(drill_2))
-print(r, r.json())
-saw_1 = {'code':'01x', 'name':'Testing saw', 'description':'da-da', 'brand':'idk', 
-         'amount':10, 'image':None, 'price':700.00, 'type_of_tool':'Saws'}
-r = requests.post('http://127.0.0.1:8000/system/category/tools/', data=json.dumps(saw_1))
-print(r, r.json())
+# drill_1 = {'code':'01x', 'name':'Testing drill', 'description':'POWER', 'brand':'idk', 
+#            'amount':10, 'image':None, 'price':1000.00, 'type_of_tool':'Drills'}
+# r = requests.post('http://127.0.0.1:8000/system/category/tools/', data=json.dumps(drill_1))
+# print(r, r.json())
+# drill_2 = {'code':'02x', 'name':'faifa drill', 'description':'POWER', 'brand':'idk', 
+#            'amount':12, 'image':None, 'price':800.00, 'type_of_tool':'Drills'}
+# r = requests.post('http://127.0.0.1:8000/system/category/tools/', data=json.dumps(drill_2))
+# print(r, r.json())
+# saw_1 = {'code':'01x', 'name':'Testing saw', 'description':'da-da', 'brand':'idk', 
+#          'amount':10, 'image':None, 'price':700.00, 'type_of_tool':'Saws'}
+# r = requests.post('http://127.0.0.1:8000/system/category/tools/', data=json.dumps(saw_1))
+# print(r, r.json())
 saw_2 = {'code':'02x', 'name':'see saw', 'description':'da-da', 'brand':'idk', 
          'amount':12, 'image':None, 'price':1000.00, 'type_of_tool':'Saws'}
 r = requests.post('http://127.0.0.1:8000/system/category/tools/', data=json.dumps(saw_2))
