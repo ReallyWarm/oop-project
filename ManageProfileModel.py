@@ -23,7 +23,9 @@ customer[1].create_address('พรี่โอมใจเกเร','ใจเ�
 customer[2].create_address('Prakrittipon','KMIL','Thailand','Bangkok','Pha ya tai','sol.12 24/89','0901276842','11120')   
 
 order1 = Order([], '34000', 'NorNor', 'Success', '12.00')
+order2 = Order(['test_drill','น็อต'], '12000', 'พรี่โอมใจเกเร', 'Success', '150.00')
 customer[0].store_order(order1)
+customer[1].store_order(order2)
 test_drill = Tool('01x', 'Testing drill', 'POWER',
                       'idk', 10, None, 1000.00, 'Drills')
 customer[2].create_review(test_drill, "test_review1", "good_tool", 4.5, "4/1/2023")   
@@ -44,24 +46,24 @@ async def create_address(name:str, company:str, country:str, state:str,
         if customer.first_name == name:
             customer.create_address(name,company, country, state, city, address, phone_number,postal_code)
             return {"data":"You have create the address successfully."}
-            break
+            
     return{"data":"Unable to create the address."}
 
 #delete the address     
 @app.delete('/cusrtomer/address/{name}',tags=['address'])     
 async def delete_address(name:str) ->dict:
-    for i in range(len(customer)):
-        if customer[i].first_name == name:
-            customer[i].delete_address(name)
+    for customer in Sys.customerinfo:
+        if customer.first_name == name:
+            customer.delete_address(name)
             return {"data":"You have delete the address successfully"}
     return {"data":"Unable to delete the address"}    
 
 #get the address              
 @app.get('/customer/address/{address}',tags=['address'])   
 async def get_address(name:str)->dict:
-  for i in range(len(customer)):
-      if customer[i].first_name == name:
-          address = customer[i].get_address(name)
+  for customer in Sys.customerinfo:
+      if customer.first_name == name:
+          address = customer.get_address(name)
           return {"data":f'Your address  {address}'}
   return {"data":"Sorry cannot found your address in system. Please try again!"}    
       
@@ -69,24 +71,24 @@ async def get_address(name:str)->dict:
 #edit the address       
 @app.put('/customer/address/{address}',tags=['address'])
 async def edit_address(name:str=None, company:str=None, country:str=None, state:str=None, city:str=None ,address:str=None, phone_number:str=None, postal_code:str=None) ->dict:
-    for i in range(len(customer)):
-        if customer[i].first_name == name:
-            new_address = customer[i].get_address(name).edit_address(company, country,state,city,address,phone_number, postal_code)
+    for customer in Sys.customerinfo:
+        if customer.first_name == name:
+            new_address = customer.get_address(name).edit_address(company, country,state,city,address,phone_number, postal_code)
         return {"data":f"Your edit address is successfully {new_address}"}
     return {"data":"Unable to edit address. Please try again"}
 
 @app.get('/customer/order{name}')
 async def check_order(name:str)->dict:
-    for i in range(len(customer)):
-        if customer[i].first_name == name:
-            order = customer[i].my_order[i]
+    for customer in Sys.customerinfo:
+        if customer.first_name == name:
+            order = customer.my_order[0]
             return {"data":f"Your order is {order}"}
     return {"data":"Not found this order. Please try again"}    
 
 @app.get('/customer/review{name}')
 async def check_review(name:str)->dict:
-    for i in range(len(customer)):
-        if customer[i].first_name == name:
-            review = customer[i].my_reviewed[0]
+    for customer in Sys.customerinfo:
+        if customer.first_name == name:
+            review = customer.my_reviewed[0]
             return {"data":f"Your review is {review}"}
     return {"data":"Not found this review. Please try again"}
