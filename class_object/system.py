@@ -3,6 +3,7 @@ from shoppingcart import ShoppingCart
 from discount import Coupon, Wholesale
 from tool import Tool
 from customerinfo import CustomerInfo
+from payment import Payment
 
 class System():
     # Data of coupon and wholesale
@@ -91,25 +92,44 @@ class System():
                 self._server_coupon.remove(coupon) 
                 return
             
-    def add_tool(self):
-        tool_name = input('Enter tool name:')
-        tool_description = input('Enter tool_description:')
-        tool_brand = input('Enter tool_brane:')
-        tool_price = input('Enter tool price:')
-        tool_category = input('Enter tool_category:')
-        tool_review = []
-        tool_image = []
-        tool_wholesale = []
-        #type_of_tool = TypeOfTool(name=input('Enter type of tool:'))
-        #subtype_of_tool = SubtypeOfTool(name=input('Enter subtype of tool:'))
-        tool_name = Tool(tool_name, tool_description, tool_brand, tool_price, tool_category, tool_review,\
-                          tool_image,tool_wholesale)
-        #self.category.add_type_of_tool(type_of_tool)
-        #TypeOfTool.add_subtype(subtype_of_tool)
-        #SubtypeOfTool.add_tool(tool_name)
-        #print(SubtypeOfTool.tools_list)
+    def create_tool(self, product_code, tool_name, tool_description, tool_brand, tool_amount, tool_image, tool_price, subtype_of_tool):
+        tool_name = Tool(product_code, tool_name, tool_description, tool_brand, tool_amount, tool_image, tool_price, subtype_of_tool)
+        self._category.subtype_add_tool(subtype_of_tool, tool_name)
+        
+    def delete_tool(self, tool):
+        for tool_in_list in self._category._all_tools: 
+            if tool_in_list.name == tool.name:
+                self._category._all_tools.remove(tool_in_list)
+                
+        for subtype in self._category._all_subtypes:
+            if subtype.subtypename == tool.type_of_tool:
+                for tool_in_subtype in subtype.tools_list:
+                    if tool_in_subtype.name == tool.name:
+                        subtype.tools_list.remove(tool_in_subtype)
 
-    def delete_tool(self, will_delete_tool):
-        del will_delete_tool
-        #search by name or category
-        #self._will_delete_tool = A
+    def modify_tool(self, tool, name:str=None, description:str=None, brand:str=None, price:float=None, code:str=None ,type_of_tool:str=None) -> None:
+        if name is not None :
+            tool.change_name(name)
+        if description is not None :
+            tool.change_description(description)
+        if brand is not None :
+            tool.change_brand(brand)
+        if price is not None :
+            tool.change_price(price)
+        if code is not None :
+            tool.change_code(code)
+        if type_of_tool is not None :
+            tool.change_type_of_tool(type_of_tool)
+            search_type = self._category.search_by_category(type_of_tool)
+            selected_type = search_type[type_of_tool]
+            self.delete_tool(tool)
+            self._category.subtype_add_tool(selected_type, tool)
+
+    def make_payment(self,card : str,coupon_code :str = None): 
+        coupon = self.search_coupon(coupon_code) 
+        if(coupon is None): 
+            return "coupon not found" 
+        total_price = self._system_cart.total_price 
+        discount_value = coupon.discount_value
+        payment = Payment(total_price,card,discount_value)
+        payment.make_payment()

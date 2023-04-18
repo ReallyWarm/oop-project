@@ -108,8 +108,8 @@ class SubtypeOfTool:
     def add_tool(self, tool:'Tool') -> list:
         self._tools_list.append(tool)
 
-    def __str__(self) -> str:
-        return str(self.__class__)+f' -> name : {self.subtypename}, subtypes of tool : {len(self.tools_list)}'
+    def __str__(self) -> str: 
+        return str(self.__class__)+f' -> name : {self.subtypename}, tool : {len(self.tools_list)}'
     
     def __repr__(self) -> str:
         return f'\"{self.__str__()}\"'
