@@ -1,7 +1,7 @@
 import requests
 import json
-input = {"tool_modify":{"code":"12x","amount":12,"discount_value":68}}
-update = {"tool_modify":{"code":"12x","amount":54,"discount_value":18}}
+input = {"wholesale_add":{"code":"12x","amount":12,"discount_value":68}}
+update = {"wholesale_modify":{"code":"12x","amount":54,"discount_value":18}}
 delete = {"code":"12x"}   
 
 # get wholesale

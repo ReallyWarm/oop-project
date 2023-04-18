@@ -36,7 +36,7 @@ async def search_category(search:str=''):
 async def search_category(search:str=''):
     return system.category.search_by_name(search)
 
-# MANAGE TOOL
+#MANAGE TOOL
 @app.post("/system/category/tools/")
 async def add_tool(tool_data:dict):
     system.create_tool(tool_data["code"], tool_data["name"], tool_data["description"], tool_data["brand"],
@@ -46,14 +46,15 @@ async def add_tool(tool_data:dict):
 # MANAGE COUPON
 def make_coupon_dict(system : System): 
     dict = {}
-    for item in system.server_coupon :
+    for item in system.server_coupons :
         dict[item.code] = {"name":item.name, "discount_value":item.discount_value}
     return dict
 
 @app.get("/coupons/all",tags = ['coupon'])
-async def get_coupons() -> dict:  
+async def get_coupons() -> dict:   
+# def  get_coupons() -> dict: 
     return make_coupon_dict(system)
- 
+
 @app.put("/coupons/all",tags=['coupon'])
 async def update_coupons(newcoupon : dict) -> dict: 
     for key_sys in make_coupon_dict(system).keys(): 
@@ -88,24 +89,35 @@ def system_wholesale() -> dict :
     for ws in system.wholesales : 
         dict[ws.code]={"discount_value":ws.discount_value,"amount":ws.amount}
     return dict
-    
+
+def get_wholesale(tool : Tool) -> dict :  
+    dict = {} 
+    for ws in tool.wholesales : 
+        dict[ws.code]={"discount_value":ws.discount_value,"amount":ws.amount}
+    return dict
+
 @app.get("/wholesale/all",tags = ['wholesale']) 
 async def show_wholesale()->dict : 
     return system_wholesale()
 
 @app.put("/wholesale/all",tags = ['wholesale']) 
 async def update_wholesale(data : dict) ->dict :
-    code = data["tool_modify"]["code"]
+    code = data["wholesale_modify"]["code"]
     for key_sys in system_wholesale().keys(): 
-        if key_sys == data["tool_modify"]["code"] : 
-                system.modify_wholesale(data["tool_modify"]["code"],data["tool_modify"]["amount"],data["tool_modify"]["discount_value"])
+        if key_sys == data["wholesale_modify"]["code"] : 
+                system.modify_wholesale(data["wholesale_modify"]["code"],data["wholesale_modify"]["amount"],data["wholesale_modify"]["discount_value"])
                 return {"data":f"wholesale at code {code} has been update"} 
                    
     return {"data":f"wholesale at code {code} is not found"} 
 
 @app.post("/wholesale/all",tags = ['wholesale'])  
 async def add_wholesale(data: dict) -> dict:   
-    pass
+    code = data["wholesale_add"]["code"] 
+    for key_sys in system_wholesale().keys(): 
+        if key_sys == code: 
+            return {"data":f"wholesale at code {code} has been update"}
+    system.add_wholesale(data["wholesale_add"]["code"],data["wholesale_add"]["amount"],data["wholesale_add"]["discount_value"])
+    return {"data":f"wholesale at code {code} has been update"}
 
 @app.delete("/wholesale/all",tags = ['wholesale']) 
 async def delete_wholesale(data : dict) ->dict: 
@@ -175,4 +187,3 @@ async def check_review(name:str)->dict:
         if customer.first_name == name:
             return {"data":f"Your review is {customer.my_reviewed}"}
     return {"data":"Not found this review. Please try again"}
-
