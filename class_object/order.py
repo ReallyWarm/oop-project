@@ -19,3 +19,6 @@ class Order:
 
     def update_order(self):
         pass
+
+    def __repr__(self) -> str:
+        return "{}" .format(str(self._orders) +','+self._price +','+self._shipping +','+self._status +','+self._delivery_time)

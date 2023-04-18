@@ -14,6 +14,10 @@ class System():
         self._wholesale = []
         self._customerinfo = []
 
+    @property
+    def customerinfo(self) ->list:
+        return self._customerinfo
+
     @property 
     def server_coupon (self) -> list : 
         return self._server_coupon
@@ -24,7 +28,7 @@ class System():
     @property
     def category(self) -> 'Category':
         return self._category
-
+    
     @property
     def system_cart(self) -> 'ShoppingCart':
         return self._system_cart

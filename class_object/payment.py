@@ -5,10 +5,10 @@ class Payment :
     def __init__(self, total_amount:float,card:str,discount_amount : int = 0) -> None:
         self.__total_amount = total_amount
         self.__date_create = datetime.datetime.now()
-        # self.__id = ''.join(random.choices(string.ascii_uppercase + string.digits, k=10)) 
         self.__id = None
         self.__card = card 
         self.__final_price = (100 - discount_amount) * self.__total_amount/100 
+        
     def make_payment(self):
         if( not self.check_valid_card(self.__card)): 
             return "Invalid card" 
@@ -24,8 +24,5 @@ class Payment :
             return True 
         return False 
 
-
     def perform_payment(self) -> bool:
         return True
-# payment = Payment(231.21,"mnasdxx",21,"sdf5","ON") 
-# print(payment.date_create)
