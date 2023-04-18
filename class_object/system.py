@@ -10,20 +10,20 @@ class System():
     def __init__(self) -> None:
         self._category = Category()
         self._system_cart = ShoppingCart()
-        self._server_coupon = []
-        self._wholesale = []
-        self._customerinfo = []
+        self._server_coupons = []
+        self._wholesales = []
+        self._customerinfos = []
 
     @property
-    def customerinfo(self) ->list:
-        return self._customerinfo
+    def customerinfos(self) ->list:
+        return self._customerinfos
 
     @property 
-    def server_coupon (self) -> list : 
-        return self._server_coupon
+    def server_coupons(self) -> list : 
+        return self._server_coupons
     @property 
     def wholesales(self) -> list:
-        return self._wholesale
+        return self._wholesales
     
     @property
     def category(self) -> 'Category':
@@ -34,12 +34,12 @@ class System():
         return self._system_cart
     
     def search_wholesale(self, code:str) -> 'Wholesale':
-        for wholesale in self._wholesale:
+        for wholesale in self._wholesales:
             if wholesale.code == code : 
                 return wholesale
 
     def search_coupon(self, coupon_code:str) -> 'Coupon': 
-        for coupon in self._server_coupon:
+        for coupon in self._server_coupons:
             if coupon.code == coupon_code: 
                 return coupon
 
@@ -47,7 +47,7 @@ class System():
         self._system_cart.add_item(tool, buy_amount)
 
     def add_customerinfo(self, customer:'CustomerInfo') -> None:
-        self._customerinfo.append(customer)
+        self._customerinfos.append(customer)
 
     def vertify_user(self):
         pass
@@ -57,7 +57,7 @@ class System():
 
     def add_wholesale(self, code:str, amount:int, discount_value:int) -> None: 
         wholesale = Wholesale(code,amount,discount_value)
-        self._wholesale.append(wholesale)
+        self._wholesales.append(wholesale)
 
     def modify_wholesale(self, wholesale_code:str, new_amount:int = None, new_discount_value:int = None) -> None:
         for wholesale in self.wholesales : 
@@ -82,10 +82,10 @@ class System():
 
     def add_coupon(self, code:str, discount_value:int, name:str) -> None:  
         new_coupon = Coupon(code,discount_value,name)
-        self._server_coupon.append(new_coupon)
+        self._server_coupons.append(new_coupon)
 
     def modify_coupon(self, coupon_code:str, new_discount_value:int = None, new_name:int = None) -> None:
-        for coupon in self._server_coupon :
+        for coupon in self._server_coupons :
             if coupon.code == coupon_code:  
                 if coupon.name is not None : 
                     coupon.name = new_name
@@ -94,14 +94,14 @@ class System():
                 return 
 
     def delete_coupon(self, coupon_code:str) -> None:
-        for coupon in self._server_coupon: 
+        for coupon in self._server_coupons: 
             if coupon.code == coupon_code:
-                self._server_coupon.remove(coupon) 
+                self._server_coupons.remove(coupon) 
                 return
             
     def create_tool(self, product_code, tool_name, tool_description, tool_brand, tool_amount, tool_image, tool_price, subtype_of_tool):
-        tool_name = Tool(product_code, tool_name, tool_description, tool_brand, tool_amount, tool_image, tool_price, subtype_of_tool)
-        self._category.subtype_add_tool(subtype_of_tool, tool_name)
+        new_tool = Tool(product_code, tool_name, tool_description, tool_brand, tool_amount, tool_image, tool_price, subtype_of_tool)
+        self._category.subtype_name_add_tool(subtype_of_tool, new_tool)
         
     def delete_tool(self, tool):
         for tool_in_list in self._category._all_tools: 
