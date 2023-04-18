@@ -36,7 +36,7 @@ if __name__ == '__main__':
 
     print()
     
-    print(Sys._customerinfo, end='\n')
+    print(Sys._customerinfos, end='\n')
 
     print()
 
