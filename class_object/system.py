@@ -3,7 +3,7 @@ from .shoppingcart import ShoppingCart
 from .discount import Coupon, Wholesale
 from .tool import Tool
 from .customerinfo import CustomerInfo
-
+from .payment import Payment
 class System():
     # Data of coupon and wholesale
     def __init__(self) -> None:
@@ -112,4 +112,14 @@ class System():
     def delete_tool(self, will_delete_tool):
         del will_delete_tool
         #search by name or category
-        #self._will_delete_tool = A
+        #self._will_delete_tool = A 
+    
+    def make_payment(self,card : str,coupon_code :str = None): 
+        coupon = self.search_coupon(coupon_code) 
+        if(coupon is None): 
+            return "coupon not found" 
+        total_price = self._system_cart.total_price 
+        discount_value = coupon.discount_value
+        payment = Payment(total_price,card,discount_value)
+        payment.make_payment()
+        
