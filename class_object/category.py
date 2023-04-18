@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from .tool import Tool
+    from tool import Tool
 
 class Category:
     _all_types = [ ]
@@ -26,9 +26,17 @@ class Category:
         self.types_of_tool.append(type_of_tool)
         self._all_types.append(type_of_tool)
 
+    def type_name_add_subtype(self, type_name:str, subtype_of_tool:'SubtypeOfTool') -> None:
+        type_of_tool = self.search_by_category(type_name)[type_name]
+        self.type_add_subtype(type_of_tool, subtype_of_tool)
+
     def type_add_subtype(self, type_of_tool:'TypeOfTool', subtype_of_tool:'SubtypeOfTool') -> None:
         type_of_tool.add_subtype(subtype_of_tool)
         self._all_subtypes.append(subtype_of_tool)
+
+    def subtype_name_add_tool(self, subtype_name:str, tool:'Tool') -> None:
+        subtype_of_tool = self.search_by_category(subtype_name)[subtype_name]
+        self.subtype_add_tool(subtype_of_tool, tool)
 
     def subtype_add_tool(self, subtype_of_tool:'SubtypeOfTool', tool:'Tool') -> None:
         subtype_of_tool.add_tool(tool)

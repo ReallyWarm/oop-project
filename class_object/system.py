@@ -1,9 +1,10 @@
-from .category import Category
-from .shoppingcart import ShoppingCart
-from .discount import Coupon, Wholesale
-from .tool import Tool
-from .customerinfo import CustomerInfo
-from .payment import Payment
+from category import Category
+from shoppingcart import ShoppingCart
+from discount import Coupon, Wholesale
+from tool import Tool
+from customerinfo import CustomerInfo
+from payment import Payment
+
 class System():
     # Data of coupon and wholesale
     def __init__(self) -> None:
