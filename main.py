@@ -118,33 +118,33 @@ async def delete_wholesale(data : dict) ->dict:
 
 # MANAGE CUSTOMER
 #create a new customer
-@app.post('/customer/{first_name}/')
+@app.post('/customer/',tags=['customer'])
 async def create_customer(customer:dict)->dict:
     new_customer = CustomerInfo(customer["first_name"], customer["last_name"], customer["email"],customer["company_name"])
     system.add_customerinfo(new_customer)
     return {'data':new_customer}
 
 #create a new address
-@app.post('/customer/address/{name}/')
+@app.post('/customer/address/',tags=['address'])
 async def create_address(newaddress:dict)->dict:
     for customer in system.customerinfos:
         if customer.first_name == newaddress["name"]:
             customer.create_address(newaddress["name"],newaddress["company"],newaddress["country"],newaddress[ "state"], newaddress["city"], newaddress["address"], newaddress["phone_number"],newaddress["postal_code"])
-            return {"data":"You have create the address successfully."}
+            return {"data":f"You have create the address successfully.You address is {customer.address}"}
             
     return{"data":"Unable to create the address."}
 
 # #delete the address     
-@app.delete('/cusrtomer/address/{name}',tags=['address'])     
+@app.delete('/cusrtomer/address',tags=['address'])     
 async def delete_address(data:dict) ->dict:
     for customer in system.customerinfos:
         if customer.first_name == data["name"]:
             customer.delete_address(data["name"])
-            return {"data":"You have delete the address successfully"}
+            return {"data":f"You have delete the address successfully.Your address is{customer.address}"}
     return {"data":"Unable to delete the address"}    
 
 #get the address              
-@app.get('/customer/address/{address}',tags=['address'])   
+@app.get('/customer/address',tags=['address'])   
 async def get_address(name:str)->dict:
   for customer in system.customerinfos:
       if customer.first_name == name:
@@ -153,7 +153,7 @@ async def get_address(name:str)->dict:
   return {"data":"Sorry cannot found your address in system. Please try again!"}    
       
 # edit the address       
-@app.put('/customer/address/')
+@app.put('/customer/address/',tags=['address'])
 async def edit_address(address:dict) ->dict:
     for customer in system.customerinfos:
         if customer.first_name == address["name"]:
@@ -161,7 +161,7 @@ async def edit_address(address:dict) ->dict:
             return {"data":f"Your edit address is successfully {customer.address}"}
     return {"data":"Unable to edit address. Please try again"}
 
-@app.get('/customer/order{name}')
+@app.get('/customer/order',tags=['customer'])
 async def check_order(name:str)->dict:
     for customer in system.customerinfos:
         if customer.first_name == name:
@@ -169,7 +169,7 @@ async def check_order(name:str)->dict:
             return {"data":f"Your order is {order}"}
     return {"data":"Not found this order. Please try again"}    
 
-@app.get('/customer/review{name}')
+@app.get('/customer/review',tags=['customer'])
 async def check_review(name:str)->dict:
     for customer in system.customerinfos:
         if customer.first_name == name:
