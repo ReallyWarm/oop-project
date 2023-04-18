@@ -33,6 +33,11 @@ class System():
     def system_cart(self) -> 'ShoppingCart':
         return self._system_cart
     
+    def search_user(self, username):
+        for user in self._customerinfos:
+            if user.username == username:
+                return user
+    
     def search_wholesale(self, code:str) -> 'Wholesale':
         for wholesale in self._wholesales:
             if wholesale.code == code : 
