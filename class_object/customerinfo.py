@@ -1,11 +1,11 @@
+from .wishlish import Wishlist
+from .shoppingcart import ShoppingCart
+from .address import Address
+from .review import Review
 from typing import TYPE_CHECKING
-from wishlish import Wishlist
-from shoppingcart import ShoppingCart
-from address import Address
-from review import Review
 if TYPE_CHECKING:
-    from tool import Tool
-    from order import Order
+    from .tool import Tool
+    from .order import Order
 
 class CustomerInfo:
     def __init__(self, first_name:str, last_name:str, email:str, company_name:str) -> None:

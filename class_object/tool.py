@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from discount import Wholesale
-    from review import Review
+    from .discount import Wholesale
+    from .review import Review
 
 class Tool:
     def __init__(self, code:str, name:str, description:str, brand:str, \

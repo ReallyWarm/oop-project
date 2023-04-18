@@ -1,7 +1,7 @@
-from tool import Item
+from .tool import Item
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
-    from tool import Tool
+    from .tool import Tool
 
 class ShoppingCart: 
     def __init__(self) -> None:
@@ -9,8 +9,12 @@ class ShoppingCart:
         self._subtotal_price = 0.00
         self._shipping_price = 0.00
         self._discount_value = 0.00
-        self._total_price = 0.00
+        self._total_price = 0.00 
 
+    
+    @property  
+    def total_price(self): 
+        return self._total_price
     @property
     def cart(self) -> list:
         return self._cart

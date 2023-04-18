@@ -1,9 +1,9 @@
-from category import Category
-from shoppingcart import ShoppingCart
-from discount import Coupon, Wholesale
-from tool import Tool
-from customerinfo import CustomerInfo
-
+from .category import Category
+from .shoppingcart import ShoppingCart
+from .discount import Coupon, Wholesale
+from .tool import Tool
+from .customerinfo import CustomerInfo
+from .payment import Payment
 class System():
     # Data of coupon and wholesale
     def __init__(self) -> None:
@@ -123,3 +123,12 @@ class System():
             selected_type = search_type[type_of_tool]
             self.delete_tool(tool)
             self._category.subtype_add_tool(selected_type, tool)
+
+    def make_payment(self,card : str,coupon_code :str = None): 
+        coupon = self.search_coupon(coupon_code) 
+        if(coupon is None): 
+            return "coupon not found" 
+        total_price = self._system_cart.total_price 
+        discount_value = coupon.discount_value
+        payment = Payment(total_price,card,discount_value)
+        payment.make_payment()
