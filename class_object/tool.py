@@ -39,6 +39,18 @@ class Tool:
     def review_list(self) -> list:
         return self._reviews
     
+    @property
+    def code(self):
+        return self._code
+    
+    @property
+    def description(self):
+        return self._description
+    
+    @property
+    def brand(self):
+        return self._brand
+    
     def add_review(self, review:'Review') -> None:
         self._reviews.append(review)
         self.__n_review += 1
@@ -48,42 +60,28 @@ class Tool:
     @property
     def rating(self) -> float:
         return self._rating
+    
+    @property
+    def type_of_tool(self):
+        return self._category
+    
+    def change_name(self,new_name:str):
+        self._name = new_name
+            
+    def change_description(self,new_description:str):
+        self._description = new_description
+            
+    def change_brand(self,new_brand:str):
+        self._brand = new_brand
+            
+    def change_price(self,new_price:float):
+        self._price = new_price
 
-    def modify_tool(self) -> None:
-        print(self)
-        a = input('Choose modify infomation: \n 1 = name \n 2 = description \n 3 = brand \n 4 = price \n your input:::')
+    def change_code(self,new_code):
+        self._code = new_code
 
-        def modify_name(new_name:str):
-            self._name = new_name
-            
-        def modify_description(new_description:str):
-            self._description = new_description
-            
-        def modify_brand(new_brand:str):
-            self._brand = new_brand
-            
-        def modify_price(new_price:float):
-            self._price = new_price
-            
-        # print(a)  
-        if (int(a) == 1):
-            new_name = input('Enter new name:')
-            modify_name(new_name)
-            print('changing success')
-        elif ( int(a) == 2 ):
-            new_description = input('Enter new description:')
-            modify_description(new_description)
-            print('changing success')
-        elif (int(a) == 3 ):
-            new_brand = input('Enter new brand:')
-            modify_brand(new_brand)
-            print('changing success')
-        elif (int(a) == 4):
-            new_price = input('Enter new price:')
-            modify_price(new_price)
-            print('changing success')
-            
-        print(self)
+    def change_type_of_tool(self, new_type_of_tool):
+        self._category = new_type_of_tool
 
     def __str__(self) -> str:
         return str(self.__class__)+'\n'+', '.join(f'{key} : {value}' for key, value in self.__dict__.items())
