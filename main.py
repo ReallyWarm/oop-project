@@ -1,8 +1,8 @@
 import sys
 sys.path.append('./class_object/')
-import secrets
+import os
 from fastapi import FastAPI, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm, HTTPBasicCredentials, HTTPBearer, HTTPBasic
+from fastapi.security import OAuth2PasswordRequestForm, HTTPAuthorizationCredentials, HTTPBearer, HTTPBasic, HTTPBasicCredentials
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 from datetime import datetime, timedelta
@@ -14,7 +14,7 @@ from app_database import add_database_users, add_database_system, add_database_u
 
 app = FastAPI()
 system = System()
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login",scheme_name="JWT")
+os.environ['API_TOKEN'] = ''
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 SECRET_KEY = "608672d916b11ac31e9ac553d5418caec4052bca348f2d06d4440aaacce155b0"
@@ -219,40 +219,18 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
-# def get_current_user(credentials: HTTPBasicCredentials = Depends(HTTPBearer())):
-#     credentials_exception = HTTPException(
-#         status_code=status.HTTP_401_UNAUTHORIZED,
-#         detail="Could not validate credentials",
-#         headers={"WWW-Authenticate": "Bearer"},
-#     )
-
-#     token = credentials.credentials
-
-#     try:
-#         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-#         if payload is None:
-#             raise credentials_exception
-#         return credentials
-#     except JWTError:
-#         raise credentials_exception
-
-async def get_current_user(token: str = Depends(oauth2_scheme)):
+def get_current_user(token: str = os.environ.get('API_TOKEN')):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
         headers={"WWW-Authenticate": "Bearer"})
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
+        if payload is None:
             raise credentials_exception
-        token_username = username
+        return { "user": payload['sub'], "exp": payload['exp'] }
     except JWTError:
         raise credentials_exception
-    user = get_user(username=token_username)
-    if user is None:
-        raise credentials_exception
-    return object_to_dict(user)
 
 @app.post('/signup', summary="Create new user", response_model=dict)
 async def create_user(signup_data:dict):
@@ -269,7 +247,7 @@ async def create_user(signup_data:dict):
     return {'data':new_customer}
 
 @app.post("/login", summary="Create access tokens for login user", response_model=dict)
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
+async def login_for_access_token(form_data: HTTPBasicCredentials = Depends()):
     user = authenticate_user(form_data.username, form_data.password)
     if not user:
         raise HTTPException(
@@ -279,8 +257,8 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     
     access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(data={"sub": user.username}, expires_delta=access_token_expires)
+    os.environ['API_TOKEN'] = access_token
     return {"access_token": access_token, "token_type": "bearer"}
-
 
 @app.get("/me", response_model=dict)
 async def read_users_me(current_user: dict = Depends(get_current_user)):
