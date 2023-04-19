@@ -1,11 +1,7 @@
 import sys
 sys.path.append('./class_object/')
-import os
 from fastapi import FastAPI, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm, HTTPAuthorizationCredentials, HTTPBearer, HTTPBasic, HTTPBasicCredentials
-from jose import JWTError, jwt
-from passlib.context import CryptContext
-from datetime import datetime, timedelta
+from fastapi.security import HTTPBasicCredentials
 from system import System
 from category import TypeOfTool, SubtypeOfTool
 from tool import Tool
@@ -14,12 +10,6 @@ from app_database import add_database_users, add_database_system, add_database_u
 
 app = FastAPI()
 system = System()
-os.environ['API_TOKEN'] = ''
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-SECRET_KEY = "608672d916b11ac31e9ac553d5418caec4052bca348f2d06d4440aaacce155b0"
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 add_database_users(system)
 add_database_system(system)
@@ -191,47 +181,6 @@ async def check_review(name:str)->dict:
     return {"data":"Not found this review. Please try again"}
 
 # LOGIN
-
-def verify_password(plain_password, hashed_password):
-    return pwd_context.verify(plain_password, hashed_password)
-
-def get_password_hash(password):
-    return pwd_context.hash(password)
-
-def get_user(username: str):
-    return system.search_user(username)
-    
-def authenticate_user(username: str, password: str):
-    user = get_user(username)
-    if not user:
-        return False
-    if not verify_password(password, user.hashed_password):
-        return False
-    return user
-
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
-    to_encode = data.copy()
-    if expires_delta:
-        expire = datetime.utcnow() + expires_delta
-    else:
-        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-    return encoded_jwt
-
-def get_current_user(token: str = os.environ.get('API_TOKEN')):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"})
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        if payload is None:
-            raise credentials_exception
-        return { "user": payload['sub'], "exp": payload['exp'] }
-    except JWTError:
-        raise credentials_exception
-
 @app.post('/signup', summary="Create new user", response_model=dict)
 async def create_user(signup_data:dict):
     # {"username":"","password":"","first_name":"","last_name":"","email":"","company_name":""}
@@ -240,7 +189,7 @@ async def create_user(signup_data:dict):
             raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="User with this username already exist")
-    new_customer = CustomerInfo(signup_data["username"], get_password_hash(signup_data["password"]), 
+    new_customer = CustomerInfo(signup_data["username"], system.auth.get_password_hash(signup_data["password"]), 
                                 signup_data["first_name"], signup_data["last_name"], 
                                 signup_data["email"], signup_data["company_name"])
     system.add_customerinfo(new_customer)
@@ -248,18 +197,21 @@ async def create_user(signup_data:dict):
 
 @app.post("/login", summary="Create access tokens for login user", response_model=dict)
 async def login_for_access_token(form_data: HTTPBasicCredentials = Depends()):
-    user = authenticate_user(form_data.username, form_data.password)
-    if not user:
+    input_user = system.search_user(form_data.username)
+    this_user = system.auth.authenticate_user(input_user, form_data.password)
+    if not this_user:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username or password",
-            headers={"WWW-Authenticate": "Bearer"})
+            detail="Incorrect username or password")
     
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(data={"sub": user.username}, expires_delta=access_token_expires)
-    os.environ['API_TOKEN'] = access_token
+    access_token = system.auth.create_access_token(data={"sub": this_user.username})
     return {"access_token": access_token, "token_type": "bearer"}
 
+@app.post("/logout", summary="Delete access tokens", response_model=dict)
+async def logout_to_invalidate_token(current_user: dict = Depends(system.get_current_user)):
+    system.auth.invalidate_token()
+    return {"logout":current_user.get("user")}
+
 @app.get("/me", response_model=dict)
-async def read_users_me(current_user: dict = Depends(get_current_user)):
+async def read_users_me(current_user: dict = Depends(system.get_current_user)):
     return current_user
