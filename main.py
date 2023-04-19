@@ -204,3 +204,7 @@ async def create_review(review: dict) -> dict:
                         return {"data": "A new review is added!"}
                     else:
                         return {"data": "Invalid rating"}
+                else:
+                    return {"data": "Not found this customer. Please try again"}
+        else:
+            return {"data": "Not found this tool. Please try again"}
