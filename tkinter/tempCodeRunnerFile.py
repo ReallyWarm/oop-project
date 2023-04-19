@@ -1,12 +1,3 @@
-# create main window
-# root = tk.Tk()
-
-# # create data to be displayed
-# data = "Hello, World!"
-
-# # create label to display data
-# label = tk.Label(root, text=data)
-# label.pack()
-
-# # run main loop
-# root.mainloop()
+# create submit button
+submit_button = tk.Button(root, text="Submit", command=submit, font=("Arial", 12), bg="#4caf50", fg="#fff")
+submit_button.pack(pady=20)
