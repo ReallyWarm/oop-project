@@ -4,15 +4,21 @@ from discount import Coupon, Wholesale
 from tool import Tool
 from customerinfo import CustomerInfo
 from payment import Payment
+from auth import Authenticate
 
 class System():
     # Data of coupon and wholesale
     def __init__(self) -> None:
+        self._authentication = Authenticate()
         self._category = Category()
         self._system_cart = ShoppingCart()
         self._server_coupons = []
         self._wholesales = []
         self._customerinfos = []
+
+    @property
+    def auth(self) -> Authenticate:
+        return self._authentication
 
     @property
     def customerinfos(self) ->list:
@@ -54,11 +60,8 @@ class System():
     def add_customerinfo(self, customer:'CustomerInfo') -> None:
         self._customerinfos.append(customer)
 
-    def vertify_user(self):
-        pass
-
-    def login(self,username,password):
-        pass
+    def get_current_user(self):
+        return self._authentication.get_current_user()
 
     def add_wholesale(self, code:str, amount:int, discount_value:int) -> None: 
         wholesale = Wholesale(code,amount,discount_value)
