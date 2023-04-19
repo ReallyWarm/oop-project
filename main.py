@@ -135,7 +135,7 @@ async def create_address(newaddress:dict)->dict:
     return{"data":"Unable to create the address."}
 
 # #delete the address     
-@app.delete('/cusrtomer/address',tags=['address'])     
+@app.delete('/customer/address',tags=['address'])     
 async def delete_address(data:dict) ->dict:
     for customer in system.customerinfos:
         if customer.first_name == data["name"]:
