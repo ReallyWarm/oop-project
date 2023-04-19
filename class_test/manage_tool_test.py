@@ -30,7 +30,7 @@ print(category)
 print(hand_tools_type)
 print(drills_type)
 
-#manage tool *****done*****
+#modify tool *****done*****
 print(category.search_by_name("t"))
 modifing_tool = input("type tool name: ")
 b = category.search_by_name(modifing_tool)

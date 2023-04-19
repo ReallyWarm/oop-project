@@ -37,11 +37,35 @@ async def search_category(search:str=''):
     return system.category.search_by_name(search)
 
 # MANAGE TOOL
-@app.post("/system/category/tools/")
+@app.post("/system/category/tools/", tags = ['Manage Tool'])
 async def add_tool(tool_data:dict):
-    system.create_tool(tool_data["code"], tool_data["name"], tool_data["description"], tool_data["brand"],
-                       tool_data["amount"], tool_data["image"], tool_data["price"], tool_data['type_of_tool'])
-    return {'ADD Tool':tool_data["name"]}
+    system.create_tool(tool_data["product_code"], tool_data["tool_name"], tool_data["tool_description"], tool_data["tool_brand"],
+                       tool_data["tool_amount"], tool_data["tool_image"], tool_data["tool_price"], tool_data['tool_category'])
+    return {'ADD Tool':tool_data["tool_name"]}
+
+@app.put("/system/category/tools/", tags = ['Manage Tool'])
+async def modify_tool(changing_tool_data:dict):
+    for tool in system.category._all_tools:
+        if tool.name == changing_tool_data["tool_name"]:
+            system.modify_tool(tool,changing_tool_data["tool_name"],
+                               changing_tool_data["tool_description"],
+                                changing_tool_data["tool_brand"], 
+                                changing_tool_data["tool_price"],
+                                changing_tool_data["product_code"], 
+                                changing_tool_data['tool_category'])
+            return {'MODIFY Tool':"change tool infomation successfully"}
+        else:
+            return {'MODIFY Tool':'Invalid Tool'}
+
+@app.delete("/system/category/tools/", tags = ['Manage Tool'])
+async def delete_tool(deleting_tool:str):
+    for tool in system.category._all_tools:
+        if tool.name == deleting_tool:
+            system.delete_tool(tool)
+            return {'DELETE Tool':"delete tool successfully"}
+        else:
+            return {'DELETE Tool':'Invalid Tool'}
+
 
 # MANAGE COUPON
 def make_coupon_dict(system : System): 
