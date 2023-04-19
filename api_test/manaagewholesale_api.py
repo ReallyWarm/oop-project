@@ -8,7 +8,7 @@ delete = {"code":"12x"}
 r = requests.get("http://127.0.0.1:8000/wholesale/all") 
 print(r.json())  
 
-# add wholesale 
+# # add wholesale 
 r = requests.post("http://127.0.0.1:8000/wholesale/all",data = json.dumps(input))
 r = requests.get("http://127.0.0.1:8000/wholesale/all") 
 print(r.json()) 

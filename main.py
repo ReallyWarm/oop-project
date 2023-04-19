@@ -41,7 +41,7 @@ async def search_category(search:str=''):
 async def search_category(search:str=''):
     return system.category.search_by_name(search)
 
-#MANAGE TOOL
+# MANAGE TOOL
 @app.post("/system/category/tools/")
 async def add_tool(tool_data:dict):
     system.create_tool(tool_data["code"], tool_data["name"], tool_data["description"], tool_data["brand"],
@@ -139,7 +139,7 @@ def get_wholesale(tool : Tool) -> dict :
         dict[ws.code]={"discount_value":ws.discount_value,"amount":ws.amount}
     return dict
 
-@app.get("/wholesale/all/get",tags = ['wholesale']) 
+@app.get("/wholesale/all",tags = ['wholesale']) 
 async def show_wholesale()->dict : 
     return system_wholesale()
 
@@ -153,7 +153,7 @@ async def update_wholesale(data : dict) ->dict :
                    
     return {"data":f"wholesale at code {code} is not found"} 
 
-@app.post("/wholesale/all/post",tags = ['wholesale'])  
+@app.post("/wholesale/all",tags = ['wholesale'])  
 async def add_wholesale(data: dict) -> dict:   
     code = data["wholesale_add"]["code"] 
     for key_sys in system_wholesale().keys(): 
@@ -172,7 +172,7 @@ async def delete_wholesale(data : dict) ->dict:
     return {"data":f"wholesale with code {code} is not found"}
 
 # MANAGE CUSTOMER
-#create a new customer
+# create a new customer
 @app.post('/customer/{first_name}/')
 async def create_customer(customer:dict)->dict:
     new_customer = CustomerInfo(customer["first_name"], customer["last_name"], customer["email"],customer["company_name"])
