@@ -75,9 +75,10 @@ class ManageProfilePage(tk.Frame):
         # show message box indicating changes have been saved
         if  res == {'data':'Unable to create the address.'}:
             messagebox.showinfo(title='Error',message="You don't have account in this system. Please try again")
+            print(r.json())
         else:
              messagebox.showinfo(title='Notice',message="Success creating the address")
-        print(r.json())
+             print(r.json())
         
 # create tkinter window
 root = tk.Tk()
