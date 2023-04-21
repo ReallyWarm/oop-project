@@ -40,7 +40,7 @@ if __name__ == '__main__':
     print(wishlist.wish_product)
 
     # ------------- manage wishlist by customer ------------- # 
-    customer = CustomerInfo("kelvin","Lim","Kelvin1521@gmail.com","holly wood")
+    customer = CustomerInfo("unused","unused","kelvin","Lim","Kelvin1521@gmail.com","holly wood")
 
     # add to wishlist
     customer.my_wishlist.add_item(test_drill, 5) 
