@@ -82,7 +82,7 @@ class System():
             for wholesale in value.wholesales : 
                 if wholesale.code == wholesale_code: 
                     value.wholesales.remove(wholesale)
-        for wholesale in self._wholesale : 
+        for wholesale in self.wholesales : 
             if wholesale.code == wholesale_code :
                 self.wholesales.remove(wholesale)
                 del wholesale 
