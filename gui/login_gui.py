@@ -4,7 +4,7 @@ import requests, json
 class Window(tk.Tk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.geometry("400x300")
+        self.geometry("500x400")
         self.resizable(False, False)
         self.title("Login/Search App")
 
@@ -83,16 +83,25 @@ class LoginPage(tk.Frame):
         self.logout_button = tk.Button(self, text="Logout", command=self.do_logout)
         self.logout_button.pack()
 
+        self.all_entry = []
+        self.all_entry.extend([self.username_entry, self.password_entry])
+
     def do_login(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
         data = {"username": username, "password": password}
         r = requests.post('http://127.0.0.1:8000/login', params=data)
         print(r, r.json())
+        if r.status_code == 200:
+            for entry in self.all_entry: 
+                entry.delete(0, 'end')
+            self.master.show_home()
 
     def do_logout(self):
         r = requests.post('http://127.0.0.1:8000/logout')
         print(r, r.json())
+        if r.status_code == 200:
+            self.master.show_home()
 
 class SignupPage(tk.Frame):
     def __init__(self, master=None):
@@ -140,6 +149,9 @@ class SignupPage(tk.Frame):
         self.signup_button = tk.Button(self, text="Signup", command=self.do_signup)
         self.signup_button.pack()
 
+        self.all_entry = []
+        self.all_entry.extend([self.username_entry, self.password_entry, self.firstname_entry, self.lastname_entry, self.email_entry, self.company_entry])
+
     def do_signup(self):
         username = self.username_entry.get()
         password = self.password_entry.get()
@@ -150,6 +162,10 @@ class SignupPage(tk.Frame):
         data = {"username": username, "password": password, "first_name": firstname, "last_name": lastname, "email": email, "company_name": company}
         r = requests.post('http://127.0.0.1:8000/signup', data=json.dumps(data))
         print(r, r.json())
+        if r.status_code == 200:
+            for entry in self.all_entry: 
+                entry.delete(0, 'end')
+            self.master.show_home()
 
 class SearchPage(tk.Frame):
     def __init__(self, link:str, search_type:str, master=None):
@@ -180,7 +196,6 @@ class SearchPage(tk.Frame):
         self.swap_button.pack()
 
     def do_search(self):
-        print(len(self.link), self.search_index)
         query = self.search_entry.get()
         r = requests.get(f'http://127.0.0.1:8000/system/{self.link[self.search_index]}?search={query}')
         print(r, r.json())
