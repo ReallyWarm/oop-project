@@ -184,6 +184,11 @@ async def check_review(name:str)->dict:
 @app.post('/signup', summary="Create new user", response_model=dict)
 async def create_user(signup_data:dict):
     # {"username":"","password":"","first_name":"","last_name":"","email":"","company_name":""}
+    for _, item in signup_data.items():
+        if not item:
+            raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Please fill up all the forms.")
     user = system.search_user(signup_data['username'])
     if user is not None:
             raise HTTPException(
@@ -218,6 +223,4 @@ async def read_users_me(current_user: dict = Depends(system.get_current_user)):
 
 if __name__ == "__main__":
     import uvicorn
-    sys.path.append('./gui/')
-    from login_gui import App
     uvicorn.run("main:app", reload=True)
