@@ -4,6 +4,8 @@ from fastapi.templating import Jinja2Templates
 from fastapi.staticfiles import StaticFiles
 import sys
 sys.path.append('./class_object/')
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.security import HTTPBasicCredentials
 from system import System
 from category import TypeOfTool, SubtypeOfTool
 from tool import Tool
@@ -18,6 +20,9 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 add_database_users(system)
 add_database_system(system)
 add_database_userdata(system)
+
+def object_to_dict(object):
+    return object.__dict__
 
 # CATEGORY
 @app.post("/system/category/typeoftools/")
@@ -228,3 +233,48 @@ async def check_review(name:str)->dict:
         if customer.first_name == name:
             return {"data":f"Your review is {customer.my_reviewed}"}
     return {"data":"Not found this review. Please try again"}
+
+# LOGIN
+@app.post('/signup', summary="Create new user", response_model=dict)
+async def create_user(signup_data:dict):
+    # {"username":"","password":"","first_name":"","last_name":"","email":"","company_name":""}
+    for _, item in signup_data.items():
+        if not item:
+            raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Please fill up all the forms.")
+    user = system.search_user(signup_data['username'])
+    if user is not None:
+            raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User with this username already exist")
+    new_customer = CustomerInfo(signup_data["username"], system.auth.get_password_hash(signup_data["password"]), 
+                                signup_data["first_name"], signup_data["last_name"], 
+                                signup_data["email"], signup_data["company_name"])
+    system.add_customerinfo(new_customer)
+    return {'data':new_customer}
+
+@app.post("/login", summary="Create access tokens for login user", response_model=dict)
+async def login_for_access_token(form_data: HTTPBasicCredentials = Depends()):
+    input_user = system.search_user(form_data.username)
+    this_user = system.auth.authenticate_user(input_user, form_data.password)
+    if not this_user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password")
+    
+    access_token = system.auth.create_access_token(data={"sub": this_user.username})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@app.post("/logout", summary="Delete access tokens", response_model=dict)
+async def logout_to_invalidate_token(current_user: dict = Depends(system.get_current_user)):
+    system.auth.invalidate_token()
+    return {"logout":current_user.get("user")}
+
+@app.get("/me", response_model=dict)
+async def read_users_me(current_user: dict = Depends(system.get_current_user)):
+    return current_user
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", reload=True)

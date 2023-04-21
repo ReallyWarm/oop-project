@@ -9,10 +9,10 @@ if __name__ == '__main__':
     # Set up the clss object
     Sys = System()
 
-    customer = [CustomerInfo('Pornthep', 'Thammawong', 'firm@gmail.com', 'Kmitl'), 
-                CustomerInfo('NorNor', 'Sawongnam', 'NorNor@gmail.com', 'Kmitl'), 
-                CustomerInfo('พรี่โอมใจเกเร', 'สองศรี', 'Thanasak@gmail.com', 'Kmitl'),
-                CustomerInfo("Prakrittipon", "Sommool", "korphaisk@gmail.com", "KMITL")]
+    customer = [CustomerInfo("unused","unused",'Pornthep', 'Thammawong', 'firm@gmail.com', 'Kmitl'), 
+                CustomerInfo("unused","unused",'NorNor', 'Sawongnam', 'NorNor@gmail.com', 'Kmitl'), 
+                CustomerInfo("unused","unused",'พรี่โอมใจเกเร', 'สองศรี', 'Thanasak@gmail.com', 'Kmitl'),
+                CustomerInfo("unused","unused","Prakrittipon", "Sommool", "korphaisk@gmail.com", "KMITL")]
 
     # create the example review and order
     order1 = Order([], '34000', 'Pronthep', 'Success', '12.00')
