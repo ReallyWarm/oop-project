@@ -4,15 +4,21 @@ from discount import Coupon, Wholesale
 from tool import Tool
 from customerinfo import CustomerInfo
 from payment import Payment
+from auth import Authenticate
 
 class System():
     # Data of coupon and wholesale
     def __init__(self) -> None:
+        self._authentication = Authenticate()
         self._category = Category()
         self._system_cart = ShoppingCart()
         self._server_coupons = []
         self._wholesales = []
         self._customerinfos = []
+
+    @property
+    def auth(self) -> Authenticate:
+        return self._authentication
 
     @property
     def customerinfos(self) ->list:
@@ -33,6 +39,11 @@ class System():
     def system_cart(self) -> 'ShoppingCart':
         return self._system_cart
     
+    def search_user(self, username):
+        for user in self._customerinfos:
+            if user.username == username:
+                return user
+    
     def search_wholesale(self, code:str) -> 'Wholesale':
         for wholesale in self._wholesales:
             if wholesale.code == code : 
@@ -49,11 +60,8 @@ class System():
     def add_customerinfo(self, customer:'CustomerInfo') -> None:
         self._customerinfos.append(customer)
 
-    def vertify_user(self):
-        pass
-
-    def login(self,username,password):
-        pass
+    def get_current_user(self):
+        return self._authentication.get_current_user()
 
     def add_wholesale(self, code:str, amount:int, discount_value:int) -> None: 
         wholesale = Wholesale(code,amount,discount_value)
@@ -74,7 +82,7 @@ class System():
             for wholesale in value.wholesales : 
                 if wholesale.code == wholesale_code: 
                     value.wholesales.remove(wholesale)
-        for wholesale in self._wholesale : 
+        for wholesale in self.wholesales : 
             if wholesale.code == wholesale_code :
                 self.wholesales.remove(wholesale)
                 del wholesale 

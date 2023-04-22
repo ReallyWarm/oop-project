@@ -8,9 +8,13 @@ if TYPE_CHECKING:
 
 def add_database_users(system:'System'):
     # Customer information
-    customers = [CustomerInfo('NorNor', 'Sawongnam', 'NorNor@gmail.com', 'Kmitl'), 
-                CustomerInfo('พรี่โอมใจเกเร', 'สองศรี', 'Thanasak@gmail.com', 'Kmitl'),
-                CustomerInfo("Prakrittipon", "Sommool", "korphaisk@gmail.com", "KMITL")]
+    customers = [CustomerInfo('NorNor007', '$2b$12$DmZVZhN.hpSa.QbeXWfUzO5Nh8b5Csh7AvqYFZsTR6i8KfdWlg6Am',
+                              'NorNor', 'Sawongnam', 'NorNor@gmail.com', 'Kmitl'), # pass nornor
+                CustomerInfo('PreeOhm','$2b$12$w4yNVfOcN36ylngAaAmW1etV8pD9H9ju0pbbeYFdbUaYof60CjA72',
+                             'พรี่โอมใจเกเร', 'สองศรี', 'Thanasak@gmail.com', 'Kmitl'), # pass OhmZAZA
+                CustomerInfo('KorphaiSK','$2b$12$3XJZVS.xPIG5NE46RspWZOsdQEbq3EFtKxMl7zB9.9XY9cf8283ny',
+                             "Prakrittipon", "Sommool", "korphaisk@gmail.com", "KMITL") # pass korphai1234
+                ]
 
     # Customer addresses
     customers[0].create_address('NorNor','จารย์แดง จำกัด','Thailand','Udon Thani','-','-','0210567473','10010')
