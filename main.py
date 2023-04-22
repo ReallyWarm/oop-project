@@ -258,6 +258,35 @@ async def check_review(name:str)->dict:
             return {"data":f"Your review is {customer.my_reviewed}"}
     return {"data":"Not found this review. Please try again"}
 
+# make review
+@app.get('/tool/review_list',tags=['review'])
+async def get_reveiw(name:str) -> dict:
+    for tool in system.category._all_tools:
+        if tool.name == name:
+            return {"Data": tool.review_list}
+    return {"data": "Not found this tool. Please try again"}
+
+
+@app.get('/tool/rating',tags=['review'])
+async def get_rating(name:str) -> dict:
+    for tool in system.category._all_tools:
+        if tool.name == name:
+            return {"Data": tool.rating}
+    return {"data":"Not found this tool. Please try again"}
+
+
+@app.post('/tool/make_review',tags=['review'])
+async def create_review(review: dict) -> dict:
+    for tool in system.category._all_tools:
+        if tool.name == review["tool"]:
+            for reviewer in system.customerinfos:
+                if reviewer.first_name == review["User"]:
+                    if float(review["rating"]) <= 5.00:
+                        reviewer.create_review(tool, review["head_review"], review["comment"], float(review["rating"]), review["date_of_review"])
+                        return {"data": "A new review is added!"}
+                    else:
+                        return {"data": "Invalid rating"}
+
 # LOGIN
 @app.post('/signup', summary="Create new user", response_model=dict)
 async def create_user(signup_data:dict):
