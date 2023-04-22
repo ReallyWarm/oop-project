@@ -12,7 +12,7 @@ input_review = {
 
 input_tool = 'Testing drill'
 
-#create address
+#make review
 r= requests.post("http://127.0.0.1:8000/tool/make_review",data=json.dumps(input_review))
 print(r.json())
 
