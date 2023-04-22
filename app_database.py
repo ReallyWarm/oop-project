@@ -32,13 +32,13 @@ def add_database_system(system:'System'):
     system.category.type_add_subtype(hand_tools_type, saws_type)
 
     # Tools
-    test_drill = Tool('01x', 'Testing drill', 'POWER', 'idk', 10, None, 1000.00, 'Drills')
-    faifa_drill = Tool('02x', 'Faifa drill', 'POWER', 'idk', 12, None, 800.00, 'Drills')
-    sawaan_drill = Tool('03x', 'Sawaan', 'go to hell', 'HEAVEN', 15, None, 2000.00, 'Drills')
+    test_drill = Tool('01x', 'Testing drill', 'POWER', 'idk', 10, "https://images.unsplash.com/photo-1572981779307-38b8cabb2407?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1332&q=80", 1000.00, 'Drills')
+    faifa_drill = Tool('02x', 'Faifa drill', 'POWER', 'idk', 12, "https://images.unsplash.com/photo-1504148455328-c376907d081c?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1278&q=80", 800.00, 'Drills')
+    sawaan_drill = Tool('03x', 'Sawaan', 'go to hell', 'HEAVEN', 15, "https://images.unsplash.com/photo-1622044939413-0b829c342434?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80", 2000.00, 'Drills')
     system.category.subtype_add_tool(drills_type, test_drill)
     system.category.subtype_add_tool(drills_type, faifa_drill)
     system.category.subtype_add_tool(drills_type, sawaan_drill)
-    test_saw = Tool('04x', 'Testing saw', 'da-da', 'idk', 10, None, 700.00, 'Saws')
+    test_saw = Tool('04x', 'Testing saw', 'da-da', 'idk', 10, "https://images.unsplash.com/photo-1540104539488-92a51bbc0410?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1176&q=80", 700.00, 'Saws')
     system.category.subtype_add_tool(saws_type, test_saw)
 
     # System Wholesales
