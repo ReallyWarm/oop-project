@@ -1,18 +1,28 @@
+from fastapi import FastAPI,Form,Request
+from fastapi.responses import HTMLResponse
+from fastapi.templating import Jinja2Templates
+from fastapi.staticfiles import StaticFiles
 import sys
 sys.path.append('./class_object/')
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi.security import HTTPBasicCredentials
 from system import System
 from category import TypeOfTool, SubtypeOfTool
 from tool import Tool
 from customerinfo import CustomerInfo
 from app_database import add_database_users, add_database_system, add_database_userdata
 
+
+templates = Jinja2Templates(directory="templates")
 app = FastAPI()
 system = System()
-
+app.mount("/static", StaticFiles(directory="static"), name="static")
 add_database_users(system)
 add_database_system(system)
 add_database_userdata(system)
+
+def object_to_dict(object):
+    return object.__dict__
 
 # CATEGORY
 @app.post("/system/category/typeoftools/")
@@ -37,49 +47,110 @@ async def search_category(search:str=''):
     return system.category.search_by_name(search)
 
 # MANAGE TOOL
-@app.post("/system/category/tools/")
+@app.post("/system/category/tools/", tags = ['Manage Tool'])
 async def add_tool(tool_data:dict):
-    system.create_tool(tool_data["code"], tool_data["name"], tool_data["description"], tool_data["brand"],
-                       tool_data["amount"], tool_data["image"], tool_data["price"], tool_data['type_of_tool'])
-    return {'ADD Tool':tool_data["name"]}
+    system.create_tool(tool_data["product_code"], tool_data["tool_name"], tool_data["tool_description"], tool_data["tool_brand"],
+                       tool_data["tool_amount"], tool_data["tool_image"], tool_data["tool_price"], tool_data['tool_category'])
+    return {'ADD Tool':tool_data["tool_name"]}
+
+@app.put("/system/category/tools/", tags = ['Manage Tool'])
+async def modify_tool(changing_tool_data:dict):
+    for tool in system.category._all_tools:
+        if tool.name == changing_tool_data["tool_name"]:
+            system.modify_tool(tool,changing_tool_data["tool_name"],
+                               changing_tool_data["tool_description"],
+                                changing_tool_data["tool_brand"], 
+                                changing_tool_data["tool_price"],
+                                changing_tool_data["product_code"], 
+                                changing_tool_data['tool_category'])
+            return {'MODIFY Tool':"change tool infomation successfully"}
+        else:
+            return {'MODIFY Tool':'Invalid Tool'}
+
+@app.delete("/system/category/tools/", tags = ['Manage Tool'])
+async def delete_tool(deleting_tool:str):
+    for tool in system.category._all_tools:
+        if tool.name == deleting_tool:
+            system.delete_tool(tool)
+            return {'DELETE Tool':"delete tool successfully"}
+        else:
+            return {'DELETE Tool':'Invalid Tool'}
+
 
 # MANAGE COUPON
 def make_coupon_dict(system : System): 
     dict = {}
-    for item in system.server_coupon :
+    for item in system.server_coupons :
         dict[item.code] = {"name":item.name, "discount_value":item.discount_value}
     return dict
 
 @app.get("/coupons/all",tags = ['coupon'])
-async def get_coupons() -> dict:  
+# async def get_coupons(request:Request) -> dict:   
+def  get_coupons() -> dict: 
     return make_coupon_dict(system)
- 
+    # data = make_coupon_dict(system)
+    # return templates.TemplateResponse("getcoupon.html", {"request": request, "data": data})
+
+# @app.get("/coupons/all/put",tags = ['coupon'])
+# async def put_coupons(request:Request): 
+#     return templates.TemplateResponse("putcoupon.html", {"request": request})
+
 @app.put("/coupons/all",tags=['coupon'])
+# @app.post("/coupons/all/put",tags=['coupon'])
 async def update_coupons(newcoupon : dict) -> dict: 
+# async def update_coupons(request: Request,code: str = Form(...), name: str = Form(...), discount_value: int = Form(...)) -> dict:
+    # newcoupon = {}
+    # newcoupon[code] = {"discount_value": discount_value,"name": name}
     for key_sys in make_coupon_dict(system).keys(): 
         for key_item in newcoupon.keys(): 
             if key_item == key_sys : 
                 system.modify_coupon(key_item,newcoupon[key_item]["discount_value"],newcoupon[key_item]["name"]) 
-                return {"data":f"coupon at code {key_item} has been update"}
+                return {"data":f"coupon at code {key_item} has been update"} 
+                # message = f"coupon at code {key_item} has been update"
+                # return templates.TemplateResponse("messageput.html", {"request": request,"message": message})
+                
     for key in newcoupon.keys():
         return {"data":f"coupon at code {key} is not found"}
+        # message = f"coupon at code {key} is not found"
+        # return templates.TemplateResponse("messageput.html", {"request": request,"message": message})
 
+# @app.get("/coupons/all/post",tags=['coupon'])  
+# async def index(request: Request):
+#     return templates.TemplateResponse("postcoupon.html", {"request": request})
 @app.post("/coupons/all",tags=['coupon']) 
 async def add_coupons(newcoupon : dict) -> dict:
+#async def add_coupons(request: Request,code: str = Form(...), name: str = Form(...), discount_value: int = Form(...)) -> dict: 
+    # newcoupon = {}
+    # newcoupon[code] = {"discount_value": discount_value,"name": name}
     for key_item in newcoupon.keys(): 
         for key_sys in make_coupon_dict(system).keys(): 
             if key_item == key_sys :
-                return {"data":f"coupon have already been added"} 
+                return {"data":f"coupon have already been added"}  
+                # message = f"coupon have already been added"
+                # return templates.TemplateResponse("messagepost.html", {"request": request,"message": message})
     for key_item in newcoupon.keys(): 
         system.add_coupon(key_item,newcoupon[key_item]["discount_value"],newcoupon[key_item]["name"])        
         return {"data":f"add new coupon with code {key_item} successfully"}
+        # message = f"add new coupon with code {key_item} successfully"
+        # return templates.TemplateResponse("messagepost.html", {"request": request,"message": message})
 
+# @app.get("/coupons/all/delete",tags=['coupon'])
+# async def del_coupon(request: Request):
+#     return templates.TemplateResponse("deletecoupon.html", {"request": request})
 @app.delete("/coupons/all",tags=['coupon'])
+# @app.post("/coupons/all/delete",tags=['coupon'])
+# async def delete_coupons(request:Request,input : str =Form(...)) ->dict :  
 async def delete_coupons(code : dict) ->dict : 
+    # code ={} 
+    # code["code"] = input
     for key in make_coupon_dict(system).keys(): 
         if key == code["code"] : 
-            system.delete_coupon(key)
+            system.delete_coupon(key) 
+            # message = f"coupon with code {code} have been deleted"
+            # return templates.TemplateResponse("messagedelete.html", {"request": request,"message": message})
             return {"data":f"coupon with code {code} have been deleted"}
+    # message = f"delete coupon with code {code} is not found"
+    # return templates.TemplateResponse("messagedelete.html", {"request": request,"message": message})
     return {"data":f"delete coupon with code {code} is not found"}
 
 # MANAGE WHOLESALE
@@ -88,24 +159,35 @@ def system_wholesale() -> dict :
     for ws in system.wholesales : 
         dict[ws.code]={"discount_value":ws.discount_value,"amount":ws.amount}
     return dict
-    
+
+def get_wholesale(tool : Tool) -> dict :  
+    dict = {} 
+    for ws in tool.wholesales : 
+        dict[ws.code]={"discount_value":ws.discount_value,"amount":ws.amount}
+    return dict
+
 @app.get("/wholesale/all",tags = ['wholesale']) 
 async def show_wholesale()->dict : 
     return system_wholesale()
 
 @app.put("/wholesale/all",tags = ['wholesale']) 
 async def update_wholesale(data : dict) ->dict :
-    code = data["tool_modify"]["code"]
+    code = data["wholesale_modify"]["code"]
     for key_sys in system_wholesale().keys(): 
-        if key_sys == data["tool_modify"]["code"] : 
-                system.modify_wholesale(data["tool_modify"]["code"],data["tool_modify"]["amount"],data["tool_modify"]["discount_value"])
+        if key_sys == data["wholesale_modify"]["code"] : 
+                system.modify_wholesale(data["wholesale_modify"]["code"],data["wholesale_modify"]["amount"],data["wholesale_modify"]["discount_value"])
                 return {"data":f"wholesale at code {code} has been update"} 
                    
     return {"data":f"wholesale at code {code} is not found"} 
 
 @app.post("/wholesale/all",tags = ['wholesale'])  
 async def add_wholesale(data: dict) -> dict:   
-    pass
+    code = data["wholesale_add"]["code"] 
+    for key_sys in system_wholesale().keys(): 
+        if key_sys == code: 
+            return {"data":f"wholesale at code {code} has been update"}
+    system.add_wholesale(data["wholesale_add"]["code"],data["wholesale_add"]["amount"],data["wholesale_add"]["discount_value"])
+    return {"data":f"wholesale at code {code} has been update"}
 
 @app.delete("/wholesale/all",tags = ['wholesale']) 
 async def delete_wholesale(data : dict) ->dict: 
@@ -117,7 +199,7 @@ async def delete_wholesale(data : dict) ->dict:
     return {"data":f"wholesale with code {code} is not found"}
 
 # MANAGE CUSTOMER
-#create a new customer
+# create a new customer
 @app.post('/customer/{first_name}/')
 async def create_customer(customer:dict)->dict:
     new_customer = CustomerInfo(customer["first_name"], customer["last_name"], customer["email"],customer["company_name"])
@@ -176,3 +258,80 @@ async def check_review(name:str)->dict:
             return {"data":f"Your review is {customer.my_reviewed}"}
     return {"data":"Not found this review. Please try again"}
 
+# make review
+@app.get('/tool/review_list',tags=['review'])
+async def get_reveiw(name:str) -> dict:
+    for tool in system.category._all_tools:
+        if tool.name == name:
+            return {"Data": tool.review_list}
+    return {"data": "Not found this tool. Please try again"}
+
+
+@app.get('/tool/rating',tags=['review'])
+async def get_rating(name:str) -> dict:
+    for tool in system.category._all_tools:
+        if tool.name == name:
+            return {"Data": tool.rating}
+    return {"data":"Not found this tool. Please try again"}
+
+
+@app.post('/tool/make_review',tags=['review'])
+async def create_review(review: dict) -> dict:
+    for tool in system.category._all_tools:
+        if tool.name == review["tool"]:
+            for reviewer in system.customerinfos:
+                if reviewer.first_name == review["User"]:
+                    if float(review["rating"]) <= 5.00:
+                        reviewer.create_review(tool, review["head_review"], review["comment"], float(review["rating"]), review["date_of_review"])
+                        return {"data": "A new review is added!"}
+                    else:
+                        return {"data": "Invalid rating"}
+                else:
+                    return {"data": "Not found this customer. Please try again"}
+        else:
+            return {"data": "Not found this tool. Please try again"}
+
+# LOGIN
+@app.post('/signup', summary="Create new user", response_model=dict)
+async def create_user(signup_data:dict):
+    # {"username":"","password":"","first_name":"","last_name":"","email":"","company_name":""}
+    for _, item in signup_data.items():
+        if not item:
+            raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Please fill up all the forms.")
+    user = system.search_user(signup_data['username'])
+    if user is not None:
+            raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="User with this username already exist")
+    new_customer = CustomerInfo(signup_data["username"], system.auth.get_password_hash(signup_data["password"]), 
+                                signup_data["first_name"], signup_data["last_name"], 
+                                signup_data["email"], signup_data["company_name"])
+    system.add_customerinfo(new_customer)
+    return {'data':new_customer}
+
+@app.post("/login", summary="Create access tokens for login user", response_model=dict)
+async def login_for_access_token(form_data: HTTPBasicCredentials = Depends()):
+    input_user = system.search_user(form_data.username)
+    this_user = system.auth.authenticate_user(input_user, form_data.password)
+    if not this_user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password")
+    
+    access_token = system.auth.create_access_token(data={"sub": this_user.username})
+    return {"access_token": access_token, "token_type": "bearer"}
+
+@app.post("/logout", summary="Delete access tokens", response_model=dict)
+async def logout_to_invalidate_token(current_user: dict = Depends(system.get_current_user)):
+    system.auth.invalidate_token()
+    return {"logout":current_user.get("user")}
+
+@app.get("/me", response_model=dict)
+async def read_users_me(current_user: dict = Depends(system.get_current_user)):
+    return current_user
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("main:app", reload=True)
