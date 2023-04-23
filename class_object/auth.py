@@ -46,7 +46,7 @@ class Authenticate():
         token: str = os.environ['API_TOKEN']
         credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate token")
+            detail="You're not logged in")
         try:
             payload = jwt.decode(token, self.__SECRET_KEY, algorithms=[self.__ALGORITHM])
             if payload is None:
