@@ -6,13 +6,13 @@ if TYPE_CHECKING:
 class ShoppingCart: 
     def __init__(self) -> None:
         self._cart = []
-        self._total_items_price = 0.00
-        self._shipping_price = 40.00
         self._total_price = 0.00
+        self._shipping_price = 40.00
+        self._final_price = 0.00
 
     @property 
-    def total_items_price(self):
-        return self._total_items_price
+    def total_price(self):
+        return self._total_price
     
     @property 
     def shipping_price(self): 
@@ -63,8 +63,8 @@ class ShoppingCart:
         self.calculate_price()
 
     def calculate_price(self):
-        self._total_items_price = sum([item.items_price for item in self._cart])
-        self._total_price = self._total_items_price + self._shipping_price
+        self._total_price = sum([item.items_price for item in self._cart])
+        self._final_price = self._total_price + self._shipping_price
 
     def __str__(self) -> str:
         return str(self.__class__)+'\n'+', '.join(f'{key} : {value}' for key, value in self.__dict__.items())
