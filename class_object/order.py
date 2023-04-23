@@ -67,4 +67,4 @@ class Order:
         self._delivery_time = delivery_time
 
     def __repr__(self) -> str:
-        return "{}" .format(str(self._orders) +','+self._payment_id+','+self._total_price +','+self._status +','+self._delivery_time)
+        return f"{str(self._orders)}, {self._payment_id}, {self._payment_date.strftime('%m/%d/%Y')}, {self._final_price:.2f}, {self._status}"
