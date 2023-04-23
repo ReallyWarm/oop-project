@@ -28,6 +28,7 @@ class System():
     @property 
     def server_coupons(self) -> list : 
         return self._server_coupons
+    
     @property 
     def wholesales(self) -> list:
         return self._wholesales
@@ -39,6 +40,13 @@ class System():
     @property
     def system_cart(self) -> 'ShoppingCart':
         return self._system_cart
+    
+    def get_active_cart(self) -> 'ShoppingCart':
+        current_user = self.get_login()
+        if current_user is None:
+            return self._system_cart
+        else:
+            return current_user.my_shoppingcart
     
     def search_user(self, username) -> 'CustomerInfo':
         for user in self._customerinfos:
@@ -56,16 +64,17 @@ class System():
                 return coupon
             
     def get_login(self):
-        login_user = self.auth.get_current_user()
         try:
+            login_user = self.auth.get_current_user()
             user_name = login_user.get('user')
-            current_user = self.search_user(user_name)
-        except KeyError:
+        except:
             return None
+        current_user = self.search_user(user_name)
         return current_user
 
     def add_to_cart(self, tool:'Tool', buy_amount:int) -> None:
-        self._system_cart.add_item(tool, buy_amount)
+        active_cart = self.get_active_cart()
+        active_cart.add_item(tool, buy_amount)
 
     def add_customerinfo(self, customer:'CustomerInfo') -> None:
         self._customerinfos.append(customer)

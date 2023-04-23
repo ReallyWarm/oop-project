@@ -32,11 +32,12 @@ if __name__ == '__main__':
     # Add to Cart
     system.add_to_cart(testing, 10)
     system.add_to_cart(faifa, 20)
-    print(system.system_cart.cart[0].tool.price)
-    print(system.system_cart)
+    print(system.get_active_cart().cart[0].tool.price)
+    print(system.get_active_cart())
     print('----------------------------------------------------------------')
     # Add same tool, but with different amount
     system.add_to_cart(testing, 20)
+    print(system.get_active_cart())
     print(system.system_cart)
 
 
