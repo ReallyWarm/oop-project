@@ -46,7 +46,7 @@ if __name__ == '__main__':
     print(status)
     print('--------------------------------')
 
-    customer.my_shoppingcart.add_item(test_drill, 3)
+    customer.my_shoppingcart.add_item(test_drill, 4)
 
     # INVALID CARD
     status = system.make_payment('not_numberwith16', customer, 'Pornthep')

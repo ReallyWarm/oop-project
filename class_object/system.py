@@ -74,7 +74,10 @@ class System():
 
     def add_to_cart(self, tool:'Tool', buy_amount:int) -> None:
         active_cart = self.get_active_cart()
-        active_cart.add_item(tool, buy_amount)
+        if tool.amount < buy_amount:
+            return "Item amount exceeds the available tool in stock"
+        else:
+            active_cart.add_item(tool, buy_amount)
 
     def add_customerinfo(self, customer:'CustomerInfo') -> None:
         self._customerinfos.append(customer)
@@ -179,8 +182,10 @@ class System():
         payment = Payment(total_price, shoppingcart.shipping_price, card, discount_value)
         status = payment.make_payment()
         if status == "Payment success":
+            # store used coupon
             if coupon is not None:
                 current_user.store_used_coupon(coupon)
+            # store new order
             address = current_user.get_address(address_name)
             order_items = [item for item in shoppingcart.cart]
             pay_id = payment.payment_id
@@ -191,7 +196,11 @@ class System():
             pay_final = payment.final_price
             new_order = Order(order_items, pay_id, pay_date, pay_total, pay_ship, pay_discount, pay_final, address)
             current_user.store_order(new_order)
+            # clear cart
             current_user.my_shoppingcart.clear_cart()
+            # update tool amount in shop
+            for item in order_items:
+                item.tool.amount = item.tool.amount - item.buy_amount
         del payment
 
         return status

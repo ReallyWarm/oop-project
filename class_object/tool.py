@@ -51,6 +51,14 @@ class Tool:
     def brand(self):
         return self._brand
     
+    @property
+    def amount(self):
+        return self._amount
+    
+    @amount.setter
+    def amount(self, value):
+        self._amount = value
+    
     def add_review(self, review:'Review') -> None:
         self._reviews.append(review)
         self.__n_review += 1
