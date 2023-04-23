@@ -6,6 +6,9 @@ from customerinfo import CustomerInfo
 from order import Order
 from payment import Payment
 from auth import Authenticate
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from address import Address
 
 class System():
     # Data of coupon and wholesale
@@ -43,10 +46,10 @@ class System():
     
     def get_active_cart(self) -> 'ShoppingCart':
         current_user = self.get_login()
-        if current_user is None:
-            return self._system_cart
-        else:
+        if isinstance(current_user, CustomerInfo):
             return current_user.my_shoppingcart
+        else:
+            return self._system_cart    
     
     def search_user(self, username) -> 'CustomerInfo':
         for user in self._customerinfos:
@@ -65,10 +68,10 @@ class System():
             
     def get_login(self):
         try:
-            login_user = self.auth.get_current_user()
-            user_name = login_user.get('user')
-        except:
-            return None
+            login_user = self.get_current_user()
+        except Exception as e:
+            return e
+        user_name = login_user.get('user')
         current_user = self.search_user(user_name)
         return current_user
 
@@ -159,9 +162,9 @@ class System():
             self.delete_tool(tool)
             self._category.subtype_add_tool(selected_type, tool)
 
-    def make_payment(self,card : str,coupon_code :str = None): 
+    def make_payment(self,card:str, address:'Address', coupon_code:str = None): 
         current_user = self.get_login()
-        if current_user is None:
+        if not isinstance(current_user, CustomerInfo):
             return "Please login to pay your items"
         
         total_price = current_user.my_shoppingcart.total_price
@@ -173,18 +176,20 @@ class System():
             return "Coupon not found"
         if current_user.check_used_coupon():
             return "You have already used the coupon"
-        
+          
         discount_value = coupon.discount_value
         payment = Payment(total_price,card,discount_value)
         status = payment.make_payment()
         if status == "Payment success":
             current_user.store_used_coupon(coupon)
+            order_items = [item for item in current_user.my_shoppingcart.cart]
             pay_id = payment.payment_id
             pay_date = payment.date_create
-            pay_total = payment.total_amount
-            pay_discount = payment.discount_amount
+            pay_total = payment.total_price
+            pay_ship = payment.shipping_price
+            pay_discount = payment.discount_price
             pay_final = payment.final_price
-            new_order = Order(current_user.my_shoppingcart.cart, pay_final, '', '', '')
+            new_order = Order(order_items, pay_id, pay_date, pay_total, pay_ship, pay_discount, pay_final, address)
             current_user.store_order(new_order)
             current_user.my_shoppingcart.clear_cart()
         del payment
