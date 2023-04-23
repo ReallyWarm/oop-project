@@ -26,7 +26,7 @@ class CustomerInfo(User):
                 return True
         return False
 
-    def store_use_coupon(self, coupon:'Coupon'):
+    def store_used_coupon(self, coupon:'Coupon'):
         self._used_coupon.append(coupon)
 
     def store_order(self, order:'Order') -> None:
