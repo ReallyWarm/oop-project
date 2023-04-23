@@ -14,6 +14,9 @@ class Authenticate():
     __ACCESS_TOKEN_EXPIRE_MINUTES = 30
     __pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
+    def __init__(self) -> None:
+        self.__autherized = False
+
     def verify_password(self, plain_password, hashed_password):
         return self.__pwd_context.verify(plain_password, hashed_password)
 
@@ -33,7 +36,7 @@ class Authenticate():
         if expires_delta:
             expire = datetime.utcnow() + expires_delta
         else:
-            expire = datetime.utcnow() + timedelta(minutes=self.__ACCESS_TOKEN_EXPIRE_MINUTES)
+            expire = datetime.utcnow() + timedelta(minutes=15)
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, self.__SECRET_KEY, algorithm=self.__ALGORITHM)
         os.environ['API_TOKEN'] = encoded_jwt
