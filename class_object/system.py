@@ -67,10 +67,7 @@ class System():
                 return coupon
             
     def get_login(self):
-        try:
-            login_user = self.get_current_user()
-        except Exception as e:
-            return e
+        login_user = self.get_current_user()
         user_name = login_user.get('user')
         current_user = self.search_user(user_name)
         return current_user
@@ -162,11 +159,7 @@ class System():
             self.delete_tool(tool)
             self._category.subtype_add_tool(selected_type, tool)
 
-    def make_payment(self,card:str, address:'Address', coupon_code:str = None): 
-        current_user = self.get_login()
-        if not isinstance(current_user, CustomerInfo):
-            return "Please login to pay your items"
-        
+    def make_payment(self,card:str, current_user:'CustomerInfo', address_name:str, coupon_code:str = None):
         total_price = current_user.my_shoppingcart.total_price
         if total_price <= 0:
             return "You must add items to your shopping cart before paying"
@@ -182,6 +175,7 @@ class System():
         status = payment.make_payment()
         if status == "Payment success":
             current_user.store_used_coupon(coupon)
+            address = current_user.get_address(address_name)
             order_items = [item for item in current_user.my_shoppingcart.cart]
             pay_id = payment.payment_id
             pay_date = payment.date_create

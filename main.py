@@ -275,6 +275,13 @@ async def logout_to_invalidate_token(current_user: dict = Depends(system.get_cur
 async def read_users_me(current_user: dict = Depends(system.get_current_user)):
     return current_user
 
+# PAYMENT
+@app.post("/cart/payment", summary="Making payment", response_model=dict)
+async def make_payment(payment_data:dict):
+    current_user = system.get_login()
+    status = system.make_payment(payment_data['card'], current_user, payment_data['address'], payment_data['coupon'])
+    return {"status":status}
+
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", reload=True)
