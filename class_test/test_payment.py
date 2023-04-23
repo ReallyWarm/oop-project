@@ -67,7 +67,7 @@ if __name__ == '__main__':
     print(customer.my_order)
     print('--------------------------------')
 
-    customer.my_shoppingcart.add_item(test_drill, 10)
+    customer.my_shoppingcart.add_item(test_drill, 1)
 
     # You have already used the coupon
     status = system.make_payment('1234567890123456', customer, 'Pornthep', '1234')
@@ -77,9 +77,18 @@ if __name__ == '__main__':
     # "Coupon not found"
     status = system.make_payment('1234567890123456', customer, 'Pornthep', 'No')
     print(status)
+    print('--------------------------------')
 
+    # Wholesale
+    system.add_wholesale("03x",5,5)
+    wholesale = system.search_wholesale("03x")
+    sawaan.add_wholesale(wholesale)
 
+    customer.my_shoppingcart.add_item(sawaan, 10)
 
+    status = system.make_payment('1234567890123456', customer, 'Pornthep')
+    print(status)
 
-
-
+    print('--------------------------------')
+    print(customer.my_order)
+    print('--------------------------------')
