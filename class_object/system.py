@@ -178,7 +178,7 @@ class System():
                 return "You have already used the coupon"
             discount_value = coupon.discount_value
 
-        
+        shoppingcart.update_cart_items()
         payment = Payment(total_price, shoppingcart.shipping_price, card, discount_value)
         status = payment.make_payment()
         if status == "Payment success":

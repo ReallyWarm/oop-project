@@ -62,9 +62,13 @@ class ShoppingCart:
         self._cart.clear()
         self.calculate_price()
 
-    def calculate_price(self):
+    def calculate_price(self) -> None:
         self._total_price = sum([item.items_price for item in self._cart])
         self._final_price = self._total_price + self._shipping_price
+
+    def update_cart_items(self) -> None:
+        for item in self._cart:
+            item.update_item()
 
     def __str__(self) -> str:
         return str(self.__class__)+'\n'+', '.join(f'{key} : {value}' for key, value in self.__dict__.items())
