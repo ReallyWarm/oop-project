@@ -45,7 +45,12 @@ class Wishlist:
         self._wish_product.clear()
         self.calculate_price()
 
+    def update_wish_items(self) -> None:
+        for item in self._wish_product:
+            item.update_item()
+
     def send_to_cart(self, cart:'ShoppingCart') -> None:
+        self.update_wish_items()
         for wish_item in self.wish_product:
             cart.add_by_item(wish_item)
         self._wish_product.clear()
