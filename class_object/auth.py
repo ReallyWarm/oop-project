@@ -33,7 +33,7 @@ class Authenticate():
         if expires_delta:
             expire = datetime.utcnow() + expires_delta
         else:
-            expire = datetime.utcnow() + timedelta(minutes=self.__ACCESS_TOKEN_EXPIRE_MINUTES)
+            expire = datetime.utcnow() + timedelta(minutes=15)
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, self.__SECRET_KEY, algorithm=self.__ALGORITHM)
         os.environ['API_TOKEN'] = encoded_jwt
@@ -43,7 +43,7 @@ class Authenticate():
         token: str = os.environ['API_TOKEN']
         credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate token")
+            detail="You're not logged in")
         try:
             payload = jwt.decode(token, self.__SECRET_KEY, algorithms=[self.__ALGORITHM])
             if payload is None:

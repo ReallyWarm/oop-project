@@ -16,7 +16,7 @@ if __name__ == '__main__':
     category.add_type(hand_tools_type)
     category.type_add_subtype(hand_tools_type, drills_type)
     category.type_add_subtype(hand_tools_type, nothing)
-    test_drill = Tool('01x', 'Testing drill', 'POWER', 'idk', 10, None, 1000.00, 'Drills')
+    test_drill = Tool('01x', 'Testing drill', 'POWER', 'idk', 40, None, 1000.00, 'Drills')
     faifa_drill = Tool('02x', 'faifa drill', 'POWER', 'idk', 12, None, 800.00, 'Drills')
     sawaan = Tool('03x', 'Sawaan', 'go to hell', 'HEAVEN', 15, None, 2000.00, 'Drills')
     category.subtype_add_tool(drills_type, test_drill)
@@ -32,11 +32,14 @@ if __name__ == '__main__':
     # Add to Cart
     system.add_to_cart(testing, 10)
     system.add_to_cart(faifa, 20)
-    print(system.system_cart.cart[0].tool.price)
-    print(system.system_cart)
+    print(system.get_active_cart().cart[0].tool.price)
+    print(system.get_active_cart())
     print('----------------------------------------------------------------')
     # Add same tool, but with different amount
     system.add_to_cart(testing, 20)
+    print(system.get_active_cart())
+    print('----------------------------------------------------------------')
+    # Same with system.get_active_cart()
     print(system.system_cart)
 
 

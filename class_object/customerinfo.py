@@ -7,6 +7,7 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from tool import Tool
     from order import Order
+    from discount import Coupon
 
 class CustomerInfo(User):
     def __init__(self, username:str, hashed_password:str, first_name:str, last_name:str, email:str, company_name:str) -> None:
@@ -19,11 +20,14 @@ class CustomerInfo(User):
         self._my_review = []
         self._used_coupon = []
 
-    def check_coupon(self, coupon):
-        pass
+    def check_used_coupon(self, coupon_code:str) -> bool:
+        for coupon in self._used_coupon:
+            if coupon.code == coupon_code: 
+                return True
+        return False
 
-    def store_use_coupon(self, coupon):
-        pass
+    def store_used_coupon(self, coupon:'Coupon'):
+        self._used_coupon.append(coupon)
 
     def store_order(self, order:'Order') -> None:
         self._my_order.append(order)
