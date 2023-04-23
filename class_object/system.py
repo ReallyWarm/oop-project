@@ -45,13 +45,13 @@ class System():
         return self._system_cart
     
     def get_active_cart(self) -> 'ShoppingCart':
-        current_user = self.get_login()
-        if isinstance(current_user, CustomerInfo):
+        try:
+            current_user = self.get_login()
             return current_user.my_shoppingcart
-        else:
-            return self._system_cart    
+        except:
+            return self._system_cart
     
-    def search_user(self, username) -> 'CustomerInfo':
+    def search_user(self, username:str) -> 'CustomerInfo':
         for user in self._customerinfos:
             if user.username == username:
                 return user
@@ -160,23 +160,29 @@ class System():
             self._category.subtype_add_tool(selected_type, tool)
 
     def make_payment(self,card:str, current_user:'CustomerInfo', address_name:str, coupon_code:str = None):
-        total_price = current_user.my_shoppingcart.total_price
+        shoppingcart = current_user.my_shoppingcart
+        total_price = shoppingcart.total_price
         if total_price <= 0:
             return "You must add items to your shopping cart before paying"
         
-        coupon = self.search_coupon(coupon_code) 
-        if(coupon is None): 
-            return "Coupon not found"
-        if current_user.check_used_coupon():
-            return "You have already used the coupon"
-          
-        discount_value = coupon.discount_value
-        payment = Payment(total_price,card,discount_value)
+        coupon = None
+        discount_value = 0
+        if coupon_code is not None:
+            coupon = self.search_coupon(coupon_code) 
+            if(coupon is None): 
+                return "Coupon not found"
+            if current_user.check_used_coupon(coupon_code):
+                return "You have already used the coupon"
+            discount_value = coupon.discount_value
+
+        
+        payment = Payment(total_price, shoppingcart.shipping_price, card, discount_value)
         status = payment.make_payment()
         if status == "Payment success":
-            current_user.store_used_coupon(coupon)
+            if coupon is not None:
+                current_user.store_used_coupon(coupon)
             address = current_user.get_address(address_name)
-            order_items = [item for item in current_user.my_shoppingcart.cart]
+            order_items = [item for item in shoppingcart.cart]
             pay_id = payment.payment_id
             pay_date = payment.date_create
             pay_total = payment.total_price
