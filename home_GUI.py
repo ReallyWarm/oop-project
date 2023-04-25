@@ -7,6 +7,7 @@ from category import Category
 from fastapi import FastAPI
 from system import System
 from app_database import add_database_users, add_database_system, add_database_userdata
+from PIL import Image, ImageTk
 
 app = FastAPI()
 system = System()
@@ -37,7 +38,7 @@ class Home:
 
     def random_tool_to_show(self):
         show_random_tool = []
-        while show_random_tool.size() <= 4:
+        while len(show_random_tool) <= 4:
             a = random.randint(0, len(self.category._all_tools))
             tool = self.category._all_tools[a]
             for item in show_random_tool:
@@ -45,11 +46,13 @@ class Home:
                     continue
                 else:
                     show_random_tool.append(tool)
+        return show_random_tool
 
     def show_random_tool(self):
-        #
+        pass
     
-
+    def random_show(self):
+        print(self.random_tool_to_show())
 
 
 Home()
