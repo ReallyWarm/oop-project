@@ -1,23 +1,24 @@
 import sys 
-sys.path.append('./class_object/')
+sys.path.append('./class_object/')  
+sys.path.append('./')
 import tkinter as tk
 from tkinter import *
 from login_gui import LoginPage, SignupPage
 from search_gui import SearchPage
 from PIL import Image, ImageTk 
 import random
-from tkinter import messagebox
-from tkinter import ttk
+# # from tkinter import messagebox
+# # from tkinter import ttk
 import io
 import urllib.request
 from system import System
-from category import Category 
-# from app_database import add_database_users, add_database_system, add_database_userdata
+# from category import Category 
+from app_database import add_database_users, add_database_system, add_database_userdata
 
-# system = System() 
-# add_database_users(system) 
-# add_database_system(system) 
-# add_database_userdata(system)
+system = System() 
+add_database_users(system) 
+add_database_system(system) 
+add_database_userdata(system)
 class Window(tk.Tk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -25,7 +26,7 @@ class Window(tk.Tk):
         self.resizable(False, False)
         self.title("Login/Search App")
         self.photo = None 
-        self._category = Category
+        self._category = system.category
         # Create the menu bar
         menubar = tk.Menu(self)
         self.config(menu=menubar)
@@ -71,9 +72,12 @@ class Window(tk.Tk):
         Label(self.home_page, image=self.image4).place(x=680, y=50)
         Label(self.home_page, text="wholesale price", font=("Helvetica", 12)).place(x=720, y=210)
         # Show the initial page
-
+        self.show_random_tool()
 
         self.show_home()
+    @property
+    def category(self): 
+        return self._category
     def random_tool_to_show(self):
         show_random_tool = []
         while len(show_random_tool) < 4:
@@ -87,40 +91,40 @@ class Window(tk.Tk):
         print(image_list)
         # tool 1
         self.im = self.get_image(image_list[0]._image[0],150,150)
-        self.button1 = Button(self.root, image=self.im, command= self.jump_to_next_tool1)
+        self.button1 = Button(self.home_page, image=self.im, command= self.jump_to_next_tool1)
         self.button1.pack()
-        self.button1.place(x=0,y=10)
-        self.description1 = Label(self.root,text =image_list[0].name) 
+        self.button1.place(x=100,y=350)
+        self.description1 = Label(self.home_page,text =image_list[0].name) 
         self.description1.pack() 
-        self.description1.place(x=0,y=220) 
+        self.description1.place(x=100,y=550) 
 
 
         # tool 2
         self.im2 = self.get_image(image_list[1]._image[0],150,150)
-        self.button2 = Button(self.root, image=self.im2, command= self.jump_to_next_tool2)
+        self.button2 = Button(self.home_page, image=self.im2, command= self.jump_to_next_tool2)
         self.button2.pack()
-        self.button2.place(x=260,y=10) 
-        self.description2 = Label(self.root,text = image_list[1].name) 
+        self.button2.place(x=300,y=350) 
+        self.description2 = Label(self.home_page,text = image_list[1].name) 
         self.description2.pack() 
-        self.description2.place(x=260,y=220)  
+        self.description2.place(x=300,y=550)  
 
         # tool 3 
         self.im3 = self.get_image(image_list[2]._image[0],150,150)
-        self.button3 = Button(self.root, image=self.im3, command= self.jump_to_next_tool3)
+        self.button3 = Button(self.home_page, image=self.im3, command= self.jump_to_next_tool3)
         self.button3.pack()
-        self.button3.place(x=520,y=10)  
-        self.description3 = Label(self.root,text = image_list[2].name) 
+        self.button3.place(x=500,y=350)  
+        self.description3 = Label(self.home_page,text = image_list[2].name) 
         self.description3.pack() 
-        self.description3.place(x=520,y=220)  
+        self.description3.place(x=500,y=550)  
 
         # tool 4
         self.im4 = self.get_image(image_list[3]._image[0],150,150)
-        self.button4 = Button(self.root, image=self.im4, command= self.jump_to_next_tool4)
+        self.button4 = Button(self.home_page, image=self.im4, command= self.jump_to_next_tool4)
         self.button4.pack()
-        self.button4.place(x=780,y=10) 
-        self.description4 = Label(self.root,text = image_list[3].name) 
+        self.button4.place(x=700,y=350) 
+        self.description4 = Label(self.home_page,text = image_list[3].name) 
         self.description4.pack() 
-        self.description4.place(x=780,y=220) 
+        self.description4.place(x=700,y=550) 
     def get_image(self,url,width,height) -> ImageTk.PhotoImage: 
         with urllib.request.urlopen(url) as u:
             raw_data = u.read()  # read the image data from the URL
