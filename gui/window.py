@@ -31,6 +31,7 @@ class Window(tk.Tk):
         self._category = system.category
         # Create the menu bar
         menubar = tk.Menu(self)
+        accountbar = tk.Menu(self)
         self.config(menu=menubar)
 
         # Create the Pages menu with commands to switch to each page
@@ -40,6 +41,9 @@ class Window(tk.Tk):
         pages_menu.add_command(label="Login", command=self.show_login)
         pages_menu.add_command(label="Sign Up", command=self.show_sign_up)
         menubar.add_cascade(label="Pages", menu=pages_menu)
+
+
+        # Create the account bar
 
         self.image_list = self.random_tool_to_show()
 
@@ -51,7 +55,7 @@ class Window(tk.Tk):
         self.search_page.add_new_search(link='category/tools', search_type='Tool')
         self.login_page = LoginPage(self)
         self.sign_up_page = SignupPage(self) 
-        self.tool_page = Tool_GUI(tool =self.image_list[0],master =self)
+        self.tool_page = Tool_GUI(name =self.image_list[0].name,master =self)
         self.make_review_page = MakeReview(user = 'NorNor',tool=self.image_list[0].name,master=self)
 
         self.image1 = self.get_image("https://cdn-icons-png.flaticon.com/512/649/649438.png?w=740&t=st=1682418903~exp=1682419503~hmac=9f666ca6e05c302741f8531345f3fc24865b0a54bd5eed15bd969a63e2e7f431", 150, 150)
@@ -138,22 +142,21 @@ class Window(tk.Tk):
         return ImageTk.PhotoImage(im)
     def jump_to_next_tool1(self):
         self.make_review_page = MakeReview(user = 'NorNor',tool=self.image_list[0].name,master=self) 
-        self.tool_page = Tool_GUI(master = self,tool =self.image_list[0])
+        self.tool_page = Tool_GUI(master = self,name=self.image_list[0].name)
         self.show_tool()
     def jump_to_next_tool2(self): 
-        self.make_review_page = MakeReview(user = 'NorNor',tool=self.image_list[0].name,master=self) 
-        self.tool_page = Tool_GUI(master = self,tool =self.image_list[1])
+        self.make_review_page = MakeReview(user = 'NorNor',tool=self.image_list[1].name,master=self) 
+        self.tool_page = Tool_GUI(master = self,name=self.image_list[1].name)
         self.show_tool()
     def jump_to_next_tool3(self):
-        self.make_review_page = MakeReview(user = 'NorNor',tool=self.image_list[0].name,master=self) 
-        self.tool_page = Tool_GUI(master=self,tool=self.image_list[2])
+        self.make_review_page = MakeReview(user = 'NorNor',tool=self.image_list[2].name,master=self) 
+        self.tool_page = Tool_GUI(master=self,name=self.image_list[2].name)
         self.show_tool()
     def jump_to_next_tool4(self): 
-        self.make_review_page = MakeReview(user = 'NorNor',tool=self.image_list[0].name,master=self) 
-        self.tool_page = Tool_GUI(master=self,tool=self.image_list[3])
+        self.make_review_page = MakeReview(user = 'NorNor',tool=self.image_list[3].name,master=self) 
+        self.tool_page = Tool_GUI(master=self,name=self.image_list[3].name)
         self.show_tool()
-        
-    def show_home(self):
+    def show_home(self): 
         self.tool_page.pack_forget()
         self.search_page.pack_forget()
         #self.search_page.place_forget()

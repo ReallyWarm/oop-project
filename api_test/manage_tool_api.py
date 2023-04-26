@@ -24,12 +24,12 @@ updating_tool = {
 deleting_tool = "Testing drill"   
 
 # add tool 
-# r = requests.post("http://127.0.0.1:8000/system/category/tools/",data = json.dumps(tool_info))
-# print(r.json()) 
+r = requests.post("http://127.0.0.1:8000/system/category/tools/",data = json.dumps(tool_info))
+print(r.json()) 
 
 # modify tool
-# r = requests.put("http://127.0.0.1:8000/system/category/tools/",data=json.dumps(updating_tool)) 
-# print(r.json()) 
+r = requests.put("http://127.0.0.1:8000/system/category/tools/",data=json.dumps(updating_tool)) 
+print(r.json()) 
 
 # delete tool 
 r = requests.delete("http://127.0.0.1:8000/system/category/tools/?deleting_tool=okm")

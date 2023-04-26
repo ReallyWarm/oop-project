@@ -47,6 +47,26 @@ async def search_category(search:str=''):
     return system.category.search_by_name(search)
 
 # MANAGE TOOL
+
+# MANAGE TOOL
+
+@app.get("/system/category/show_tools/", tags = ['Manage Tool'])
+async def get_tool(tool_name:str):
+    for tool in system.category._all_tools:
+        if str(tool.name) == tool_name:
+            return {'tool code':tool.code,
+                    'tool name':tool.name,
+                    'tool description':tool.description,
+                    'tool brand':tool.brand,
+                    'tool amount':tool.amount,
+                    'tool image':tool.image,
+                    'tool price':tool.price,
+                    'tool wholesale':tool.wholesales,
+                    'tool reviews':tool.review_list,
+                    'tool rating' : tool.rating,
+                    'input': tool_name
+                    }
+    return {'GET Tool':'Invalid Tool'}
 @app.post("/system/category/tools/", tags = ['Manage Tool'])
 async def add_tool(tool_data:dict):
     system.create_tool(tool_data["product_code"], tool_data["tool_name"], tool_data["tool_description"], tool_data["tool_brand"],
@@ -288,8 +308,7 @@ async def create_review(review: dict) -> dict:
                         return {"data": "Invalid rating"}
                 else:
                     return {"data": "Not found this customer. Please try again"}
-        else:
-            return {"data": "Not found this tool. Please try again"}
+    return {"data": "Not found this tool. Please try again"}
 
 # LOGIN
 @app.post('/signup', summary="Create new user", response_model=dict)
@@ -339,6 +358,8 @@ async def make_payment(payment_data:dict):
     status = system.make_payment(payment_data['card'], current_user, payment_data['address'], payment_data['coupon'])
     return {"status":status}
 
-if __name__ == "__main__":
+if __name__ == "__main__": 
+    for tool in system.category._all_tools :
+        print(tool.name)
     import uvicorn
     uvicorn.run("main:app", reload=True)
