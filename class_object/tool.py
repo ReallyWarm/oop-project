@@ -55,6 +55,10 @@ class Tool:
     def amount(self):
         return self._amount
     
+    @property 
+    def image(self): 
+        return self._image
+    
     @amount.setter
     def amount(self, value):
         self._amount = value

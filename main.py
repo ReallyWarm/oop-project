@@ -13,10 +13,8 @@ from customerinfo import CustomerInfo
 from app_database import add_database_users, add_database_system, add_database_userdata
 
 
-templates = Jinja2Templates(directory="templates")
 app = FastAPI()
 system = System()
-app.mount("/static", StaticFiles(directory="static"), name="static")
 add_database_users(system)
 add_database_system(system)
 add_database_userdata(system)
@@ -47,6 +45,23 @@ async def search_category(search:str=''):
     return system.category.search_by_name(search)
 
 # MANAGE TOOL
+@app.get("/system/category/show_tools/", tags = ['Manage Tool'])
+async def get_tool(tool_name:str):
+    for tool in system.category._all_tools:
+        if str(tool.name) == tool_name:
+            return {'tool code':tool.code,
+                    'tool name':tool.name,
+                    'tool description':tool.description,
+                    'tool brand':tool.brand,
+                    'tool amount':tool.amount,
+                    'tool image':tool.image,
+                    'tool price':tool.price,
+                    'tool wholesale':tool.wholesales,
+                    'tool reviews':tool.review_list,
+                    'tool rating' : tool.rating,
+                    'input': tool_name
+                    }
+    return {'GET Tool':'Invalid Tool'}
 @app.post("/system/category/tools/", tags = ['Manage Tool'])
 async def add_tool(tool_data:dict):
     system.create_tool(tool_data["product_code"], tool_data["tool_name"], tool_data["tool_description"], tool_data["tool_brand"],
@@ -85,72 +100,37 @@ def make_coupon_dict(system : System):
     return dict
 
 @app.get("/coupons/all",tags = ['coupon'])
-# async def get_coupons(request:Request) -> dict:   
 def  get_coupons() -> dict: 
     return make_coupon_dict(system)
-    # data = make_coupon_dict(system)
-    # return templates.TemplateResponse("getcoupon.html", {"request": request, "data": data})
-
-# @app.get("/coupons/all/put",tags = ['coupon'])
-# async def put_coupons(request:Request): 
-#     return templates.TemplateResponse("putcoupon.html", {"request": request})
 
 @app.put("/coupons/all",tags=['coupon'])
-# @app.post("/coupons/all/put",tags=['coupon'])
 async def update_coupons(newcoupon : dict) -> dict: 
-# async def update_coupons(request: Request,code: str = Form(...), name: str = Form(...), discount_value: int = Form(...)) -> dict:
-    # newcoupon = {}
-    # newcoupon[code] = {"discount_value": discount_value,"name": name}
     for key_sys in make_coupon_dict(system).keys(): 
         for key_item in newcoupon.keys(): 
             if key_item == key_sys : 
                 system.modify_coupon(key_item,newcoupon[key_item]["discount_value"],newcoupon[key_item]["name"]) 
                 return {"data":f"coupon at code {key_item} has been update"} 
-                # message = f"coupon at code {key_item} has been update"
-                # return templates.TemplateResponse("messageput.html", {"request": request,"message": message})
                 
     for key in newcoupon.keys():
         return {"data":f"coupon at code {key} is not found"}
-        # message = f"coupon at code {key} is not found"
-        # return templates.TemplateResponse("messageput.html", {"request": request,"message": message})
 
-# @app.get("/coupons/all/post",tags=['coupon'])  
-# async def index(request: Request):
-#     return templates.TemplateResponse("postcoupon.html", {"request": request})
 @app.post("/coupons/all",tags=['coupon']) 
 async def add_coupons(newcoupon : dict) -> dict:
-#async def add_coupons(request: Request,code: str = Form(...), name: str = Form(...), discount_value: int = Form(...)) -> dict: 
-    # newcoupon = {}
-    # newcoupon[code] = {"discount_value": discount_value,"name": name}
     for key_item in newcoupon.keys(): 
         for key_sys in make_coupon_dict(system).keys(): 
             if key_item == key_sys :
                 return {"data":f"coupon have already been added"}  
-                # message = f"coupon have already been added"
-                # return templates.TemplateResponse("messagepost.html", {"request": request,"message": message})
+
     for key_item in newcoupon.keys(): 
         system.add_coupon(key_item,newcoupon[key_item]["discount_value"],newcoupon[key_item]["name"])        
         return {"data":f"add new coupon with code {key_item} successfully"}
-        # message = f"add new coupon with code {key_item} successfully"
-        # return templates.TemplateResponse("messagepost.html", {"request": request,"message": message})
 
-# @app.get("/coupons/all/delete",tags=['coupon'])
-# async def del_coupon(request: Request):
-#     return templates.TemplateResponse("deletecoupon.html", {"request": request})
 @app.delete("/coupons/all",tags=['coupon'])
-# @app.post("/coupons/all/delete",tags=['coupon'])
-# async def delete_coupons(request:Request,input : str =Form(...)) ->dict :  
 async def delete_coupons(code : dict) ->dict : 
-    # code ={} 
-    # code["code"] = input
     for key in make_coupon_dict(system).keys(): 
         if key == code["code"] : 
             system.delete_coupon(key) 
-            # message = f"coupon with code {code} have been deleted"
-            # return templates.TemplateResponse("messagedelete.html", {"request": request,"message": message})
             return {"data":f"coupon with code {code} have been deleted"}
-    # message = f"delete coupon with code {code} is not found"
-    # return templates.TemplateResponse("messagedelete.html", {"request": request,"message": message})
     return {"data":f"delete coupon with code {code} is not found"}
 
 # MANAGE WHOLESALE
@@ -288,8 +268,7 @@ async def create_review(review: dict) -> dict:
                         return {"data": "Invalid rating"}
                 else:
                     return {"data": "Not found this customer. Please try again"}
-        else:
-            return {"data": "Not found this tool. Please try again"}
+    return {"data": "Not found this tool. Please try again"}
 
 # LOGIN
 @app.post('/signup', summary="Create new user", response_model=dict)
