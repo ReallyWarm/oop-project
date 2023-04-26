@@ -195,13 +195,7 @@ class System():
             # store new order
             address = current_user.get_address(address_name)
             order_items = [item for item in shoppingcart.cart]
-            pay_id = payment.payment_id
-            pay_date = payment.date_create
-            pay_total = payment.total_price
-            pay_ship = payment.shipping_price
-            pay_discount = payment.discount_price
-            pay_final = payment.final_price
-            new_order = Order(order_items, pay_id, pay_date, pay_total, pay_ship, pay_discount, pay_final, address)
+            new_order = payment.create_order(order_items, address)
             current_user.store_order(new_order)
             # clear cart
             current_user.my_shoppingcart.clear_cart()
