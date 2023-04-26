@@ -32,7 +32,14 @@ class SearchPage(tk.Frame):
     def do_search(self):
         query = self.search_entry.get()
         r = requests.get(f'http://127.0.0.1:8000/system/{self.link[self.search_index]}?search={query}')
-        print(r, r.json())
+
+        if self.search_index == 1:
+            name = [key for key in r.json().keys()]
+            widget_searched = []
+            for tool_widget in self.master.tool_widgets:
+                if tool_widget.name in name:
+                    widget_searched.append(tool_widget)
+            self.master.show_tool_widget(widget_searched, start_x=75, start_y=200, page=self)
 
     def swap_to_other_search(self):
         if len(self.link) - 1 > self.search_index:
@@ -40,3 +47,4 @@ class SearchPage(tk.Frame):
         else:
             self.search_index = 0
         self.search_label.configure(text=f"Search {self.search_type[self.search_index]}:")
+        self.master.hide_tool_widget()
