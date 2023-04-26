@@ -20,6 +20,7 @@ class System():
         self._server_coupons = []
         self._wholesales = []
         self._customerinfos = []
+        self._admins = []
 
     @property
     def auth(self) -> Authenticate:
@@ -52,10 +53,13 @@ class System():
         except:
             return self._system_cart
     
-    def search_user(self, username:str) -> 'CustomerInfo':
+    def search_user(self, username:str) -> 'CustomerInfo' or 'Admin':
         for user in self._customerinfos:
             if user.username == username:
                 return user
+        for admin_user in self._admins:
+            if admin_user.username == username:
+                return admin_user
     
     def search_wholesale(self, code:str) -> 'Wholesale':
         for wholesale in self._wholesales:
@@ -77,9 +81,11 @@ class System():
         return current_user
     
     def check_admin(self):
-        user = self.get_login()
-        if isinstance(user, Admin):
-            return True
+        user = self.get_current_user()
+        admin_username = user.get('user')
+        for admin in self._admins:
+            if admin.username == admin_username and isinstance(admin, Admin):
+                return True
         return False
 
     def add_to_cart(self, tool:'Tool', buy_amount:int) -> None:
@@ -88,6 +94,9 @@ class System():
             return "Item amount exceeds the available tool in stock"
         else:
             active_cart.add_item(tool, buy_amount)
+
+    def add_admin(self, admin:'Admin') -> None:
+        self._admins.append(admin)
 
     def add_customerinfo(self, customer:'CustomerInfo') -> None:
         self._customerinfos.append(customer)
