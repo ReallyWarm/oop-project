@@ -330,7 +330,10 @@ async def logout_to_invalidate_token(current_user: dict = Depends(system.get_cur
 
 @app.get("/me", response_model=dict)
 async def read_users_me(current_user: dict = Depends(system.get_current_user)):
-    return current_user
+    authority = 'customer'
+    if system.check_admin():
+        authority = 'admin'
+    return {'username':current_user,'authority':authority}
 
 # PAYMENT
 @app.post("/cart/payment", summary="Making payment", response_model=dict)
