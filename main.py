@@ -318,8 +318,6 @@ async def make_payment(payment_data:dict):
     status = system.make_payment(payment_data['card'], current_user, payment_data['address'], payment_data['coupon'])
     return {"status":status}
 
-if __name__ == "__main__": 
-    for tool in system.category._all_tools :
-        print(tool.name)
+if __name__ == "__main__":
     import uvicorn
     uvicorn.run("main:app", reload=True)
