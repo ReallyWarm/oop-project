@@ -1,4 +1,4 @@
-
+from admin import Admin
 from customerinfo import CustomerInfo
 from tool import Tool
 from category import SubtypeOfTool, TypeOfTool
@@ -21,8 +21,15 @@ def add_database_users(system:'System'):
     customers[1].create_address('พรี่โอมใจเกเร','ใจเกเร จำกัด','Thailand','Udon Thani','-','-','0810567473','10010')
     customers[2].create_address('Prakrittipon','KMIL','Thailand','Bangkok','Pha ya tai','sol.12 24/89','0901276842','11120')
 
-    for i in range(len(customers)):
-        system.add_customerinfo(customers[i])
+    for customer in customers:
+        system.add_customerinfo(customer)
+
+    admins = [Admin('notAdmin','$2b$12$c.hV4c5GMpULPd1N4.l2Ne7lKtdDXoB6eS/GK0g3PBOEIv8yaOGhe',
+                    'admin','batman','admin@admin.com') # pass admin1234
+             ]
+    
+    for admin in admins:
+        system.add_admin(admin)
 
 def add_database_system(system:'System'):
     # Tool Types

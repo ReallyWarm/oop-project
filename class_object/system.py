@@ -3,12 +3,13 @@ from shoppingcart import ShoppingCart
 from discount import Coupon, Wholesale
 from tool import Tool
 from customerinfo import CustomerInfo
-from order import Order
+from admin import Admin
 from payment import Payment
 from auth import Authenticate
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from address import Address
+    from order import Order
 
 class System():
     # Data of coupon and wholesale
@@ -19,6 +20,7 @@ class System():
         self._server_coupons = []
         self._wholesales = []
         self._customerinfos = []
+        self._admins = []
 
     @property
     def auth(self) -> Authenticate:
@@ -51,10 +53,13 @@ class System():
         except:
             return self._system_cart
     
-    def search_user(self, username:str) -> 'CustomerInfo':
+    def search_user(self, username:str) -> 'CustomerInfo' or 'Admin':
         for user in self._customerinfos:
             if user.username == username:
                 return user
+        for admin_user in self._admins:
+            if admin_user.username == username:
+                return admin_user
     
     def search_wholesale(self, code:str) -> 'Wholesale':
         for wholesale in self._wholesales:
@@ -66,11 +71,22 @@ class System():
             if coupon.code == coupon_code: 
                 return coupon
             
+    def get_current_user(self):
+        return self._authentication.get_current_user()
+            
     def get_login(self):
         login_user = self.get_current_user()
         user_name = login_user.get('user')
         current_user = self.search_user(user_name)
         return current_user
+    
+    def check_admin(self):
+        user = self.get_current_user()
+        admin_username = user.get('user')
+        for admin in self._admins:
+            if admin.username == admin_username and isinstance(admin, Admin):
+                return True
+        return False
 
     def add_to_cart(self, tool:'Tool', buy_amount:int) -> None:
         active_cart = self.get_active_cart()
@@ -79,11 +95,11 @@ class System():
         else:
             active_cart.add_item(tool, buy_amount)
 
+    def add_admin(self, admin:'Admin') -> None:
+        self._admins.append(admin)
+
     def add_customerinfo(self, customer:'CustomerInfo') -> None:
         self._customerinfos.append(customer)
-
-    def get_current_user(self):
-        return self._authentication.get_current_user()
 
     def add_wholesale(self, code:str, amount:int, discount_value:int) -> None: 
         wholesale = Wholesale(code,amount,discount_value)
@@ -188,13 +204,7 @@ class System():
             # store new order
             address = current_user.get_address(address_name)
             order_items = [item for item in shoppingcart.cart]
-            pay_id = payment.payment_id
-            pay_date = payment.date_create
-            pay_total = payment.total_price
-            pay_ship = payment.shipping_price
-            pay_discount = payment.discount_price
-            pay_final = payment.final_price
-            new_order = Order(order_items, pay_id, pay_date, pay_total, pay_ship, pay_discount, pay_final, address)
+            new_order = payment.create_order(order_items, address)
             current_user.store_order(new_order)
             # clear cart
             current_user.my_shoppingcart.clear_cart()

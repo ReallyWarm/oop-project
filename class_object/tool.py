@@ -99,6 +99,7 @@ class Item:
         self._tool = tool
         self._buy_amount = buy_amount
         self._items_price = 0.00
+        self._wholesale_discount = 0.00
         self.update_item()
 
     @property
@@ -113,6 +114,10 @@ class Item:
     def items_price(self) -> float:
         return self._items_price
     
+    @property
+    def wholesale_discount(self) -> float:
+        return self._wholesale_discount
+    
     def set_buy_amount(self, amount:int) -> None:
         self._buy_amount = amount
         self.update_item()
@@ -122,7 +127,7 @@ class Item:
         last_amount = 0
         for wholesale in self.tool.wholesales:
             new_amount = wholesale.amount
-            if new_amount < self.buy_amount and last_amount < new_amount:
+            if new_amount <= self.buy_amount and last_amount < new_amount:
                 tool_wholesale = wholesale
                 last_amount = new_amount
         return tool_wholesale
@@ -130,11 +135,11 @@ class Item:
     def update_item(self) -> None:
         tool_wholesale = self.find_wholesale()
 
-        wholesale_discount = 0
+        self._wholesale_discount = 0
         if tool_wholesale is not None:
-            wholesale_discount = tool_wholesale.discount_value * self.tool.price/100
+            self._wholesale_discount = tool_wholesale.discount_value * self.tool.price/100
         
-        self._items_price = (self.tool.price - wholesale_discount) * self.buy_amount
+        self._items_price = (self.tool.price - self._wholesale_discount) * self.buy_amount
 
     def __str__(self) -> str:
         return str(self.__class__)+'\n'+', '.join(f'{key} : {value}' for key, value in self.__dict__.items())

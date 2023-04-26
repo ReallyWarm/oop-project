@@ -80,9 +80,15 @@ if __name__ == '__main__':
     print('--------------------------------')
 
     # Wholesale
+    system.add_wholesale("04x",8,10)
+    system.add_wholesale("05x",10,50)
     system.add_wholesale("03x",5,5)
-    wholesale = system.search_wholesale("03x")
-    sawaan.add_wholesale(wholesale)
+    wholesale1 = system.search_wholesale("04x")
+    wholesale2 = system.search_wholesale("05x")
+    wholesale3 = system.search_wholesale("03x")
+    sawaan.add_wholesale(wholesale1)
+    sawaan.add_wholesale(wholesale2)
+    sawaan.add_wholesale(wholesale3)
 
     customer.my_shoppingcart.add_item(sawaan, 10)
 
