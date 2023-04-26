@@ -1,7 +1,4 @@
 from fastapi import FastAPI,Form,Request
-from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
-from fastapi.staticfiles import StaticFiles
 import sys
 sys.path.append('./class_object/')
 from fastapi import FastAPI, Depends, HTTPException, status
@@ -47,8 +44,8 @@ async def search_category(search:str=''):
 # MANAGE TOOL
 @app.get("/system/category/show_tools/", tags = ['Manage Tool'])
 async def get_tool(tool_name:str):
-    for tool in system.category._all_tools:
-        if str(tool.name) == tool_name:
+    for name, tool in system.category.search_by_name('').items():
+        if str(name) == tool_name:
             return {'tool code':tool.code,
                     'tool name':tool.name,
                     'tool description':tool.description,
@@ -62,16 +59,19 @@ async def get_tool(tool_name:str):
                     'input': tool_name
                     }
     return {'GET Tool':'Invalid Tool'}
+
 @app.post("/system/category/tools/", tags = ['Manage Tool'])
 async def add_tool(tool_data:dict):
+    if tool_data["tool_image"] == "None":
+        tool_data["tool_image"] = None
     system.create_tool(tool_data["product_code"], tool_data["tool_name"], tool_data["tool_description"], tool_data["tool_brand"],
                        tool_data["tool_amount"], tool_data["tool_image"], tool_data["tool_price"], tool_data['tool_category'])
     return {'ADD Tool':tool_data["tool_name"]}
 
 @app.put("/system/category/tools/", tags = ['Manage Tool'])
 async def modify_tool(changing_tool_data:dict):
-    for tool in system.category._all_tools:
-        if tool.name == changing_tool_data["tool_name"]:
+    for name, tool in system.category.search_by_name('').items():
+        if name == changing_tool_data["tool_name"]:
             system.modify_tool(tool,changing_tool_data["tool_name"],
                                changing_tool_data["tool_description"],
                                 changing_tool_data["tool_brand"], 
@@ -84,8 +84,8 @@ async def modify_tool(changing_tool_data:dict):
 
 @app.delete("/system/category/tools/", tags = ['Manage Tool'])
 async def delete_tool(deleting_tool:str):
-    for tool in system.category._all_tools:
-        if tool.name == deleting_tool:
+    for name, tool in system.category.search_by_name('').items():
+        if name == deleting_tool:
             system.delete_tool(tool)
             return {'DELETE Tool':"delete tool successfully"}
         else:
@@ -241,24 +241,24 @@ async def check_review(name:str)->dict:
 # make review
 @app.get('/tool/review_list',tags=['review'])
 async def get_reveiw(name:str) -> dict:
-    for tool in system.category._all_tools:
-        if tool.name == name:
+    for tool_name, tool in system.category.search_by_name('').items():
+        if tool_name == name:
             return {"Data": tool.review_list}
     return {"data": "Not found this tool. Please try again"}
 
 
 @app.get('/tool/rating',tags=['review'])
 async def get_rating(name:str) -> dict:
-    for tool in system.category._all_tools:
-        if tool.name == name:
+    for tool_name, tool in system.category.search_by_name('').items():
+        if tool_name == name:
             return {"Data": tool.rating}
     return {"data":"Not found this tool. Please try again"}
 
 
 @app.post('/tool/make_review',tags=['review'])
 async def create_review(review: dict) -> dict:
-    for tool in system.category._all_tools:
-        if tool.name == review["tool"]:
+    for tool_name, tool in system.category.search_by_name('').items():
+        if tool_name == review["tool"]:
             for reviewer in system.customerinfos:
                 if reviewer.first_name == review["User"]:
                     if float(review["rating"]) <= 5.00:
