@@ -8,6 +8,7 @@ from make_review import MakeReview
 from search_gui import SearchPage
 from PIL import Image, ImageTk  
 from Tool_gui import Tool_GUI
+from cart_gui import CartGui
 from tool_widget import ToolWidget
 import random
 import requests
@@ -23,11 +24,13 @@ class Window(tk.Tk):
         self.resizable(False, False)
         self.title("Login/Search App")
         self.photo = None 
+
         # Create the menu bar
         menubar = tk.Menu(self)
         accountbar = tk.Menu(self)
         self.config(menu=menubar)
         self.first_name = 'NorNor'
+
         # Create the Pages menu with commands to switch to each page
         pages_menu = tk.Menu(menubar, tearoff=0)
         pages_menu.add_command(label="Home", command=self.show_home)
@@ -42,12 +45,13 @@ class Window(tk.Tk):
         # Create the pages
         self.home_page = tk.Frame(self)
         tk.Label(self.home_page, text="This is the Home page").pack()
-
+        self.cart_page = CartGui(self)
         self.search_page = SearchPage(link='category', search_type='Category', master=self)
         self.search_page.add_new_search(link='category/tools', search_type='Tool')
         self.login_page = LoginPage(self)
         self.sign_up_page = SignupPage(self)
 
+        self.create_cart_button()
         self.tool_data = self.get_tool_data()
         self.tool_widgets = [ ]
         self.make_tool_widget(self.get_tool_data())
@@ -91,7 +95,11 @@ class Window(tk.Tk):
             widget = ToolWidget(name=name, image=image, master=self)
             widget.set_button_command(command=lambda w=widget:self.to_tool_page(w))
             self.tool_widgets.append(widget)
-            
+        
+    def create_cart_button(self): 
+        self.back_button = tk.Button(self,text="cart",command=self.show_cart)
+        self.back_button.pack()  
+        self.back_button.place(x =600,y = 600)
     
     def get_tool_data(self):
         return requests.get(f'http://127.0.0.1:8000/system/category/tools?search=').json()
@@ -145,6 +153,7 @@ class Window(tk.Tk):
         self.show_tool()
 
     def show_home(self): 
+        # self.create_cart_button()
         self.first_name = self.first_name_user()
         self.first_name = self.first_name["first_name"]
         print(self.first_name)
@@ -156,9 +165,11 @@ class Window(tk.Tk):
         #self.login_page.place_forget()
         self.sign_up_page.pack_forget()
         self.make_review_page.pack_forget()
+        self.cart_page.pack_forget()
         #self.sign_up_page.place_forget()
         self.home_page.pack(fill=tk.BOTH, expand=1)
         self.show_tool_widget(self.random_tool_list, start_x=75, start_y=350)
+
         
     def show_review(self): 
         self.tool_page.pack_forget()
@@ -170,6 +181,7 @@ class Window(tk.Tk):
         self.sign_up_page.pack_forget()
         self.make_review_page.pack_forget()
         self.login_page.pack_forget()
+        self.cart_page.pack_forget()
         #self.sign_up_page.place_forget()
         self.make_review_page.pack(fill=tk.BOTH, expand=1)
 
@@ -181,6 +193,7 @@ class Window(tk.Tk):
         self.login_page.pack_forget()
         #self.login_page.place_forget()
         self.sign_up_page.pack_forget()
+        self.cart_page.pack_forget()
         #self.sign_up_page.place_forget()
         self.search_page.pack(fill=tk.BOTH, expand=1)
         self.make_review_page.pack_forget()
@@ -193,6 +206,7 @@ class Window(tk.Tk):
         self.search_page.pack_forget()
         #self.search_page.place_forget()
         self.sign_up_page.pack_forget()
+        self.cart_page.pack_forget()
         self.make_review_page.pack_forget()
         #self.sign_up_page.place_forget()
         self.login_page.pack(fill=tk.BOTH, expand=1)
@@ -205,6 +219,7 @@ class Window(tk.Tk):
         #self.search_page.place_forget()
         self.sign_up_page.pack_forget()
         self.login_page.pack_forget()
+        self.cart_page.pack_forget()
         self.make_review_page.pack_forget()
         #self.login_page.place_forget()
         self.tool_page.pack(fill=tk.BOTH, expand=1)
@@ -217,9 +232,25 @@ class Window(tk.Tk):
         self.search_page.pack_forget()
         #self.search_page.place_forget()
         self.login_page.pack_forget()
+        self.cart_page.pack_forget()
         self.make_review_page.pack_forget()
         #self.login_page.place_forget()
         self.sign_up_page.pack(fill=tk.BOTH, expand=1)
+    
+    def show_cart(self):
+        # self.back_button.destroy()
+        self.back_button.pack(in_=None)
+        self.back_button.pack_forget()
+        self.sign_up_page.pack_forget()
+        self.tool_page.pack_forget()
+        self.home_page.pack_forget()
+        self.hide_tool_widget()
+        #self.home_page.place_forget()
+        self.search_page.pack_forget()
+        #self.search_page.place_forget()
+        self.login_page.pack_forget()
+        self.make_review_page.pack_forget()
+        self.cart_page.pack(fill=tk.BOTH, expand=1)
 
 if __name__ == "__main__":
     app = Window()

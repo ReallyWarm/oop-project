@@ -353,6 +353,7 @@ async def read_users_me(current_user: dict = Depends(system.get_current_user)):
     if system.check_admin():
         authority = 'admin'
     return {'username':current_user,'authority':authority}
+
 @app.get("/user/",response_model=dict) 
 async def get_user_first_name(username:str): 
     return {"first_name":system.search_user(username).first_name}
@@ -364,6 +365,7 @@ async def make_payment(payment_data:dict):
     return {"status":status}
 
 if __name__ == "__main__": 
-    print(system.search_user('NorNor007').first_name)
+    pass
+    # print(system.search_user('NorNor007').first_name)
     # import uvicorn
     # uvicorn.run("main:app", reload=True)
