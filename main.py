@@ -278,9 +278,37 @@ async def create_review(review: dict) -> dict:
                         return {"data": "A new review is added!"}
                     else : 
                         return {"data": "Invalid rating"}
+# shopping cart
+@app.post("/system/shopping_cart/", tags = ['shopping_cart'])
+async def add_to_cart(chosed_item:dict):
+    for name, tool in system.category.search_by_name('').items():
+        if name == chosed_item['tool_name']:
+            system.add_to_cart(tool,chosed_item['quantity'])
+            return {'ADD TO CART':"add to cart successfully"}
+    return {'ADD TO CART':"Invalid Tool"}
 
+@app.get("/system/shopping_cart/", tags = ['shopping_cart'])
+async def get_cart():
+    if system.get_active_cart() != None:
+        return system.get_active_cart()
+    else:
+        return {'GET CART':"No active cart"}
 
-    
+@app.delete("/system/shopping_cart/delete_cart/", tags= ['shopping_cart'])
+async def clear_cart():
+    if system.get_active_cart() != None:
+        system.get_active_cart().clear_cart()
+        return {'CLEAR CART':"clear cart successfully"}
+    else:
+        return {'GET CART':"No active cart"}
+
+@app.delete("/system/shopping_cart/delete_item/", tags= ['shopping_cart'])
+async def delete_item(chosed_item:dict):
+    for name, tool in system.category.search_by_name('').items():
+        if name == chosed_item['tool_name']:
+            system.get_active_cart().delete_item(tool)
+            return {'DELETE ITEM':"delete item successfully"}
+    return {'DELETE ITEM':"Invalid Tool"}
 
 # LOGIN
 @app.post('/signup', summary="Create new user", response_model=dict)

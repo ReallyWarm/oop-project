@@ -103,7 +103,7 @@ class Window(tk.Tk):
                 username = user["username"]["user"]   
                 firstname = requests.get(f'http://127.0.0.1:8000/user/?username={username}').json()
                 return firstname
-        return {"first_name":"NorNor"}
+        return {"first_name":" "}
     def random_tool_to_show(self):
         random_tool = []
         while len(random_tool) < 4:

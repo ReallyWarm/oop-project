@@ -10,8 +10,11 @@ class Tool_GUI(tk.Frame) :
         super().__init__(master) 
         self.master = master 
         self.name = name
+        self.chosen_amoung = 1
         self.create_widget()
         self.get_tool_details()
+        self.show_amoung()
+
     def create_widget(self): 
         self.back_button = tk.Button(self,text="home",command=self.Home)
         self.back_button.pack()
@@ -19,7 +22,24 @@ class Tool_GUI(tk.Frame) :
         self.review_button = tk.Button(self,text="review",command=self.show_make_review)
         self.review_button.pack()
         self.review_button.place(x=80,y=500)
+        self.incresse_amoung_button = tk.Button(self,text="+",command=self.incresse_amoung, font=("Helvetica", 24))
+        self.incresse_amoung_button.pack()
+        self.incresse_amoung_button.place(x=50,y=400)
+        self.add_to_cart_button = tk.Button(self,text="add to cart",command=self.add_tool_to_cart)
+        self.add_to_cart_button.pack()
+        self.add_to_cart_button.place(x=180,y=450)
+        self.decresse_amoung_button = tk.Button(self,text="-",command=self.decresse_amoung, font=("Helvetica", 24))
+        self.decresse_amoung_button.pack()
+        self.decresse_amoung_button.place(x=310,y=400)
         # self.get_tool_details()
+
+    def show_amoung(self):
+        self.chosen_amoung_lable = tk.Label(self, text=self.chosen_amoung, font=("Helvetica", 24))
+        self.chosen_amoung_lable.pack()
+        self.chosen_amoung_lable.place(x=190,y=400)
+
+    def delete_amoung(self):
+        self.chosen_amoung_lable.destroy()
 
     def get_tool_details(self): 
         name = self.name 
@@ -30,7 +50,7 @@ class Tool_GUI(tk.Frame) :
         self.tool_name = r.json()['tool name']
         self.tool_description = r.json()['tool description']
         self.tool_brand = r.json()['tool brand']
-        self.tool_amount = r.json()['tool amount']
+        self.tool_amoung = r.json()['tool amount']
         self.tool_price = r.json()['tool price']
         self.tool_image = r.json()['tool image']
         self.tool_wholesale = r.json()['tool wholesale']
@@ -46,6 +66,11 @@ class Tool_GUI(tk.Frame) :
 
         self.tool_code_label = tk.Label(self, text=self.tool_code, font=("Helvetica", 12))
         self.tool_code_label.place(x=800, y=60)
+
+        tk.Label(self, text="price", font=("Helvetica", 12)).place(x=150, y=350)
+
+        self.tool_price_label = tk.Label(self, text=self.tool_price, font=("Helvetica", 12))
+        self.tool_price_label.place(x=200, y=350)
 
         tk.Label(self, text='rating ', font=("Helvetica", 12)).place(x= 1100, y=60)
 
@@ -99,6 +124,31 @@ class Tool_GUI(tk.Frame) :
                  
             for detail in range(3,5):
                 review[detail].place(x=500, y=280+long*(detail-3)+100*amount)
+
+    def incresse_amoung(self):
+        if self.tool_amoung > self.chosen_amoung:
+            self.chosen_amoung += 1
+            self.show_amoung()
+            #print("added")
+        else:
+            #print("Passed")
+            pass
+
+    def add_tool_to_cart(self):
+        input_data = {"tool_name": self.tool_name, "quantity": self.chosen_amoung}
+        r = requests.post(f'http://127.0.0.1:8000/system/shopping_cart/', json=input_data)
+        self.delete_amoung()
+        self.chosen_amoung = 1
+        self.show_amoung()
+        
+
+    def decresse_amoung(self):
+        if self.chosen_amoung > 0:
+            self.chosen_amoung -= 1
+            self.show_amoung()
+        else:
+            pass
+    
     def get_image(self,url,width,height) -> ImageTk.PhotoImage: 
         with urllib.request.urlopen(url) as u:
             raw_data = u.read()  # read the image data from the URL
@@ -106,6 +156,7 @@ class Tool_GUI(tk.Frame) :
         im = Image.open(io.BytesIO(raw_data))  # create a PIL Image object from the image data
         im = im.resize((width,height))
         return ImageTk.PhotoImage(im)
+    
     def Home(self):  
         self.master.show_home() 
         
