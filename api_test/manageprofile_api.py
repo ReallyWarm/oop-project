@@ -11,31 +11,36 @@ edit_address ={"name": "John", "company": "continental","country": "Thailand","s
 
 delete_address ={"name": "John"}
 
-
-
 #add customer
-r= requests.post("http://127.0.0.1:8000/customer/{first_name}",data=json.dumps(input_customer))
+r= requests.post("http://127.0.0.1:8000/customer/",data=json.dumps(input_customer))
 print(r.json())
+print('-'*20)
 
 #create address
-r= requests.post("http://127.0.0.1:8000/customer/address/{name}",data=json.dumps(input_address))
+r= requests.post("http://127.0.0.1:8000/customer/address/",data=json.dumps(input_address))
 print(r.json())
-
-#delete address
-r= requests.delete("http://127.0.0.1:8000/customer/address/{name}",data=json.dumps(delete_address))
-print(r.json())
+print('-'*20)
 
 #get address
-r = requests.get("http://127.0.0.1:8000/customer/address/{address}?name=John")
+r = requests.get("http://127.0.0.1:8000/customer/address?name=John")
 print(r.json())
+print('-'*20)
 
 #edit address
-r = requests.put("http://127.0.0.1:8000/customer/address{address}",data=json.dumps(edit_address))
+r = requests.put("http://127.0.0.1:8000/customer/address/",data=json.dumps(edit_address))
 print(r.json())
+print('-'*20)
+
+#delete address
+r =  requests.delete("http://127.0.0.1:8000/customer/address",data=json.dumps(delete_address))
+print(r.json())
+print('-'*20)
+
+#check order
+r = requests.get("http://127.0.0.1:8000/customer/order?name=John")
+print(r.json())
+print('-'*20)
 
 #check review
-r = requests.get("http://127.0.0.1:8000/customer/reviewPrakrittipon")
-print(r.json())
-
-r = requests.get("http://127.0.0.1:8000/customer/orderNorNor")
+r = requests.get("http://127.0.0.1:8000/customer/review?name=John")
 print(r.json())
