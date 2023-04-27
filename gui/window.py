@@ -163,6 +163,8 @@ class Window(tk.Tk):
 
     def show_home(self): 
         # self.create_cart_button()
+        self.back_button.pack(in_=self)
+        self.back_button.place(x =600,y = 600)
         self.first_name = self.first_name_user()
         self.first_name = self.first_name["first_name"]
         self.delete_name()
