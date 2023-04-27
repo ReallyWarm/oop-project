@@ -9,7 +9,7 @@ class ManageProfilePage(tk.Frame):
         self.parent = parent 
         
         # create label for page title
-        title_label = tk.Label(self, text="Edit the address", font=("Arial", 18, "bold"))
+        title_label = tk.Label(self, text="Edit and Delete the address", font=("Arial", 18, "bold"))
         title_label.grid(row=0, column=0, columnspan=2, pady=20)
         
         # create labels and entry fields for user information
@@ -55,12 +55,14 @@ class ManageProfilePage(tk.Frame):
   
         # create save button
         edit_button = tk.Button(self, text="Edit", font=("Arial", 12), command=self.save_changes)
-        edit_button.grid(row=9, column=0, columnspan=2, pady=20)
+        edit_button.grid(row=9, column=0, columnspan=1, pady=20)
         
+        delete_button = tk.Button(self, text="Delete", font={"Arial",12},command = self.delete_changes)
+        delete_button.grid(row=9, column=1, columnspan=3, pady=0)
         
     def save_changes(self):
         # save changes to user information
-        user_info = {
+        new_add = {
             "name":self.username_entry.get(),
             "company":self.company_entry.get(),
             "country":self.country_entry.get(),
@@ -70,17 +72,38 @@ class ManageProfilePage(tk.Frame):
             "phone_number":self.phone_entry.get(),
             "postal_code":self.postal_entry.get()
         }
-        
-        r = requests.put("http://127.0.0.1:8000/customer/address/",data=json.dumps(user_info))
+        name  = new_add["name"]
+        r1 = requests.put("http://127.0.0.1:8000/customer/address/",data=json.dumps(new_add))
+        res1 = json.loads(r1.text)   
+        # show message box indicating changes have been saved
+        if  res1 == {"data":"Unable to edit address. Please try again"}:
+            messagebox.showinfo(title='Error',message="You don't have account in this system. Please try again")
+            print(r1.json())
+        else:
+            r2 = requests.get(f"http://127.0.0.1:8000/customer/address?name={name}")
+            res2 = json.loads(r2.text)
+            messagebox.showinfo(title='Notice',message=f"Success edit the address {res2['data']}")
+            print(r2.json())
+            
+    def delete_changes(self):
+        # save changes to user information
+        user_info = {
+            "name":self.username_entry.get()
+        }
+        name = user_info['name']
+        r = requests.delete("http://127.0.0.1:8000/customer/address",data=json.dumps(user_info))
         res = json.loads(r.text)
         # show message box indicating changes have been saved
-        if  res == {"data":"Unable to edit address. Please try again"}:
+        if  res == {"data":"Unable to delete the address"}:
             messagebox.showinfo(title='Error',message="You don't have account in this system. Please try again")
             print(r.json())
         else:
-             messagebox.showinfo(title='Notice',message="Success edit the address")
-             print(r.json())
-        
+             messagebox.showinfo(title='Notice',message="Success delete the address")
+             r2 = requests.get(f"http://127.0.0.1:8000/customer/address?name={name}")
+             res2 = json.loads(r2.text)
+             print(res2['data'])
+             print(r2.json())
+
 # create tkinter window
 root = tk.Tk()
 
