@@ -9,16 +9,10 @@ if __name__ == '__main__':
     # Set up the clss object
     Sys = System()
 
-    customer = [CustomerInfo('Pornthep', 'Thammawong', 'firm@gmail.com', 'Kmitl'), 
-                CustomerInfo('NorNor', 'Sawongnam', 'NorNor@gmail.com', 'Kmitl'), 
-                CustomerInfo('พรี่โอมใจเกเร', 'สองศรี', 'Thanasak@gmail.com', 'Kmitl'),
-                CustomerInfo("Prakrittipon", "Sommool", "korphaisk@gmail.com", "KMITL")]
-
-    # create the example review and order
-    order1 = Order([], '34000', 'Pronthep', 'Success', '12.00')
-    test_drill = Tool('01x', 'Testing drill', 'POWER',
-                      'idk', 10, None, 1000.00, 'Drills')
-    customer[3].create_review(test_drill, "test_review1", "good_tool", 4.5, "4/1/2023")
+    customer = [CustomerInfo("unused","unused",'Pornthep', 'Thammawong', 'firm@gmail.com', 'Kmitl'), 
+                CustomerInfo("unused","unused",'NorNor', 'Sawongnam', 'NorNor@gmail.com', 'Kmitl'), 
+                CustomerInfo("unused","unused",'พรี่โอมใจเกเร', 'สองศรี', 'Thanasak@gmail.com', 'Kmitl'),
+                CustomerInfo("unused","unused","Prakrittipon", "Sommool", "korphaisk@gmail.com", "KMITL")]
 
     # add customer information to system
     for i in range(len(customer)):
@@ -30,13 +24,19 @@ if __name__ == '__main__':
     customer[2].create_address('พรี่โอมใจเกเร','ใจเกเร จำกัด','Thailand','Udon Thani','-','-','0810567473','10010')
     customer[3].create_address('Prakrittipon','KMIL','Thailand','Bangkok','Pha ya tai','sol.12 24/89','0901276842','11120')
     
+    # create the example review and order
+    order1 = Order([], 'x', '0', '34000', '0', '0', '34000', customer[0].get_address('Pornthep'))
+    test_drill = Tool('01x', 'Testing drill', 'POWER',
+                      'idk', 10, None, 1000.00, 'Drills')
+    customer[3].create_review(test_drill, "test_review1", "good_tool", 4.5, "4/1/2023")
+
     #test result name is duplicate
     print()
     customer[3].create_address('Prakrittipon','KU','Thailand','Bangkok','Sapan','sol.12 24/89','02012389089','10000')
 
     print()
     
-    print(Sys._customerinfos, end='\n')
+    print(Sys.customerinfos, end='\n')
 
     print()
 

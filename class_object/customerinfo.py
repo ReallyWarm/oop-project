@@ -1,3 +1,4 @@
+from user import User
 from wishlish import Wishlist
 from shoppingcart import ShoppingCart
 from address import Address
@@ -6,12 +7,11 @@ from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from tool import Tool
     from order import Order
+    from discount import Coupon
 
-class CustomerInfo:
-    def __init__(self, first_name:str, last_name:str, email:str, company_name:str) -> None:
-        self._first_name = first_name
-        self._last_name = last_name
-        self._email = email
+class CustomerInfo(User):
+    def __init__(self, username:str, hashed_password:str, first_name:str, last_name:str, email:str, company_name:str) -> None:
+        User.__init__(self, username, hashed_password, first_name, last_name, email)
         self._company_name = company_name
         self._addresses = []
         self._my_wishlist = Wishlist()
@@ -20,11 +20,14 @@ class CustomerInfo:
         self._my_review = []
         self._used_coupon = []
 
-    def check_coupon(self, coupon):
-        pass
+    def check_used_coupon(self, coupon_code:str) -> bool:
+        for coupon in self._used_coupon:
+            if coupon.code == coupon_code: 
+                return True
+        return False
 
-    def store_use_coupon(self, coupon):
-        pass
+    def store_used_coupon(self, coupon:'Coupon'):
+        self._used_coupon.append(coupon)
 
     def store_order(self, order:'Order') -> None:
         self._my_order.append(order)
@@ -48,9 +51,6 @@ class CustomerInfo:
 
     def get_ShoppingCart(self) -> 'ShoppingCart':
         return self.my_shoppingcart
-    
-    def find_user(self, username):
-        pass
 
     def create_review(self, tool:'Tool', head_of_review:str, comment:str, rating:float, date_of_review:str) -> None:
         review = Review(self._first_name, head_of_review, comment, date_of_review, rating)
@@ -68,10 +68,6 @@ class CustomerInfo:
     @property
     def my_wishlist(self) -> 'Wishlist':
         return self._my_wishlist
-     
-    @property
-    def first_name(self) -> str:
-        return self._first_name
     
     @property
     def my_shoppingcart(self) -> 'ShoppingCart':

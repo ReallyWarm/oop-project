@@ -3,16 +3,28 @@ from shoppingcart import ShoppingCart
 from discount import Coupon, Wholesale
 from tool import Tool
 from customerinfo import CustomerInfo
+from admin import Admin
 from payment import Payment
+from auth import Authenticate
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from address import Address
+    from order import Order
 
 class System():
     # Data of coupon and wholesale
     def __init__(self) -> None:
+        self._authentication = Authenticate()
         self._category = Category()
         self._system_cart = ShoppingCart()
         self._server_coupons = []
         self._wholesales = []
         self._customerinfos = []
+        self._admins = []
+
+    @property
+    def auth(self) -> Authenticate:
+        return self._authentication
 
     @property
     def customerinfos(self) ->list:
@@ -21,6 +33,7 @@ class System():
     @property 
     def server_coupons(self) -> list : 
         return self._server_coupons
+    
     @property 
     def wholesales(self) -> list:
         return self._wholesales
@@ -33,6 +46,21 @@ class System():
     def system_cart(self) -> 'ShoppingCart':
         return self._system_cart
     
+    def get_active_cart(self) -> 'ShoppingCart':
+        try:
+            current_user = self.get_login()
+            return current_user.my_shoppingcart
+        except:
+            return self._system_cart
+    
+    def search_user(self, username:str) -> 'CustomerInfo' or 'Admin':
+        for user in self._customerinfos:
+            if user.username == username:
+                return user
+        for admin_user in self._admins:
+            if admin_user.username == username:
+                return admin_user
+    
     def search_wholesale(self, code:str) -> 'Wholesale':
         for wholesale in self._wholesales:
             if wholesale.code == code : 
@@ -42,18 +70,36 @@ class System():
         for coupon in self._server_coupons:
             if coupon.code == coupon_code: 
                 return coupon
+            
+    def get_current_user(self):
+        return self._authentication.get_current_user()
+            
+    def get_login(self):
+        login_user = self.get_current_user()
+        user_name = login_user.get('user')
+        current_user = self.search_user(user_name)
+        return current_user
+    
+    def check_admin(self):
+        user = self.get_current_user()
+        admin_username = user.get('user')
+        for admin in self._admins:
+            if admin.username == admin_username and isinstance(admin, Admin):
+                return True
+        return False
 
     def add_to_cart(self, tool:'Tool', buy_amount:int) -> None:
-        self._system_cart.add_item(tool, buy_amount)
+        active_cart = self.get_active_cart()
+        if tool.amount < buy_amount:
+            return "Item amount exceeds the available tool in stock"
+        else:
+            active_cart.add_item(tool, buy_amount)
+
+    def add_admin(self, admin:'Admin') -> None:
+        self._admins.append(admin)
 
     def add_customerinfo(self, customer:'CustomerInfo') -> None:
         self._customerinfos.append(customer)
-
-    def vertify_user(self):
-        pass
-
-    def login(self,username,password):
-        pass
 
     def add_wholesale(self, code:str, amount:int, discount_value:int) -> None: 
         wholesale = Wholesale(code,amount,discount_value)
@@ -74,7 +120,7 @@ class System():
             for wholesale in value.wholesales : 
                 if wholesale.code == wholesale_code: 
                     value.wholesales.remove(wholesale)
-        for wholesale in self._wholesale : 
+        for wholesale in self.wholesales : 
             if wholesale.code == wholesale_code :
                 self.wholesales.remove(wholesale)
                 del wholesale 
@@ -132,11 +178,39 @@ class System():
             self.delete_tool(tool)
             self._category.subtype_add_tool(selected_type, tool)
 
-    def make_payment(self,card : str,coupon_code :str = None): 
-        coupon = self.search_coupon(coupon_code) 
-        if(coupon is None): 
-            return "coupon not found" 
-        total_price = self._system_cart.total_price 
-        discount_value = coupon.discount_value
-        payment = Payment(total_price,card,discount_value)
-        payment.make_payment()
+    def make_payment(self,card:str, current_user:'CustomerInfo', address_name:str, coupon_code:str = None):
+        shoppingcart = current_user.my_shoppingcart
+        total_price = shoppingcart.total_price
+        if total_price <= 0:
+            return "You must add items to your shopping cart before paying"
+        
+        coupon = None
+        discount_value = 0
+        if coupon_code is not None:
+            coupon = self.search_coupon(coupon_code) 
+            if(coupon is None): 
+                return "Coupon not found"
+            if current_user.check_used_coupon(coupon_code):
+                return "You have already used the coupon"
+            discount_value = coupon.discount_value
+
+        shoppingcart.update_cart_items()
+        payment = Payment(total_price, shoppingcart.shipping_price, card, discount_value)
+        status = payment.make_payment()
+        if status == "Payment success":
+            # store used coupon
+            if coupon is not None:
+                current_user.store_used_coupon(coupon)
+            # store new order
+            address = current_user.get_address(address_name)
+            order_items = [item for item in shoppingcart.cart]
+            new_order = payment.create_order(order_items, address)
+            current_user.store_order(new_order)
+            # clear cart
+            current_user.my_shoppingcart.clear_cart()
+            # update tool amount in shop
+            for item in order_items:
+                item.tool.amount = item.tool.amount - item.buy_amount
+        del payment
+
+        return status
