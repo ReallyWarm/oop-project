@@ -132,6 +132,7 @@ class Window(tk.Tk):
     def to_tool_page(self, widget):
         self.make_review_page = widget.make_review_page
         self.tool_page = widget.tool_page
+        self.tool_page.get_tool_details()
         self.show_tool()
 
     def show_home(self): 
