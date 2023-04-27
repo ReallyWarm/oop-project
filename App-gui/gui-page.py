@@ -69,17 +69,20 @@ class ManageProfilePage(tk.Frame):
             "phone_number":self.phone_entry.get(),
             "postal_code":self.postal_entry.get()
         }
+        name = user_info['name']
         
-        r= requests.post("http://127.0.0.1:8000/customer/address/",data=json.dumps(user_info))
-        res = json.loads(r.text)
+        r1= requests.post("http://127.0.0.1:8000/customer/address/",data=json.dumps(user_info))
+        res1 = json.loads(r1.text)
         # show message box indicating changes have been saved
-        if  res == {'data':'Unable to create the address.'}:
+        if  res1 == {'data':'Unable to create the address.'}:
             messagebox.showinfo(title='Error',message="You don't have account in this system. Please try again")
-            print(r.json())
+            print(r1.json())
         else:
              messagebox.showinfo(title='Notice',message="Success creating the address")
-             print(r.json())
-        
+             print(r1.json())
+        r2 = requests.get(f"http://127.0.0.1:8000/customer/address?name={name}")
+        res2 = json.loads(r2.text)
+        print(res2['data'])
 # create tkinter window
 root = tk.Tk()
 
