@@ -27,7 +27,7 @@ class Window(tk.Tk):
         menubar = tk.Menu(self)
         accountbar = tk.Menu(self)
         self.config(menu=menubar)
-
+        self.first_name = 'NorNor'
         # Create the Pages menu with commands to switch to each page
         pages_menu = tk.Menu(menubar, tearoff=0)
         pages_menu.add_command(label="Home", command=self.show_home)
@@ -84,9 +84,10 @@ class Window(tk.Tk):
         self.show_home()
 
     def make_tool_widget(self, dict_json):
+        # print(self.first_name)
         for key, value in dict_json.items():
             name = key
-            image = self.get_image(value.get('_image')[0],150,150)
+            image = self.get_image(value.get('_image')[0],150,150) 
             widget = ToolWidget(name=name, image=image, master=self)
             widget.set_button_command(command=lambda w=widget:self.to_tool_page(w))
             self.tool_widgets.append(widget)
@@ -95,6 +96,14 @@ class Window(tk.Tk):
     def get_tool_data(self):
         return requests.get(f'http://127.0.0.1:8000/system/category/tools?search=').json()
     
+    def first_name_user(self): 
+        user = requests.get("http://127.0.0.1:8000/me").json() 
+        for key in user.keys(): 
+            if key == 'username': 
+                username = user["username"]["user"]   
+                firstname = requests.get(f'http://127.0.0.1:8000/user/?username={username}').json()
+                return firstname
+        return {"first_name":"NorNor"}
     def random_tool_to_show(self):
         random_tool = []
         while len(random_tool) < 4:
@@ -136,6 +145,10 @@ class Window(tk.Tk):
         self.show_tool()
 
     def show_home(self): 
+        self.first_name = self.first_name_user()
+        self.first_name = self.first_name["first_name"]
+        print(self.first_name)
+        self.make_tool_widget(self.get_tool_data())
         self.tool_page.pack_forget()
         self.search_page.pack_forget()
         #self.search_page.place_forget()

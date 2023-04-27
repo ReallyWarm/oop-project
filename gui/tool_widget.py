@@ -5,7 +5,7 @@ from Tool_gui import Tool_GUI
 from PIL import ImageTk
 
 class ToolWidget():
-    def __init__(self, name, image:'ImageTk.PhotoImage', master):
+    def __init__(self,name, image:'ImageTk.PhotoImage', master):
         self.name = name
         self.im = image
         self.button = Button(master, image=self.im)
@@ -14,7 +14,7 @@ class ToolWidget():
         self.description = Label(master, text=name) 
         self.description.pack()
         self.description.place(x=0,y=200)
-        self.make_review_page = MakeReview(user='NorNor', tool=name, master=master) 
+        self.make_review_page = MakeReview(user=master.first_name, tool=name, master=master) 
         self.tool_page = Tool_GUI(master=master, name=name)
         self.unpack()
 

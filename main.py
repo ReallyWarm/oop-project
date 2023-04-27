@@ -257,6 +257,18 @@ async def get_rating(name:str) -> dict:
 
 @app.post('/tool/make_review',tags=['review'])
 async def create_review(review: dict) -> dict:
+    check = 0
+    check2 = 0 
+    for tool_name, tool in system.category.search_by_name('').items(): 
+        if tool_name == review["tool"]: 
+            check = 1 
+    if(check != 1): 
+        return {"data": "Not found this tool. Please try again"}
+    for reviewer in system.customerinfos: 
+        if reviewer.first_name == review["User"]: 
+            check2 = 1 
+    if(check2 != 1):  
+        return {"data": "Not found this tool. Please try again"}
     for tool_name, tool in system.category.search_by_name('').items():
         if tool_name == review["tool"]:
             for reviewer in system.customerinfos:
@@ -264,11 +276,11 @@ async def create_review(review: dict) -> dict:
                     if float(review["rating"]) <= 5.00:
                         reviewer.create_review(tool, review["head_review"], review["comment"], float(review["rating"]), review["date_of_review"])
                         return {"data": "A new review is added!"}
-                    else:
+                    else : 
                         return {"data": "Invalid rating"}
-                else:
-                    return {"data": "Not found this customer. Please try again"}
-    return {"data": "Not found this tool. Please try again"}
+
+
+    
 
 # LOGIN
 @app.post('/signup', summary="Create new user", response_model=dict)
@@ -313,7 +325,9 @@ async def read_users_me(current_user: dict = Depends(system.get_current_user)):
     if system.check_admin():
         authority = 'admin'
     return {'username':current_user,'authority':authority}
-
+@app.get("/user/",response_model=dict) 
+async def get_user_first_name(username:str): 
+    return {"first_name":system.search_user(username).first_name}
 # PAYMENT
 @app.post("/cart/payment", summary="Making payment", response_model=dict)
 async def make_payment(payment_data:dict):
@@ -321,6 +335,7 @@ async def make_payment(payment_data:dict):
     status = system.make_payment(payment_data['card'], current_user, payment_data['address'], payment_data['coupon'])
     return {"status":status}
 
-if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("main:app", reload=True)
+if __name__ == "__main__": 
+    print(system.search_user('NorNor007').first_name)
+    # import uvicorn
+    # uvicorn.run("main:app", reload=True)

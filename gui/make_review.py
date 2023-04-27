@@ -36,7 +36,7 @@ class MakeReview(tk.Frame):
         tk.Button(self,text="Submit Review", font=("Helvetica", 12, "bold"), bg="#333", fg="#fff", command=self.send_review).place(x=180, y=500)
     def send_review(self): 
         data = {
-                "User":self.user,
+                "User":self.master.first_name,
                 "tool":self.tool,
                 "head_review":self.ent1.get(),
                 "comment":self.ent2.get("1.0","end-1c"),
@@ -50,4 +50,5 @@ class MakeReview(tk.Frame):
         respon = json.loads(r.text)
         if respon == {'data': 'A new review is added!'}:
             messagebox.showinfo(title="Review Response", message="Your review has been added!")
-        print(respon)
+        print(respon) 
+        print(self.master.first_name)
