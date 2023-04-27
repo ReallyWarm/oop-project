@@ -42,7 +42,12 @@ class Window(tk.Tk):
         # Create the pages
         self.home_page = tk.Frame(self)
         tk.Label(self.home_page, text="This is the Home page").pack()
+        tk.Label(self.home_page, text="Recommended Tools", font=("Helvetica", 30)).place(x=260, y=280)
 
+        # self.delete_name()
+        self.name = tk.Label(self.home_page, text=self.first_name)
+        #self.name.pack() 
+        #self.name.place(x=800,y=10)
         self.search_page = SearchPage(link='category', search_type='Category', master=self)
         self.search_page.add_new_search(link='category/tools', search_type='Tool')
         self.login_page = LoginPage(self)
@@ -103,7 +108,7 @@ class Window(tk.Tk):
                 username = user["username"]["user"]   
                 firstname = requests.get(f'http://127.0.0.1:8000/user/?username={username}').json()
                 return firstname
-        return {"first_name":" "}
+        return {"first_name":"guest"}
     def random_tool_to_show(self):
         random_tool = []
         while len(random_tool) < 4:
@@ -124,6 +129,9 @@ class Window(tk.Tk):
             widget.description.pack(in_=page)
             row = 400 * (i//4)
             widget.set_coords(start_x+(i*200), start_y+row)
+
+    def delete_name(self):
+        self.name.destroy()
 
     def hide_tool_widget(self):
         for widget in self.current_tool_widget:
@@ -147,6 +155,10 @@ class Window(tk.Tk):
     def show_home(self): 
         self.first_name = self.first_name_user()
         self.first_name = self.first_name["first_name"]
+        self.delete_name()
+        self.name = tk.Label(self.home_page, text=self.first_name)
+        self.name.pack() 
+        self.name.place(x=850,y=5)
         print(self.first_name)
         self.make_tool_widget(self.get_tool_data())
         self.tool_page.pack_forget()
