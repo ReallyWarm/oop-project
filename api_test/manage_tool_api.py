@@ -5,9 +5,9 @@ tool_info = {
 	"tool_name":"Testing drill",
 	"tool_description": "POWER",
 	"tool_brand": "idk",
-	"tool_amount": "10",
+	"tool_amount": 10,
 	"tool_image": "None",
-	"tool_price": "100.00",
+	"tool_price": 100.00,
 	"tool_category": "Drills"
 }
 
@@ -16,7 +16,7 @@ updating_tool = {
 	"tool_name":"Testing drill",
 	"tool_description": "POWER",
 	"tool_brand": "idk",
-	"tool_price": "20.00",
+	"tool_price": 20.00,
 	"product_code": "01x",
 	"tool_category": "Drills"
 }

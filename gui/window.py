@@ -8,19 +8,14 @@ from make_review import MakeReview
 from search_gui import SearchPage
 from PIL import Image, ImageTk  
 from Tool_gui import Tool_GUI
+from tool_widget import ToolWidget
 import random
+import requests
 # # from tkinter import messagebox
 # # from tkinter import ttk
 import io
 import urllib.request
-from system import System
-# from category import Category 
-from app_database import add_database_users, add_database_system, add_database_userdata
 
-system = System() 
-add_database_users(system) 
-add_database_system(system) 
-add_database_userdata(system)
 class Window(tk.Tk):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -28,7 +23,6 @@ class Window(tk.Tk):
         self.resizable(False, False)
         self.title("Login/Search App")
         self.photo = None 
-        self._category = system.category
         # Create the menu bar
         menubar = tk.Menu(self)
         accountbar = tk.Menu(self)
@@ -45,8 +39,6 @@ class Window(tk.Tk):
 
         # Create the account bar
 
-        self.image_list = self.random_tool_to_show()
-
         # Create the pages
         self.home_page = tk.Frame(self)
         tk.Label(self.home_page, text="This is the Home page").pack()
@@ -54,9 +46,16 @@ class Window(tk.Tk):
         self.search_page = SearchPage(link='category', search_type='Category', master=self)
         self.search_page.add_new_search(link='category/tools', search_type='Tool')
         self.login_page = LoginPage(self)
-        self.sign_up_page = SignupPage(self) 
-        self.tool_page = Tool_GUI(name =self.image_list[0].name,master =self)
-        self.make_review_page = MakeReview(user = 'NorNor',tool=self.image_list[0].name,master=self)
+        self.sign_up_page = SignupPage(self)
+
+        self.tool_data = self.get_tool_data()
+        self.tool_widgets = [ ]
+        self.make_tool_widget(self.get_tool_data())
+        self.current_tool_widget = [ ]
+        self.random_tool_list = self.random_tool_to_show()
+
+        self.tool_page = self.tool_widgets[0].tool_page
+        self.make_review_page = self.tool_widgets[0].make_review_page
 
         self.image1 = self.get_image("https://cdn-icons-png.flaticon.com/512/649/649438.png?w=740&t=st=1682418903~exp=1682419503~hmac=9f666ca6e05c302741f8531345f3fc24865b0a54bd5eed15bd969a63e2e7f431", 150, 150)
         self.image1_label = Label(self.home_page, image = self.image1)
@@ -81,58 +80,47 @@ class Window(tk.Tk):
         Label(self.home_page, image=self.image4).place(x=680, y=50)
         Label(self.home_page, text="wholesale price", font=("Helvetica", 12)).place(x=720, y=210)
         # Show the initial page
-        self.show_random_tool()
 
         self.show_home()
-    @property
-    def category(self): 
-        return self._category
+
+    def make_tool_widget(self, dict_json):
+        for key, value in dict_json.items():
+            name = key
+            image = self.get_image(value.get('_image')[0],150,150)
+            widget = ToolWidget(name=name, image=image, master=self)
+            widget.set_button_command(command=lambda w=widget:self.to_tool_page(w))
+            self.tool_widgets.append(widget)
+            
+    
+    def get_tool_data(self):
+        return requests.get(f'http://127.0.0.1:8000/system/category/tools?search=').json()
+    
     def random_tool_to_show(self):
-        show_random_tool = []
-        while len(show_random_tool) < 4:
-            tool = self.category._all_tools[random.randint(0, len(self.category._all_tools)-1)]
-            if tool not in show_random_tool:
-                show_random_tool.append(tool)
-        return show_random_tool
+        random_tool = []
+        while len(random_tool) < 4:
+            tool = self.tool_widgets[random.randint(0, len(self.tool_widgets)-1)]
+            if tool not in random_tool:
+                random_tool.append(tool)
+        return random_tool
 
-    def show_random_tool(self):
-        #print(self.image_list)
-        # tool 1
-        self.im = self.get_image(self.image_list[0]._image[0],150,150)
-        self.button1 = Button(self.home_page, image=self.im, command= self.jump_to_next_tool1)
-        self.button1.pack()
-        self.button1.place(x=100,y=350)
-        self.description1 = Label(self.home_page,text =self.image_list[0].name) 
-        self.description1.pack() 
-        self.description1.place(x=100,y=550) 
+    def show_tool_widget(self, widgets_list, start_x=100, start_y=350, page=None):
+        if page is None:
+            page=self.home_page
 
+        self.hide_tool_widget()
+        self.current_tool_widget = widgets_list
+        row = 0
+        for i, widget in enumerate(self.current_tool_widget):
+            widget.button.pack(in_=page)
+            widget.description.pack(in_=page)
+            row = 400 * (i//4)
+            widget.set_coords(start_x+(i*200), start_y+row)
 
-        # tool 2
-        self.im2 = self.get_image(self.image_list[1]._image[0],150,150)
-        self.button2 = Button(self.home_page, image=self.im2, command= self.jump_to_next_tool2)
-        self.button2.pack()
-        self.button2.place(x=300,y=350) 
-        self.description2 = Label(self.home_page,text = self.image_list[1].name) 
-        self.description2.pack() 
-        self.description2.place(x=300,y=550)  
+    def hide_tool_widget(self):
+        for widget in self.current_tool_widget:
+            widget.unpack()
+        self.current_tool_widget = []
 
-        # tool 3 
-        self.im3 = self.get_image(self.image_list[2]._image[0],150,150)
-        self.button3 = Button(self.home_page, image=self.im3, command= self.jump_to_next_tool3)
-        self.button3.pack()
-        self.button3.place(x=500,y=350)  
-        self.description3 = Label(self.home_page,text = self.image_list[2].name) 
-        self.description3.pack() 
-        self.description3.place(x=500,y=550)  
-
-        # tool 4
-        self.im4 = self.get_image(self.image_list[3]._image[0],150,150)
-        self.button4 = Button(self.home_page, image=self.im4, command= self.jump_to_next_tool4)
-        self.button4.pack()
-        self.button4.place(x=700,y=350) 
-        self.description4 = Label(self.home_page,text = self.image_list[3].name) 
-        self.description4.pack() 
-        self.description4.place(x=700,y=550) 
     def get_image(self,url,width,height) -> ImageTk.PhotoImage: 
         with urllib.request.urlopen(url) as u:
             raw_data = u.read()  # read the image data from the URL
@@ -140,22 +128,12 @@ class Window(tk.Tk):
         im = Image.open(io.BytesIO(raw_data))  # create a PIL Image object from the image data
         im = im.resize((width,height))
         return ImageTk.PhotoImage(im)
-    def jump_to_next_tool1(self):
-        self.make_review_page = MakeReview(user = 'NorNor',tool=self.image_list[0].name,master=self) 
-        self.tool_page = Tool_GUI(master = self,name=self.image_list[0].name)
+    
+    def to_tool_page(self, widget):
+        self.make_review_page = widget.make_review_page
+        self.tool_page = widget.tool_page
         self.show_tool()
-    def jump_to_next_tool2(self): 
-        self.make_review_page = MakeReview(user = 'NorNor',tool=self.image_list[1].name,master=self) 
-        self.tool_page = Tool_GUI(master = self,name=self.image_list[1].name)
-        self.show_tool()
-    def jump_to_next_tool3(self):
-        self.make_review_page = MakeReview(user = 'NorNor',tool=self.image_list[2].name,master=self) 
-        self.tool_page = Tool_GUI(master=self,name=self.image_list[2].name)
-        self.show_tool()
-    def jump_to_next_tool4(self): 
-        self.make_review_page = MakeReview(user = 'NorNor',tool=self.image_list[3].name,master=self) 
-        self.tool_page = Tool_GUI(master=self,name=self.image_list[3].name)
-        self.show_tool()
+
     def show_home(self): 
         self.tool_page.pack_forget()
         self.search_page.pack_forget()
@@ -166,10 +144,12 @@ class Window(tk.Tk):
         self.make_review_page.pack_forget()
         #self.sign_up_page.place_forget()
         self.home_page.pack(fill=tk.BOTH, expand=1)
+        self.show_tool_widget(self.random_tool_list, start_x=75, start_y=350)
         
     def show_review(self): 
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
+        self.hide_tool_widget()
         #self.home_page.place_forget()
         self.search_page.pack_forget()
         #self.search_page.place_forget()
@@ -178,9 +158,11 @@ class Window(tk.Tk):
         self.login_page.pack_forget()
         #self.sign_up_page.place_forget()
         self.make_review_page.pack(fill=tk.BOTH, expand=1)
+
     def show_search(self):
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
+        self.hide_tool_widget()
         #self.home_page.place_forget()
         self.login_page.pack_forget()
         #self.login_page.place_forget()
@@ -192,6 +174,7 @@ class Window(tk.Tk):
     def show_login(self):
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
+        self.hide_tool_widget()
         #self.home_page.place_forget()
         self.search_page.pack_forget()
         #self.search_page.place_forget()
@@ -199,8 +182,10 @@ class Window(tk.Tk):
         self.make_review_page.pack_forget()
         #self.sign_up_page.place_forget()
         self.login_page.pack(fill=tk.BOTH, expand=1)
+
     def show_tool(self): 
         self.home_page.pack_forget()
+        self.hide_tool_widget()
         #self.home_page.place_forget()
         self.search_page.pack_forget()
         #self.search_page.place_forget()
@@ -209,9 +194,11 @@ class Window(tk.Tk):
         self.make_review_page.pack_forget()
         #self.login_page.place_forget()
         self.tool_page.pack(fill=tk.BOTH, expand=1)
+
     def show_sign_up(self):
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
+        self.hide_tool_widget()
         #self.home_page.place_forget()
         self.search_page.pack_forget()
         #self.search_page.place_forget()
@@ -219,19 +206,6 @@ class Window(tk.Tk):
         self.make_review_page.pack_forget()
         #self.login_page.place_forget()
         self.sign_up_page.pack(fill=tk.BOTH, expand=1)
-
-    def get_image(self,url,width,height): 
-        with urllib.request.urlopen(url) as u:
-            raw_data = u.read()  # read the image data from the URL
-
-        im = Image.open(io.BytesIO(raw_data))  # create a PIL Image object from the image data
-        im = im.resize((width,height))
-        # self.photo = ImageTk.PhotoImage(im)
-        
-        return ImageTk.PhotoImage(im)
-
-        # display the image in a label
-    
 
 if __name__ == "__main__":
     app = Window()
