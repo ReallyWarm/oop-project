@@ -5,7 +5,7 @@ from Tool_gui import Tool_GUI
 from PIL import ImageTk
 
 class ToolWidget():
-    def __init__(self,name, image:'ImageTk.PhotoImage', master):
+    def __init__(self, image:'ImageTk.PhotoImage', master,name=''):
         self.name = name
         self.im = image
         self.button = Button(master, image=self.im)
