@@ -47,10 +47,8 @@ class Window(tk.Tk):
         tk.Label(self.home_page, text="This is the Home page").pack()
         tk.Label(self.home_page, text="Recommended Tools", font=("Helvetica", 30)).place(x=260, y=280)
 
-        # self.delete_name()
         self.name = tk.Label(self.home_page, text=self.first_name)
-        #self.name.pack() 
-        #self.name.place(x=800,y=10)
+
         self.cart_page = CartGui(self)
         self.search_page = SearchPage(link='category', search_type='Category', master=self)
         self.search_page.add_new_search(link='category/tools', search_type='Tool')
@@ -62,6 +60,7 @@ class Window(tk.Tk):
         self.tool_widgets = [ ]
         self.make_tool_widget(self.get_tool_data())
         self.current_tool_widget = [ ]
+        self.current_home_widget = [self.cart_button,self.name] 
         self.random_tool_list = self.random_tool_to_show()
 
         self.tool_page = self.tool_widgets[0].tool_page
@@ -103,9 +102,9 @@ class Window(tk.Tk):
             self.tool_widgets.append(widget)
         
     def create_cart_button(self): 
-        self.back_button = tk.Button(self,text="cart",command=self.show_cart)
-        self.back_button.pack()  
-        self.back_button.place(x =600,y = 600)
+        self.cart_button = tk.Button(self,text="cart",command=self.show_cart)
+        self.cart_button.pack()  
+        self.cart_button.place(x =600,y = 600)
     
     def get_tool_data(self):
         return requests.get(f'http://127.0.0.1:8000/system/category/tools?search=').json()
@@ -138,6 +137,17 @@ class Window(tk.Tk):
             widget.description.pack(in_=page)
             row = 400 * (i//4)
             widget.set_coords(start_x+(i*200), start_y+row)
+    def show_home_widget(self):
+        self.delete_name()
+        self.name = tk.Label(self.home_page, text=self.first_name)
+        self.name.pack() 
+        self.name.place(x=800,y=20)
+        self.cart_button.pack(in_= self.home_page) 
+        
+
+    def hide_home_widget(self): 
+        self.name.pack(in_=None)
+        self.cart_button.pack(in_=None)
 
     def delete_name(self):
         self.name.destroy()
@@ -161,27 +171,18 @@ class Window(tk.Tk):
         self.tool_page.get_tool_details()
         self.show_tool()
 
-    def show_home(self): 
-        # self.create_cart_button()
-        self.back_button.pack(in_=self)
-        self.back_button.place(x =600,y = 600)
+    def show_home(self):  
         self.first_name = self.first_name_user()
         self.first_name = self.first_name["first_name"]
-        self.delete_name()
-        self.name = tk.Label(self.home_page, text=self.first_name)
-        self.name.pack() 
-        self.name.place(x=850,y=5)
         print(self.first_name)
+        self.show_home_widget()
         self.make_tool_widget(self.get_tool_data())
         self.tool_page.pack_forget()
         self.search_page.pack_forget()
-        #self.search_page.place_forget()
         self.login_page.pack_forget()
-        #self.login_page.place_forget()
         self.sign_up_page.pack_forget()
         self.make_review_page.pack_forget()
         self.cart_page.pack_forget()
-        #self.sign_up_page.place_forget()
         self.home_page.pack(fill=tk.BOTH, expand=1)
         self.show_tool_widget(self.random_tool_list, start_x=75, start_y=350)
 
@@ -190,26 +191,20 @@ class Window(tk.Tk):
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
         self.hide_tool_widget()
-        #self.home_page.place_forget()
         self.search_page.pack_forget()
-        #self.search_page.place_forget()
         self.sign_up_page.pack_forget()
         self.make_review_page.pack_forget()
         self.login_page.pack_forget()
         self.cart_page.pack_forget()
-        #self.sign_up_page.place_forget()
         self.make_review_page.pack(fill=tk.BOTH, expand=1)
 
     def show_search(self):
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
         self.hide_tool_widget()
-        #self.home_page.place_forget()
         self.login_page.pack_forget()
-        #self.login_page.place_forget()
         self.sign_up_page.pack_forget()
         self.cart_page.pack_forget()
-        #self.sign_up_page.place_forget()
         self.search_page.pack(fill=tk.BOTH, expand=1)
         self.make_review_page.pack_forget()
 
@@ -217,52 +212,39 @@ class Window(tk.Tk):
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
         self.hide_tool_widget()
-        #self.home_page.place_forget()
         self.search_page.pack_forget()
-        #self.search_page.place_forget()
         self.sign_up_page.pack_forget()
         self.cart_page.pack_forget()
         self.make_review_page.pack_forget()
-        #self.sign_up_page.place_forget()
         self.login_page.pack(fill=tk.BOTH, expand=1)
 
     def show_tool(self): 
         self.home_page.pack_forget()
         self.hide_tool_widget()
-        #self.home_page.place_forget()
         self.search_page.pack_forget()
-        #self.search_page.place_forget()
         self.sign_up_page.pack_forget()
         self.login_page.pack_forget()
         self.cart_page.pack_forget()
         self.make_review_page.pack_forget()
-        #self.login_page.place_forget()
         self.tool_page.pack(fill=tk.BOTH, expand=1)
 
     def show_sign_up(self):
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
         self.hide_tool_widget()
-        #self.home_page.place_forget()
         self.search_page.pack_forget()
-        #self.search_page.place_forget()
         self.login_page.pack_forget()
         self.cart_page.pack_forget()
         self.make_review_page.pack_forget()
-        #self.login_page.place_forget()
         self.sign_up_page.pack(fill=tk.BOTH, expand=1)
     
     def show_cart(self):
-        # self.back_button.destroy()
-        self.back_button.pack(in_=None)
-        self.back_button.pack_forget()
+        self.hide_home_widget()
         self.sign_up_page.pack_forget()
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
         self.hide_tool_widget()
-        #self.home_page.place_forget()
         self.search_page.pack_forget()
-        #self.search_page.place_forget()
         self.login_page.pack_forget()
         self.make_review_page.pack_forget()
         self.cart_page.pack(fill=tk.BOTH, expand=1)
