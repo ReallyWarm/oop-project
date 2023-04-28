@@ -4,7 +4,7 @@ from make_review import MakeReview
 import io
 import urllib.request 
 from PIL import Image, ImageTk
-
+from make_payment_gui import MakePayment
 class CartGui(tk.Frame): 
 
     def __init__(self,master): 
@@ -18,7 +18,12 @@ class CartGui(tk.Frame):
         self.create_normal_widget()
         self.show_total_cart_widget()
         # self.update_data()
-
+        self.makepayment = MakePayment(self.master) 
+        self.makepayment_button = tk.Button(self,text="Make Payment",command=self.make_payment)
+        self.makepayment_button.pack()
+        self.makepayment_button.place(x=660,y=500)
+    def make_payment(self): 
+        self.master.show_payment()
     def update_data(self): 
         
         self.destroy_widget()
