@@ -17,9 +17,9 @@ def add_database_users(system:'System'):
                 ]
 
     # Customer addresses
-    customers[0].create_address('NorNor','จารย์แดง จำกัด','Thailand','Udon Thani','-','-','0210567473','10010')
-    customers[1].create_address('พรี่โอมใจเกเร','ใจเกเร จำกัด','Thailand','Udon Thani','-','-','0810567473','10010')
-    customers[2].create_address('Prakrittipon','KMIL','Thailand','Bangkok','Pha ya tai','sol.12 24/89','0901276842','11120')
+    customers[0].create_address('NorNor007','จารย์แดง จำกัด','Thailand','Udon Thani','-','-','0210567473','10010')
+    customers[1].create_address('PreeOhm','ใจเกเร จำกัด','Thailand','Udon Thani','-','-','0810567473','10010')
+    customers[2].create_address('KorphaiSK','KMIL','Thailand','Bangkok','Pha ya tai','sol.12 24/89','0901276842','11120')
 
     for customer in customers:
         system.add_customerinfo(customer)
