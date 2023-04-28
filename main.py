@@ -191,17 +191,18 @@ async def delete_wholesale(data : dict) ->dict:
 async def create_address(newaddress:dict)->dict:
     for customer in system.customerinfos:
         if customer.username == newaddress["name"]:
-            customer.create_address(newaddress["name"],newaddress["company"],newaddress["country"],newaddress[ "state"], newaddress["city"], newaddress["address"], newaddress["phone_number"],newaddress["postal_code"])
+          return {"data":'Unvailable to create a new address. Please check your name isn\'t duplicate.'}
+        else:
+            customer.create_address(newaddress["name"],newaddress["company"],newaddress["country"],newaddress[ "state"], newaddress["city"], newaddress["address"], newaddress["phone_number"],newaddress["postal_code"])          
             return {"data":f"You have create the address successfully.You address is {customer.address}"}
-            
-    return{"data":"Unable to create the address."}
+   
 
 # #delete the address     
 @app.delete('/customer/address',tags=['address'])     
-async def delete_address(data:dict) ->dict:
+async def delete_address(name:str) ->dict:
     for customer in system.customerinfos:
-        if customer.username == data["name"]:
-            customer.delete_address(data["name"])
+        if customer.username == name:
+            customer.delete_address(name)
             return {"data":f"You have delete the address successfully.Your address is{customer.address}"}
     return {"data":"Unable to delete the address"}    
 
