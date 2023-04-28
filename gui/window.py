@@ -11,6 +11,8 @@ from Tool_gui import Tool_GUI
 from tool_widget import ToolWidget
 import random
 import requests
+from create_address import CreateAddressGUI
+from delete_edit_address import EditDeleteAddressGUI
 # # from tkinter import messagebox
 # # from tkinter import ttk
 import io
@@ -34,6 +36,8 @@ class Window(tk.Tk):
         pages_menu.add_command(label="Search", command=self.show_search)
         pages_menu.add_command(label="Login", command=self.show_login)
         pages_menu.add_command(label="Sign Up", command=self.show_sign_up)
+        pages_menu.add_command(label="Create Address",command=self.show_create_address)
+        pages_menu.add_command(label="Edit and delete address",command=self.show_edit_address)
         menubar.add_cascade(label="Pages", menu=pages_menu)
 
 
@@ -47,6 +51,9 @@ class Window(tk.Tk):
         self.search_page.add_new_search(link='category/tools', search_type='Tool')
         self.login_page = LoginPage(self)
         self.sign_up_page = SignupPage(self)
+        
+        self.create_address = CreateAddressGUI(self)
+        self.edite_delete_address = EditDeleteAddressGUI(self)
 
         self.tool_data = self.get_tool_data()
         self.tool_widgets = [ ]
@@ -142,6 +149,8 @@ class Window(tk.Tk):
         #self.login_page.place_forget()
         self.sign_up_page.pack_forget()
         self.make_review_page.pack_forget()
+        self.create_address.pack_forget()
+        self.edite_delete_address.pack_forget()
         #self.sign_up_page.place_forget()
         self.home_page.pack(fill=tk.BOTH, expand=1)
         self.show_tool_widget(self.random_tool_list, start_x=75, start_y=350)
@@ -156,6 +165,8 @@ class Window(tk.Tk):
         self.sign_up_page.pack_forget()
         self.make_review_page.pack_forget()
         self.login_page.pack_forget()
+        self.create_address.pack_forget()
+        self.edite_delete_address.pack_forget()
         #self.sign_up_page.place_forget()
         self.make_review_page.pack(fill=tk.BOTH, expand=1)
 
@@ -168,6 +179,8 @@ class Window(tk.Tk):
         #self.login_page.place_forget()
         self.sign_up_page.pack_forget()
         #self.sign_up_page.place_forget()
+        self.create_address.pack_forget()
+        self.edite_delete_address.pack_forget()
         self.search_page.pack(fill=tk.BOTH, expand=1)
         self.make_review_page.pack_forget()
 
@@ -180,6 +193,8 @@ class Window(tk.Tk):
         #self.search_page.place_forget()
         self.sign_up_page.pack_forget()
         self.make_review_page.pack_forget()
+        self.create_address.pack_forget()
+        self.edite_delete_address.pack_forget()
         #self.sign_up_page.place_forget()
         self.login_page.pack(fill=tk.BOTH, expand=1)
 
@@ -192,6 +207,8 @@ class Window(tk.Tk):
         self.sign_up_page.pack_forget()
         self.login_page.pack_forget()
         self.make_review_page.pack_forget()
+        self.create_address.pack_forget()
+        self.edite_delete_address.pack_forget()
         #self.login_page.place_forget()
         self.tool_page.pack(fill=tk.BOTH, expand=1)
 
@@ -204,8 +221,36 @@ class Window(tk.Tk):
         #self.search_page.place_forget()
         self.login_page.pack_forget()
         self.make_review_page.pack_forget()
+        self.create_address.pack_forget()
+        self.edite_delete_address.pack_forget()
         #self.login_page.place_forget()
         self.sign_up_page.pack(fill=tk.BOTH, expand=1)
+        
+    def show_create_address(self):
+        self.tool_page.pack_forget()
+        self.home_page.pack_forget()
+        self.hide_tool_widget()
+        #self.home_page.place_forget()
+        self.search_page.pack_forget()
+        #self.search_page.place_forget()
+        self.login_page.pack_forget()
+        self.make_review_page.pack_forget()
+        self.edite_delete_address.pack_forget()
+        #self.login_page.place_forget()
+        self.create_address.pack(fill=tk.BOTH, expand=1)
+    
+    def show_edit_address(self):
+        self.tool_page.pack_forget()
+        self.home_page.pack_forget()
+        self.hide_tool_widget()
+        #self.home_page.place_forget()
+        self.search_page.pack_forget()
+        #self.search_page.place_forget()
+        self.login_page.pack_forget()
+        self.make_review_page.pack_forget()
+        self.create_address.pack_forget()
+        #self.login_page.place_forget()
+        self.edite_delete_address.pack(fill=tk.BOTH, expand=1)  
 
 if __name__ == "__main__":
     app = Window()
