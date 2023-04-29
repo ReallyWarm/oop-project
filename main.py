@@ -103,6 +103,24 @@ def make_coupon_dict(system : System):
 def  get_coupons() -> dict: 
     return make_coupon_dict(system)
 
+@app.post("/coupons/used_coupon/",tags = ['coupon']) 
+async def add_used_coupon(code:str): 
+    current_user = system.get_login() 
+    coupon = system.search_coupon(code)
+    if coupon in current_user.used_coupon: 
+        return {"message":"aready in used coupon"}
+    current_user.store_used_coupon(coupon)
+    return {"message":"add used coupon successfully"}
+
+@app.get("/coupons/active_coupon/",tags = ['coupon'])
+async def get_active_coupon(username:str): 
+    dict ={}
+    current_user = system.search_user(username)
+    for coupon in system.server_coupons: 
+        if coupon not in current_user.used_coupon: 
+            dict[coupon.code]={"name": coupon.name,"discount_value": coupon.discount_value}
+    return dict
+
 @app.put("/coupons/all",tags=['coupon'])
 async def update_coupons(newcoupon : dict) -> dict: 
     for key_sys in make_coupon_dict(system).keys(): 

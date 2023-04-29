@@ -48,7 +48,6 @@ class Window(tk.Tk):
         tk.Label(self.home_page, text="Recommended Tools", font=("Helvetica", 30)).place(x=260, y=280)
 
         self.name = tk.Label(self.home_page, text=self.first_name)
-
         self.cart_page = CartGui(self)
         self.search_page = SearchPage(link='category', search_type='Category', master=self)
         self.search_page.add_new_search(link='category/tools', search_type='Tool')
@@ -175,7 +174,7 @@ class Window(tk.Tk):
     def show_home(self):  
         self.first_name = self.first_name_user()
         self.first_name = self.first_name["first_name"]
-        print(self.first_name)
+        # print(self.first_name)
         self.show_home_widget()
         self.make_tool_widget(self.get_tool_data())
         self.tool_page.pack_forget()

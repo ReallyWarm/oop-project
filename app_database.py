@@ -62,8 +62,9 @@ def add_database_system(system:'System'):
     faifa_drill.add_wholesale(system.search_wholesale('01w'))
 
     # System Coupon
-    system.add_coupon("1234",20,"สว่านใหม่ เจาะทะลุทะลวง ดุดันไม่เกรงใจใคร")
-
+    system.add_coupon("1234",20,"โปรลด 20 เปอร์เซ็นต์ผู้ใช้งานใหม่")
+    system.add_coupon("4567",50,"โปรลด 50 เปอร์เซ็นต์วันคริตมาส")
+    system.add_coupon("1120",80,"โปรลด 80 เปอร์เซ็นต์วันสถาปนา")
 def add_database_userdata(system:'System'):
     test_drill = system.category.search_by_name('Testing drill')['Testing drill']
     system.customerinfos[2].create_review(test_drill, "test_review1", "good_tool", 4.5, "4/1/2023")
