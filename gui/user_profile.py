@@ -124,92 +124,92 @@ class Profile(tk.Frame):
     def update_username(self):
         self.username = self.user_name_data()
         self.username_label = tk.Label(self, text=self.username, font=("Arial", 18, "bold"))
-        self.username_label.grid(row=0,column=0,columnspan=2,pady=30)
+        self.username_label.grid(row=0,column=1,columnspan=2,pady=30)
         print(self.username)
         
     def update_firstname(self):
         self.firstname = self.user_firstname()
         self.firstname_label = tk.Label (self,text=self.firstname,font=("Arial", 12))
-        self.firstname_label.grid(row=1, column=0, padx=10, pady=5)
+        self.firstname_label.grid(row=1, column=1, padx=10, pady=5)
         print(self.firstname)
     
     
     def update_lastname(self):
         self.lastname = self.user_lastname()
         self.lastname_label = tk.Label(self,text=self.lastname,font=('Arail',12))
-        self.lastname_label.grid(row=2, column=0, padx=10, pady=5)
+        self.lastname_label.grid(row=2, column=1, padx=10, pady=5)
         print(self.lastname)
     
     def update_email(self):
         self.email = self.user_email()
         self.email_label = tk.Label(self,text=self.email,font=('Arail',12))
-        self.email_label.grid(row=3, column=0, padx=10, pady=5)
+        self.email_label.grid(row=3, column=1, padx=10, pady=5)
         print(self.email)
         
     def update_company(self):
         self.company =self.user_company()
         self.company_label = tk.Label(self,text=self.company,font=('Arail',12))
-        self.company_label.grid(row=4, column=0, padx=10, pady=5)
+        self.company_label.grid(row=4, column=1, padx=10, pady=5)
         print(self.company)
     
     def update_address(self):
         self.address = self.user_address()
         self.address_text = tk.Text(self,height=10,width=80)
         self.address_text.insert('end',self.address)
-        self.address_text.grid(row=5, column=0, padx=10, pady=5)
+        self.address_text.grid(row=5, column=0, padx=10, pady=5, sticky=tk.E)
         print(self.address)
         
     def update_order(self):
-        self.order  = self.user_order()
+        self.order = self.user_order()
         self.order_text = tk.Text(self,height=5,width=40)
         self.order_text.insert('end',self.order)
-        self.order_text.grid(row=6, column=0, padx=10, pady=5)
+        self.order_text.grid(row=6, column=1, padx=10, pady=5)
         print(self.order)
 
     def update_review(self):
         self.review = self.user_review() 
         self.review_text = tk.Text(self,height=5,width=40)
         self.review_text.insert('end',self.review)  
-        self.review_text.grid(row=7, column=0, padx=10, pady=5)
+        self.review_text.grid(row=7, column=1, padx=10, pady=5)
         print(self.review)
         
     def create_widget(self):
         
         #create username label
-        self.username_label.grid(row=0,column=0,columnspan=2,pady=30)
+        self.username_label.grid(row=0,column=1,columnspan=2,pady=30)
       
         #create title firstname
         self.firstname_title = tk.Label(self,text="First Name:", font= ('Arail',12,'bold'))
-        self.firstname_title.grid(row=1, padx=10, pady=5,sticky=tk.W)
+        self.firstname_title.grid(row=1, column=0, padx=10, pady=5, sticky=tk.E)
         
         #show firstname data
-        self.firstname_label.grid(row=1, column=0, padx=10, pady=5)
+        self.firstname_label.grid(row=1, column=1, padx=10, pady=5)
       
         #create title lastname
         self.lastname_title = tk.Label(self,text="Last Name:", font=('Arail',12,'bold'))
-        self.lastname_title.grid(row=2, column=0, padx=10, pady=5,sticky=tk.W)
+        self.lastname_title.grid(row=2, column=0, padx=10, pady=5, sticky=tk.E)
        
        #show lastname data
-        self.lastname_label.grid(row=2, column=0, padx=10, pady=5)
+        self.lastname_label.grid(row=2, column=1, padx=10, pady=5)
         
         #create title email
         self.email_title = tk.Label(self,text="E-mail:", font=('Arail',12,'bold'))
-        self.email_title.grid(row=3, column=0, padx=10, pady=5,sticky=tk.W)
+        self.email_title.grid(row=3, column=0, padx=10, pady=5, sticky=tk.E)
       
         #show email data
-        self.email_label.grid(row=3, column=0, padx=10, pady=5)
+        self.email_label.grid(row=3, column=1, padx=10, pady=5)
        
         #create title company
         self.company_title = tk.Label(self,text="Company:", font=('Arail',12,'bold'))
-        self.company_title.grid(row=4, column=0, padx=10, pady=5,sticky=tk.W)
+        self.company_title.grid(row=4, column=0, padx=10, pady=5, sticky=tk.E)
       
         #show company data
-        self.company_label.grid(row=4, column=0, padx=10, pady=5)
+        self.company_label.grid(row=4, column=1, padx=10, pady=5)
         
        
         #create title address
         self.address_title = tk.Label(self,text="Address:", font=('Arail',12,'bold'))
-        self.address_title.grid(row=5, column=0,padx=10,sticky=tk.W)
+        self.address_title.grid(row=5, column=0, padx=10, pady=5, sticky=tk.E)
         
         #show address
         self.address_text.insert('end',self.address)
@@ -217,19 +217,19 @@ class Profile(tk.Frame):
        
         #create title order
         self.order_title = tk.Label(self,text="Order:", font=('Arail',12,'bold'))
-        self.order_title.grid(row=6, column=0, padx=10, pady=5,sticky=tk.W)
+        self.order_title.grid(row=6, column=0, padx=10, pady=5, sticky=tk.E)
        
         #show order data
         self.order_text.insert('end',self.order)
-        self.order_text.grid(row=6, column=0, padx=10, pady=5)
+        self.order_text.grid(row=6, column=1, padx=10, pady=5)
        
         #create title review
         self.review_title = tk.Label(self,text="Review:", font=('Arail',12,'bold'))
-        self.review_title.grid(row=7, column=0, padx=10, pady=5,sticky=tk.W)
+        self.review_title.grid(row=7, column=0, padx=10, pady=5, sticky=tk.E)
         
         #show review data
         self.review_text.insert('end',self.review)
-        self.review_text.grid(row=7, column=0, padx=10, pady=5)
+        self.review_text.grid(row=7, column=1, padx=10, pady=5)
       
         
  
