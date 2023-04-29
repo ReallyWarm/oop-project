@@ -102,10 +102,10 @@ class MakePayment(tk.Frame):
 
     def get_cart_data(self):
         r = requests.get(f'http://127.0.0.1:8000/system/shopping_cart/')
-        print("-------------------------------------------------------")
-        print("get_cart_data pass")
-        print(r.json())
-        print("--------------------------------------------------")
+        # print("-------------------------------------------------------")
+        # print("get_cart_data pass")
+        # print(r.json())
+        # print("--------------------------------------------------")
         self.in_cart = r.json()['_cart'] # got list // dict
         # self.item_info = self.in_cart[0] # got dict tool with info
         self.get_info_in_list()
@@ -117,7 +117,7 @@ class MakePayment(tk.Frame):
         # print("get_info_in_list pass")
         self.list_tool = []
         for item in range(len(self.in_cart)):
-            print(item) 
+            # print(item) 
             list_components= []
             self.item_info = self.in_cart[item]
             self.get_tool_info = self.item_info['_tool']
@@ -152,7 +152,7 @@ class MakePayment(tk.Frame):
 
     def get_coupon_info(self): 
         user = requests.get("http://127.0.0.1:8000/me").json()
-        print(user) 
+        # print(user) 
         self.coupon_list = []
         self.number_click =[]
         for key in user.keys(): 
@@ -167,9 +167,9 @@ class MakePayment(tk.Frame):
                     component_list.append(coupon[key]['discount_value'])
                     self.coupon_list.append(component_list)
                     self.number_click.append(0)
-        print(self.coupon_list)
+        # print(self.coupon_list)
     def show_final_price(self):
-        print(self.final_price)
+        # print(self.final_price)
         self.final_price_label = tk.Label(self,text="        ")
         self.final_price_label.pack()
         self.final_price_label.place(x=500,y=500)
@@ -203,7 +203,7 @@ class MakePayment(tk.Frame):
                 check2 = 1
         if check2==0 :
             self.to_unuse_coupon()
-        print(self.number_click)
+        # print(self.number_click)
             
     def to_use_coupon(self,discount_value): 
         self.final_show = self.final_price - discount_value
@@ -226,6 +226,6 @@ class MakePayment(tk.Frame):
                 self.final_price = 0
                 self.shipping_cost = 0
                 self.final_show = 0
-                print(self.message)
-                print(code)
+                # print(self.message)
+                # print(code)
     
