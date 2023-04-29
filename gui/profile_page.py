@@ -10,6 +10,7 @@ class ProfileGUI(tk.Frame):
         self.user_profile = Profile(self)
         self.create_address = CreateAddressGUI(self)
         self.edit_delete_address = EditDeleteAddressGUI(self)
+
         self.create_widget()
       
         
@@ -24,10 +25,12 @@ class ProfileGUI(tk.Frame):
         self.edit_delete_address.pack()
         
     def show_profile(self):
-        self.user_profile.update_data()
+        self.user_profile.update_data() #bug
         self.create_address.pack_forget()    
         self.edit_delete_address.pack_forget() 
         self.user_profile.pack()
+     
+
         
     def create_widget(self):
         self.show_profile()
@@ -42,3 +45,4 @@ class ProfileGUI(tk.Frame):
         self.back_to_profile_button = tk.Button(self, text='Back to Profile', font=("Arial", 12), command=self.show_profile)
         self.back_to_profile_button.pack()
         self.back_to_profile_button.place(x=700,y=650)    
+       

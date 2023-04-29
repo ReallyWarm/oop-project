@@ -180,28 +180,28 @@ class Profile(tk.Frame):
       
         #create title firstname
         self.firstname_title = tk.Label(self,text="First Name:", font= ('Arail',12,'bold'))
-        self.firstname_title.grid(row=1, column=0, padx=10, pady=5, sticky=tk.E)
+        self.firstname_title.grid(row=1, column=0, padx=10, pady=5, sticky=tk.W)
         
         #show firstname data
         self.firstname_label.grid(row=1, column=1, padx=10, pady=5)
       
         #create title lastname
         self.lastname_title = tk.Label(self,text="Last Name:", font=('Arail',12,'bold'))
-        self.lastname_title.grid(row=2, column=0, padx=10, pady=5, sticky=tk.E)
+        self.lastname_title.grid(row=2, column=0, padx=10, pady=5, sticky=tk.W)
        
        #show lastname data
         self.lastname_label.grid(row=2, column=1, padx=10, pady=5)
         
         #create title email
         self.email_title = tk.Label(self,text="E-mail:", font=('Arail',12,'bold'))
-        self.email_title.grid(row=3, column=0, padx=10, pady=5, sticky=tk.E)
+        self.email_title.grid(row=3, column=0, padx=10, pady=5, sticky=tk.W)
       
         #show email data
         self.email_label.grid(row=3, column=1, padx=10, pady=5)
        
         #create title company
         self.company_title = tk.Label(self,text="Company:", font=('Arail',12,'bold'))
-        self.company_title.grid(row=4, column=0, padx=10, pady=5, sticky=tk.E)
+        self.company_title.grid(row=4, column=0, padx=10, pady=5, sticky=tk.W)
       
         #show company data
         self.company_label.grid(row=4, column=1, padx=10, pady=5)
@@ -209,15 +209,15 @@ class Profile(tk.Frame):
        
         #create title address
         self.address_title = tk.Label(self,text="Address:", font=('Arail',12,'bold'))
-        self.address_title.grid(row=5, column=0, padx=10, pady=5, sticky=tk.E)
+        self.address_title.grid(row=5, column=0, padx=10, pady=5, sticky=tk.W)
         
         #show address
         self.address_text.insert('end',self.address)
-        self.address_text.grid(row=5, column=1, padx=10, pady=5)
+        self.address_text.grid(row=5, column=1, padx=10, pady=5,sticky=tk.E)
        
         #create title order
         self.order_title = tk.Label(self,text="Order:", font=('Arail',12,'bold'))
-        self.order_title.grid(row=6, column=0, padx=10, pady=5, sticky=tk.E)
+        self.order_title.grid(row=6, column=0, padx=10, pady=5, sticky=tk.W)
        
         #show order data
         self.order_text.insert('end',self.order)
@@ -225,7 +225,7 @@ class Profile(tk.Frame):
        
         #create title review
         self.review_title = tk.Label(self,text="Review:", font=('Arail',12,'bold'))
-        self.review_title.grid(row=7, column=0, padx=10, pady=5, sticky=tk.E)
+        self.review_title.grid(row=7, column=0, padx=10, pady=5, sticky=tk.W)
         
         #show review data
         self.review_text.insert('end',self.review)
