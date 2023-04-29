@@ -10,6 +10,7 @@ from PIL import Image, ImageTk
 from Tool_gui import Tool_GUI
 from cart_gui import CartGui
 from tool_widget import ToolWidget
+from admin_gui import AdminGui
 import random
 import requests
 # # from tkinter import messagebox
@@ -29,7 +30,8 @@ class Window(tk.Tk):
         menubar = tk.Menu(self)
         accountbar = tk.Menu(self)
         self.config(menu=menubar)
-        self.first_name = 'NorNor'
+        self.first_name = ''
+        self.authority = 'guest'
 
         # Create the Pages menu with commands to switch to each page
         pages_menu = tk.Menu(menubar, tearoff=0)
@@ -46,16 +48,20 @@ class Window(tk.Tk):
         self.home_page = tk.Frame(self)
         tk.Label(self.home_page, text="This is the Home page").pack()
         tk.Label(self.home_page, text="Recommended Tools", font=("Helvetica", 30)).place(x=260, y=280)
-
         self.name = tk.Label(self.home_page, text=self.first_name)
+
+
+        self.admin_page = AdminGui(self)
         self.cart_page = CartGui(self)
         self.search_page = SearchPage(link='category', search_type='Category', master=self)
         self.search_page.add_new_search(link='category/tools', search_type='Tool')
         self.login_page = LoginPage(self)
         self.sign_up_page = SignupPage(self)
 
+
         self.make_payment_page = self.cart_page.makepayment
         self.create_cart_button()
+        self.create_admin_button()
         self.tool_data = self.get_tool_data()
         self.tool_widgets = [ ]
         self.make_tool_widget(self.get_tool_data())
@@ -106,6 +112,12 @@ class Window(tk.Tk):
         self.cart_button.pack()  
         self.cart_button.place(x =600,y = 600)
     
+    def create_admin_button(self):
+        self.admin_button = tk.Button(self,text="admin",command=self.show_admin)
+        self.admin_button.pack()  
+        self.admin_button.place(x =500,y = 600)
+
+
     def get_tool_data(self):
         return requests.get(f'http://127.0.0.1:8000/system/category/tools?search=').json()
     
@@ -113,7 +125,9 @@ class Window(tk.Tk):
         user = requests.get("http://127.0.0.1:8000/me").json() 
         for key in user.keys(): 
             if key == 'username': 
-                username = user["username"]["user"]   
+                username = user["username"]["user"]  
+                print(user) 
+                self.authority = user['authority']
                 firstname = requests.get(f'http://127.0.0.1:8000/user/?username={username}').json()
                 return firstname
         return {"first_name":"guest"}
@@ -142,12 +156,14 @@ class Window(tk.Tk):
         self.name = tk.Label(self.home_page, text=self.first_name)
         self.name.pack() 
         self.name.place(x=800,y=20)
-        self.cart_button.pack(in_= self.home_page) 
+        self.cart_button.pack(in_= self.home_page)
+        self.admin_button.pack(in_= self.home_page) 
         
 
     def hide_home_widget(self): 
         self.name.pack(in_=None)
         self.cart_button.pack(in_=None)
+        self.admin_button.pack(in_=None)
 
     def delete_name(self):
         self.name.destroy()
@@ -174,7 +190,7 @@ class Window(tk.Tk):
     def show_home(self):  
         self.first_name = self.first_name_user()
         self.first_name = self.first_name["first_name"]
-        # print(self.first_name)
+        print(self.authority)
         self.show_home_widget()
         self.make_tool_widget(self.get_tool_data())
         self.tool_page.pack_forget()
@@ -182,6 +198,7 @@ class Window(tk.Tk):
         self.login_page.pack_forget()
         self.sign_up_page.pack_forget()
         self.make_review_page.pack_forget()
+        self.admin_page.pack_forget()
         self.cart_page.pack_forget()
         self.home_page.pack(fill=tk.BOTH, expand=1)
         self.make_payment_page.pack_forget()
@@ -198,6 +215,7 @@ class Window(tk.Tk):
         self.login_page.pack_forget()
         self.cart_page.pack_forget()
         self.make_payment_page.pack_forget()
+        self.admin_page.pack_forget()
         self.make_review_page.pack(fill=tk.BOTH, expand=1)
 
     def show_search(self):
@@ -208,6 +226,7 @@ class Window(tk.Tk):
         self.sign_up_page.pack_forget()
         self.cart_page.pack_forget()
         self.make_payment_page.pack_forget()
+        self.admin_page.pack_forget()
         self.search_page.pack(fill=tk.BOTH, expand=1)
         self.make_review_page.pack_forget()
 
@@ -220,6 +239,7 @@ class Window(tk.Tk):
         self.cart_page.pack_forget()
         self.make_review_page.pack_forget()
         self.make_payment_page.pack_forget()
+        self.admin_page.pack_forget()
         self.login_page.pack(fill=tk.BOTH, expand=1)
 
     def show_tool(self): 
@@ -231,6 +251,7 @@ class Window(tk.Tk):
         self.cart_page.pack_forget()
         self.make_review_page.pack_forget()
         self.make_payment_page.pack_forget()
+        self.admin_page.pack_forget()
         self.tool_page.pack(fill=tk.BOTH, expand=1)
 
     def show_sign_up(self):
@@ -242,6 +263,7 @@ class Window(tk.Tk):
         self.cart_page.pack_forget()
         self.make_review_page.pack_forget()
         self.make_payment_page.pack_forget()
+        self.admin_page.pack_forget()
         self.sign_up_page.pack(fill=tk.BOTH, expand=1)
     
     def show_cart(self):
@@ -254,7 +276,24 @@ class Window(tk.Tk):
         self.login_page.pack_forget()
         self.make_review_page.pack_forget()
         self.make_payment_page.pack_forget()
+        self.admin_page.pack_forget()
         self.cart_page.pack(fill=tk.BOTH, expand=1)
+    
+    def show_admin(self): 
+        if self.authority == "admin":
+            self.cart_page.pack_forget()
+            self.hide_home_widget()
+            self.sign_up_page.pack_forget()
+            self.tool_page.pack_forget()
+            self.home_page.pack_forget()
+            self.hide_tool_widget()
+            self.search_page.pack_forget()
+            self.login_page.pack_forget()
+            self.make_review_page.pack_forget()
+            self.make_payment_page.pack_forget()
+            self.admin_page.pack(fill=tk.BOTH, expand=1)
+        else : 
+            self.show_home()
     
     def show_payment(self):
         self.cart_page.pack_forget()
@@ -265,6 +304,7 @@ class Window(tk.Tk):
         self.hide_tool_widget()
         self.search_page.pack_forget()
         self.login_page.pack_forget()
+        self.admin_page.pack_forget()
         self.make_review_page.pack_forget()
         self.make_payment_page.pack(fill=tk.BOTH, expand=1)
 
