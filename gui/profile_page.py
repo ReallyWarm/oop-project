@@ -11,7 +11,7 @@ class ProfileGUI(tk.Frame):
         self.create_address = CreateAddressGUI(self)
         self.edit_delete_address = EditDeleteAddressGUI(self)
         self.create_widget()
-      
+        
         
     def show_create_address(self):
         self.edit_delete_address.pack_forget()
@@ -24,9 +24,10 @@ class ProfileGUI(tk.Frame):
         self.edit_delete_address.pack()
         
     def show_profile(self):
+        self.user_profile.update_data()
         self.create_address.pack_forget()    
         self.edit_delete_address.pack_forget() 
-        self.user_profile.pack()
+        self.user_profile.pack(fill=tk.BOTH,expand=1)
         
     def create_widget(self):
         self.show_profile()
