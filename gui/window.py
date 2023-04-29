@@ -2,7 +2,8 @@ import sys
 sys.path.append('./class_object/')  
 sys.path.append('./')
 import tkinter as tk
-from tkinter import *
+from tkinter import * 
+from tkinter import messagebox
 from login_gui import LoginPage, SignupPage
 from make_review import MakeReview
 from search_gui import SearchPage
@@ -294,6 +295,7 @@ class Window(tk.Tk):
             self.admin_page.pack(fill=tk.BOTH, expand=1)
         else : 
             self.show_home()
+            messagebox.showinfo(title="notification", message="you must login as a admin first")
     
     def show_payment(self):
         self.cart_page.pack_forget()
