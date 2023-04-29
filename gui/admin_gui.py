@@ -8,6 +8,7 @@ class AdminGui(tk.Frame):
     def __init__(self,master):
         super().__init__(master)
         self.master = master 
+        self.create_widget()
 
     def create_widget(self): 
         self.back_to_home_button = tk.Button(self,text="home",command=self.Home)
