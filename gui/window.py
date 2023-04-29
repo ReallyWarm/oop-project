@@ -61,6 +61,7 @@ class Window(tk.Tk):
 
 
         self.make_payment_page = self.cart_page.makepayment
+        self.managetool_page = self.admin_page.managetool
         self.create_cart_button()
         self.create_admin_button()
         self.tool_data = self.get_tool_data()
@@ -203,6 +204,7 @@ class Window(tk.Tk):
         self.cart_page.pack_forget()
         self.home_page.pack(fill=tk.BOTH, expand=1)
         self.make_payment_page.pack_forget()
+        self.managetool_page.pack_forget()
         self.show_tool_widget(self.random_tool_list, start_x=75, start_y=350)
 
         
@@ -217,6 +219,7 @@ class Window(tk.Tk):
         self.cart_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
+        self.managetool_page.pack_forget()
         self.make_review_page.pack(fill=tk.BOTH, expand=1)
 
     def show_search(self):
@@ -228,6 +231,7 @@ class Window(tk.Tk):
         self.cart_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
+        self.managetool_page.pack_forget()
         self.search_page.pack(fill=tk.BOTH, expand=1)
         self.make_review_page.pack_forget()
 
@@ -241,6 +245,7 @@ class Window(tk.Tk):
         self.make_review_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
+        self.managetool_page.pack_forget()
         self.login_page.pack(fill=tk.BOTH, expand=1)
 
     def show_tool(self): 
@@ -253,6 +258,7 @@ class Window(tk.Tk):
         self.make_review_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
+        self.managetool_page.pack_forget()
         self.tool_page.pack(fill=tk.BOTH, expand=1)
 
     def show_sign_up(self):
@@ -265,6 +271,7 @@ class Window(tk.Tk):
         self.make_review_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
+        self.managetool_page.pack_forget()
         self.sign_up_page.pack(fill=tk.BOTH, expand=1)
     
     def show_cart(self):
@@ -278,6 +285,7 @@ class Window(tk.Tk):
         self.make_review_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
+        self.managetool_page.pack_forget()
         self.cart_page.pack(fill=tk.BOTH, expand=1)
     
     def show_admin(self): 
@@ -292,6 +300,7 @@ class Window(tk.Tk):
             self.login_page.pack_forget()
             self.make_review_page.pack_forget()
             self.make_payment_page.pack_forget()
+            self.managetool_page.pack_forget()
             self.admin_page.pack(fill=tk.BOTH, expand=1)
         else : 
             self.show_home()
@@ -308,7 +317,22 @@ class Window(tk.Tk):
         self.login_page.pack_forget()
         self.admin_page.pack_forget()
         self.make_review_page.pack_forget()
-        self.make_payment_page.pack(fill=tk.BOTH, expand=1)
+        self.managetool_page.pack_forget()
+        self.make_payment_page.pack(fill=tk.BOTH, expand=1) 
+
+    def show_managetool(self): 
+        self.cart_page.pack_forget()
+        self.hide_home_widget()
+        self.sign_up_page.pack_forget()
+        self.tool_page.pack_forget()
+        self.home_page.pack_forget()
+        self.hide_tool_widget()
+        self.search_page.pack_forget()
+        self.login_page.pack_forget()
+        self.admin_page.pack_forget()
+        self.make_review_page.pack_forget()
+        self.make_payment_page.pack_forget() 
+        self.managetool_page.pack(fill=tk.BOTH, expand=1)
 
 if __name__ == "__main__":
     app = Window()
