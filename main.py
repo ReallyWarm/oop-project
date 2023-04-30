@@ -56,21 +56,26 @@ async def get_tool(tool_name:str):
                     'tool wholesale':tool.wholesales,
                     'tool reviews':tool.review_list,
                     'tool rating' : tool.rating,
+                    'tool category':tool.type_of_tool,
                     'input': tool_name
                     }
     return {'GET Tool':'Invalid Tool'}
 
 @app.post("/system/category/tools/", tags = ['Manage Tool'])
 async def add_tool(tool_data:dict):
-    if tool_data["tool_image"] == "None":
-        tool_data["tool_image"] = None
+    for name, tool in system.category.search_by_name('').items():
+        if tool_data["tool_name"] == name:
+            return {'ADD Tool':"Already have this Tool"}
     system.create_tool(tool_data["product_code"], tool_data["tool_name"], tool_data["tool_description"], tool_data["tool_brand"],
                        tool_data["tool_amount"], tool_data["tool_image"], tool_data["tool_price"], tool_data['tool_category'])
-    return {'ADD Tool':tool_data["tool_name"]}
+    return {'ADD Tool':"add tool successfully"}
 
 @app.put("/system/category/tools/", tags = ['Manage Tool'])
 async def modify_tool(changing_tool_data:dict):
+    print(changing_tool_data["tool_name"])
+    print("------------------------------------------------------")
     for name, tool in system.category.search_by_name('').items():
+        print(name)
         if name == changing_tool_data["tool_name"]:
             system.modify_tool(tool,changing_tool_data["tool_name"],
                                changing_tool_data["tool_description"],
@@ -78,18 +83,16 @@ async def modify_tool(changing_tool_data:dict):
                                 changing_tool_data["tool_price"],
                                 changing_tool_data["product_code"], 
                                 changing_tool_data['tool_category'])
-            return {'MODIFY Tool':"change tool infomation successfully"}
-        else:
-            return {'MODIFY Tool':'Invalid Tool'}
+            return {'MODIFY Tool':"change tool infomation successfully"}        
+    return {'MODIFY Tool':'Invalid Tool'}
 
 @app.delete("/system/category/tools/", tags = ['Manage Tool'])
 async def delete_tool(deleting_tool:str):
     for name, tool in system.category.search_by_name('').items():
         if name == deleting_tool:
             system.delete_tool(tool)
-            return {'DELETE Tool':"delete tool successfully"}
-        else:
-            return {'DELETE Tool':'Invalid Tool'}
+            return {'DELETE Tool':"delete tool successfully"}   
+    return {'DELETE Tool':'Invalid Tool'}
 
 
 # MANAGE COUPON

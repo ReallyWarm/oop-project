@@ -47,7 +47,8 @@ class Payment:
             return "Payment fail"
 
     def check_valid_card(self, card) -> bool: 
-        if(len(card) == 16 and card.isdigit()): 
+        #  and card.isdigit()
+        if(len(card) == 16): 
             return True 
         return False 
 

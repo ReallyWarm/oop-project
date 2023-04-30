@@ -27,7 +27,7 @@ class ManageCoupon(tk.Frame):
         
     def get_coupon_info(self): 
         coupon_all = requests.get("http://127.0.0.1:8000/coupons/all").json()
-        print(coupon_all)
+        # print(coupon_all)
         self.coupon_list = []
         for key in coupon_all: 
             components = [] 
@@ -75,7 +75,7 @@ class ManageCoupon(tk.Frame):
         discount_value = self.mdiscount_label_input.get()  
         dict_put = {code:{"name":name,"discount_value":discount_value}}
         message = requests.put("http://127.0.0.1:8000/coupons/all",data=json.dumps(dict_put))
-        print(message.json())
+        # print(message.json())
         self.mname_label_input.delete(0,tk.END)
         self.mdiscount_label_input.delete(0,tk.END) 
 
@@ -83,7 +83,7 @@ class ManageCoupon(tk.Frame):
     def delete_button(self,code):  
         dict_delete = {"code":code}
         message = requests.delete("http://127.0.0.1:8000/coupons/all",data=json.dumps(dict_delete))
-        print(message.json())
+        # print(message.json())
         # print("hi2",code)
 
     def submit_button(self):  
@@ -95,7 +95,7 @@ class ManageCoupon(tk.Frame):
         self.name_label_input.delete(0,tk.END) 
         self.code_label_input.delete(0,tk.END) 
         self.discount_label_input.delete(0,tk.END)
-        print(message)
+        # print(message)
     
     
     def create_modify_widget(self,code): 

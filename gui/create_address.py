@@ -95,11 +95,11 @@ class CreateAddressGUI(tk.Frame):
         # show message box indicating changes have been saved
         if  res1 == {"data":'Unvailable to create a new address.'}:
             messagebox.showinfo(title='Error',message="You don't have account in this system. Please try again")
-            print(r1.json())
+            # print(r1.json())
         else:
             messagebox.showinfo(title='Notice',message="Success creating the address")
-            print(r1.json())
+            # print(r1.json())
         r2 = requests.get(f"http://127.0.0.1:8000/customer/address?name={self.name}")
         res2 = json.loads(r2.text)
-        print(res2['data'])
+        # print(res2['data'])
         

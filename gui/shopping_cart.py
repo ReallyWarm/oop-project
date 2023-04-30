@@ -13,7 +13,7 @@ class ShoppingCart(tk.Frame):
 
     def get_cart_data(self):
         r = requests.get(f'http://127.0.0.1:8000/system/shopping_cart/')
-        print(r.json())
+        # print(r.json())
 
     def get_image(self,url,width,height) -> ImageTk.PhotoImage: 
         with urllib.request.urlopen(url) as u:

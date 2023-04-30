@@ -50,5 +50,5 @@ class MakeReview(tk.Frame):
         respon = json.loads(r.text)
         if respon == {'data': 'A new review is added!'}:
             messagebox.showinfo(title="Review Response", message="Your review has been added!")
-        print(respon) 
-        print(self.master.first_name)
+        # print(respon) 
+        # print(self.master.first_name)

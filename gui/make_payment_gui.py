@@ -10,6 +10,7 @@ class MakePayment(tk.Frame):
 
     def __init__(self,master=None,submaster=None): 
         super().__init__(master)
+        self.choose_address = {}
         self.final_show = 0
         self.final_price = 0
         self.code_coupon = []
@@ -90,15 +91,17 @@ class MakePayment(tk.Frame):
 
 
     def update_payment(self):
+        # print(self.choose_address)
         self.get_cart_data()
         self.destroy_widget()
         self.clear_item()
         self.show_total_payment_widget()
         self.create_receipt_widget()
-
+        self.get_address()
         self.get_coupon_info()
         # self.show_final_price()
         self.show_coupon_info()
+        self.show_address_info()
 
     def get_cart_data(self):
         r = requests.get(f'http://127.0.0.1:8000/system/shopping_cart/')
@@ -159,7 +162,7 @@ class MakePayment(tk.Frame):
             if key == 'username': 
                 username = user["username"]["user"]
                 coupon = requests.get(f"http://127.0.0.1:8000/coupons/active_coupon/?username={username}").json()
-                print(coupon)
+                # print(coupon)
                 for key in coupon.keys(): 
                     self.code_coupon.append(key)
                     component_list = []   
@@ -181,7 +184,7 @@ class MakePayment(tk.Frame):
         for j in range(20): 
             self.clear = tk.Label(self,text="                                                     ")
             self.clear.pack()
-            self.clear.place(x=700,y=20+20*j)
+            self.clear.place(x=700,y=20+15*j)
         for i,coupon in enumerate(self.coupon_list):
             self.button = tk.Button(self,text=coupon[0],command=lambda i=i,coupon=self.coupon_list:self.on_click(i,coupon))
             self.button.pack()
@@ -217,15 +220,49 @@ class MakePayment(tk.Frame):
         self.final_price_label.pack()
         self.final_price_label.place(x=50, y=650)
         # self.show_final_price()
+
+    def on_click_address(self,index): 
+        dict_add,list_add = self.get_address() 
+        self.choose_address = dict_add[index]
+    def show_address_info(self): 
+        self.address_label = tk.Label(self,text="Choose address ",font=18)
+        self.address_label.pack()
+        self.address_label.place(x=600,y=305)
+        dict_add,list_add = self.get_address()
+        for i,address in enumerate(list_add):
+            self.address_button = tk.Button(self,text=f"{address[0]} {address[1]} {address[3]} {address[4]} {address[5]}",command = lambda x = i: self.on_click_address(x))
+            self.address_button.pack()
+            self.address_button.place(x=600,y=350+20*i)
+    def get_address(self): 
+        user =requests.get("http://127.0.0.1:8000/me").json()  
+        addresses = []
+        for key in user.keys(): 
+            if key == 'username': 
+                name = user["username"]["user"]   
+                username = requests.get(f'http://127.0.0.1:8000/user//?username={name}').json()
+                # print(username['first_name']['_addresses']) 
+                for com in username['first_name']['_addresses'] :
+                    component = []
+                    component.append(com["_company"])
+                    component.append(com["_country"])
+                    component.append(com["_state"])
+                    component.append(com["_city"])
+                    component.append(com["_address"])
+                    component.append(com["_postal_code"]) 
+                    addresses.append(component)
+                # print(addresses)
+                return username['first_name']['_addresses'],addresses
+        return {"data":"guest"}
+    
     def confirm_button(self): 
         for index,i in enumerate(self.number_click): 
             if i % 2 == 1:
-                code  =  self.code_coupon[index]
-                self.message = requests.post(f"http://127.0.0.1:8000/coupons/used_coupon/?code={code}").json()
-                requests.delete(f'http://127.0.0.1:8000/system/shopping_cart/delete_cart/')
+                code  =  self.code_coupon[index] 
+                dict_payment = {'card':'1111111111111111','address':self.choose_address['_name'],'coupon':code}
+                message = requests.post("http://127.0.0.1:8000/cart/payment",data = json.dumps(dict_payment))
+                print(message.json())
                 self.final_price = 0
                 self.shipping_cost = 0
                 self.final_show = 0
-                # print(self.message)
-                # print(code)
+                return
     

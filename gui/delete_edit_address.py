@@ -84,14 +84,14 @@ class EditDeleteAddressGUI(tk.Frame):
         if res1 == {"data": "Unable to edit address. Please try again"}:
             messagebox.showinfo(
                 title='Error', message="You don't have account in this system. Please try again")
-            print(r1.json())
+            # print(r1.json())
         else:
             r2 = requests.get(
                 f"http://127.0.0.1:8000/customer/address?name={self.name}")
             res2 = json.loads(r2.text)
             messagebox.showinfo(
                 title='Notice', message=f"Success edit the address {res2['data']}")
-            print(r2.json())
+            # print(r2.json())
 
     def delete_changes(self):
         # save changes to user information
@@ -103,13 +103,13 @@ class EditDeleteAddressGUI(tk.Frame):
         if res == {"data": "Unable to delete the address"}:
             messagebox.showinfo(
                 title='Error', message="You don't have account in this system. Please try again")
-            print(r.json())
+            # print(r.json())
         else:
             messagebox.showinfo(
                 title='Notice', message="Success delete the address")
             r2 = requests.get(
                 f"http://127.0.0.1:8000/customer/address?name={self.name}")
             res2 = json.loads(r2.text)
-            print(res2['data'])
-            print(r2.json())
+            # print(res2['data'])
+            # print(r2.json())
 
