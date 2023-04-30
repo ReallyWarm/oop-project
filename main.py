@@ -197,62 +197,56 @@ async def delete_wholesale(data : dict) ->dict:
     return {"data":f"wholesale with code {code} is not found"}
 
 # MANAGE CUSTOMER
-# create a new customer
-@app.post('/customer/{first_name}/')
-async def create_customer(customer:dict)->dict:
-    new_customer = CustomerInfo(customer["first_name"], customer["last_name"], customer["email"],customer["company_name"])
-    system.add_customerinfo(new_customer)
-    return {'data':new_customer}
 
 #create a new address
-@app.post('/customer/address/{name}/')
+@app.post('/customer/address/',tags=['address'])
 async def create_address(newaddress:dict)->dict:
     for customer in system.customerinfos:
-        if customer.first_name == newaddress["name"]:
+        if customer.username == newaddress["name"]:
             customer.create_address(newaddress["name"],newaddress["company"],newaddress["country"],newaddress[ "state"], newaddress["city"], newaddress["address"], newaddress["phone_number"],newaddress["postal_code"])
-            return {"data":"You have create the address successfully."}
+            return {"data":f"You have create the address successfully.You address is {customer.address}"}
             
     return{"data":"Unable to create the address."}
 
 # #delete the address     
-@app.delete('/cusrtomer/address/{name}',tags=['address'])     
-async def delete_address(data:dict) ->dict:
+@app.delete('/customer/address',tags=['address'])     
+async def delete_address(name:str) ->dict:
     for customer in system.customerinfos:
-        if customer.first_name == data["name"]:
-            customer.delete_address(data["name"])
-            return {"data":"You have delete the address successfully"}
+        if customer.username == name:
+            customer.delete_address(name)
+            return {"data":f"You have delete the address successfully.Your address is{customer.address}"}
     return {"data":"Unable to delete the address"}    
 
 #get the address              
-@app.get('/customer/address/{address}',tags=['address'])   
+@app.get('/customer/address',tags=['address'])   
 async def get_address(name:str)->dict:
   for customer in system.customerinfos:
-      if customer.first_name == name:
+      if customer.username == name:
           address = customer.get_address(name)
           return {"data":f'Your address  {address}'}
   return {"data":"Sorry cannot found your address in system. Please try again!"}    
       
 # edit the address       
-@app.put('/customer/address/')
+@app.put('/customer/address/',tags=['address'])
 async def edit_address(address:dict) ->dict:
     for customer in system.customerinfos:
-        if customer.first_name == address["name"]:
+        if customer.username == address["name"]:
             customer.get_address(address["name"]).edit_address(company=address["company"],country=address["country"],state=address[ "state"], city=address["city"], address=address["address"], phone_number=address["phone_number"],postal_code=address["postal_code"])
             return {"data":f"Your edit address is successfully {customer.address}"}
     return {"data":"Unable to edit address. Please try again"}
 
-@app.get('/customer/order{name}')
+@app.get('/customer/order',tags=['customer'])
 async def check_order(name:str)->dict:
     for customer in system.customerinfos:
-        if customer.first_name == name:
+        if customer.username == name:
             order = customer.my_order
             return {"data":f"Your order is {order}"}
     return {"data":"Not found this order. Please try again"}    
 
-@app.get('/customer/review{name}')
+@app.get('/customer/review',tags=['customer'])
 async def check_review(name:str)->dict:
     for customer in system.customerinfos:
-        if customer.first_name == name:
+        if customer.username == name:
             return {"data":f"Your review is {customer.my_reviewed}"}
     return {"data":"Not found this review. Please try again"}
 
@@ -375,6 +369,11 @@ async def read_users_me(current_user: dict = Depends(system.get_current_user)):
 @app.get("/user/",response_model=dict) 
 async def get_user_first_name(username:str): 
     return {"first_name":system.search_user(username).first_name}
+
+@app.get("/user//",response_model=dict) 
+async def get_user(username:str): 
+    return {"first_name":system.search_user(username)}
+
 # PAYMENT
 @app.post("/cart/payment", summary="Making payment", response_model=dict)
 async def make_payment(payment_data:dict):
