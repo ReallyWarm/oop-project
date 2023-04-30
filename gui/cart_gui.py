@@ -17,6 +17,7 @@ class CartGui(tk.Frame):
         self.get_cart_data()
         self.create_normal_widget()
         self.show_total_cart_widget()
+        
         # self.update_data()
         self.makepayment = MakePayment(master=self.master,submaster=self) 
         self.makepayment_button = tk.Button(self,text="Make Payment",command=self.make_payment)
@@ -29,12 +30,15 @@ class CartGui(tk.Frame):
     def update_data(self): 
         
         self.destroy_widget()
+        self.widget.destroy()
         self.get_cart_data()
         #self.get_info_in_list()
         self.show_item_widget()
         self.show_total_cart_widget()
 
-    def create_normal_widget(self): 
+    def create_normal_widget(self):
+        self.widget = tk.Label(self,text="")
+        self.widget.pack()
         self.get = tk.Button(self,text="update cart",command=self.update_data)
         self.get.pack() 
         self.get.place(x=800, y=50)

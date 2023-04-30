@@ -386,5 +386,5 @@ async def make_payment(payment_data:dict):
 
 if __name__ == "__main__": 
     print(system.search_user('NorNor007').first_name)
-    # import uvicorn
-    # uvicorn.run("main:app", reload=True)
+    import uvicorn
+    uvicorn.run("main:app", reload=True)
