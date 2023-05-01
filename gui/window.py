@@ -393,8 +393,6 @@ class Window(tk.Tk):
         self.managetool_page.pack_forget()
         self.managecoupon_page.pack(fill=tk.BOTH, expand=1)
         self.profile_page.pack_forget()
-        #self.login_page.place_forget()
-        self.sign_up_page.pack(fill=tk.BOTH, expand=1)
         
 
 if __name__ == "__main__":

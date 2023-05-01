@@ -1,4 +1,6 @@
 import tkinter as tk
+from tkinter import messagebox
+import tkinter.simpledialog as sd
 import requests, json
 from make_review import MakeReview
 import io
@@ -11,6 +13,7 @@ class MakePayment(tk.Frame):
     def __init__(self,master=None,submaster=None): 
         super().__init__(master)
         self.choose_address = {}
+        self.show_recript_address = tk.Label(self,text=f"default")
         self.final_show = 0
         self.final_price = 0
         self.code_coupon = []
@@ -66,6 +69,9 @@ class MakePayment(tk.Frame):
         self.shipping_cost_label = tk.Label(self, text="shipping cost             {}".format(self.shipping_cost))
         self.shipping_cost_label.pack()
         self.shipping_cost_label.place(x=50, y=600)
+        self.final_price_label = tk.Label(self, text="final price                          ")
+        self.final_price_label.pack()
+        self.final_price_label.place(x=50, y=650)
         self.final_price_label = tk.Label(self, text="final price             {}".format(self.final_show))
         self.final_price_label.pack()
         self.final_price_label.place(x=50, y=650)
@@ -99,7 +105,7 @@ class MakePayment(tk.Frame):
         self.create_receipt_widget()
         self.get_address()
         self.get_coupon_info()
-        # self.show_final_price()
+        self.check_show_recript_address()
         self.show_coupon_info()
         self.show_address_info()
 
@@ -170,15 +176,6 @@ class MakePayment(tk.Frame):
                     component_list.append(coupon[key]['discount_value'])
                     self.coupon_list.append(component_list)
                     self.number_click.append(0)
-        # print(self.coupon_list)
-    def show_final_price(self):
-        # print(self.final_price)
-        self.final_price_label = tk.Label(self,text="        ")
-        self.final_price_label.pack()
-        self.final_price_label.place(x=500,y=500)
-        self.final_price_label = tk.Label(self,text=self.final_show)
-        self.final_price_label.pack()
-        self.final_price_label.place(x=500,y=500)
 
     def show_coupon_info(self): 
         for j in range(20): 
@@ -201,7 +198,7 @@ class MakePayment(tk.Frame):
         check2 =0
         for index,i in enumerate(self.number_click): 
             if i % 2 == 1 :
-                discount = coupon[index][1]*self.final_price/100
+                discount = int(coupon[index][1])*self.final_price/100
                 self.to_use_coupon(discount)
                 check2 = 1
         if check2==0 :
@@ -210,12 +207,18 @@ class MakePayment(tk.Frame):
             
     def to_use_coupon(self,discount_value): 
         self.final_show = self.final_price - discount_value
+        self.final_price_label = tk.Label(self, text="final price                               ")
+        self.final_price_label.pack()
+        self.final_price_label.place(x=50, y=650)
         self.final_price_label = tk.Label(self, text="final price             {}".format(self.final_show))
         self.final_price_label.pack()
         self.final_price_label.place(x=50, y=650)
         # self.show_final_price()
     def to_unuse_coupon(self): 
         self.final_show = self.final_price
+        self.final_price_label = tk.Label(self, text="final price                               ")
+        self.final_price_label.pack()
+        self.final_price_label.place(x=50, y=650)
         self.final_price_label = tk.Label(self, text="final price             {}".format(self.final_show))
         self.final_price_label.pack()
         self.final_price_label.place(x=50, y=650)
@@ -224,6 +227,19 @@ class MakePayment(tk.Frame):
     def on_click_address(self,index): 
         dict_add,list_add = self.get_address() 
         self.choose_address = dict_add[index]
+        self.show_recript_address = tk.Label(self,text=f" send at {list_add[index][0]} {list_add[index][1]} {list_add[index][2]} {list_add[index][3]} {list_add[index][4]} {list_add[index][5]}")
+        if self.choose_address != {}: 
+            self.show_recript_address.pack(in_ = self)
+            self.show_recript_address.place(x=50,y=470)
+    
+    def check_show_recript_address(self): 
+        if self.choose_address == {}: 
+            self.show_recript_address.pack(in_ = None)
+            self.show_recript_address.pack_forget() 
+        else : 
+            self.show_recript_address.pack(in_ = self)
+            self.show_recript_address.place(x=50,y=470)
+
     def show_address_info(self): 
         self.address_label = tk.Label(self,text="Choose address ",font=18)
         self.address_label.pack()
@@ -253,16 +269,29 @@ class MakePayment(tk.Frame):
                 # print(addresses)
                 return username['first_name']['_addresses'],addresses
         return {"data":"guest"}
-    
-    def confirm_button(self): 
+    def confirm_button(self):  
         for index,i in enumerate(self.number_click): 
             if i % 2 == 1:
-                code  =  self.code_coupon[index] 
-                dict_payment = {'card':'1111111111111111','address':self.choose_address['_name'],'coupon':code}
+                code  =  self.code_coupon[index]
+                card = sd.askstring("credit card", "Please enter credit card:") 
+                dict_payment = {'card':card,'address':self.choose_address['_name'],'coupon':code}
                 message = requests.post("http://127.0.0.1:8000/cart/payment",data = json.dumps(dict_payment))
                 print(message.json())
                 self.final_price = 0
                 self.shipping_cost = 0
                 self.final_show = 0
-                return
+                self.choose_address = {}
+                messagebox.showinfo(title = "notification",message=message.json()["status"])
+                return 
+        code  =  None
+        card = sd.askstring("credit card", "Please enter credit card:") 
+        dict_payment = {'card':card,'address':self.choose_address['_name'],'coupon':code}
+        message = requests.post("http://127.0.0.1:8000/cart/payment",data = json.dumps(dict_payment))
+        print(message.json())
+        self.final_price = 0
+        self.shipping_cost = 0
+        self.final_show = 0
+        self.choose_address = {}
+        messagebox.showinfo(title = "notification",message=message.json()["status"])
+        return
     
