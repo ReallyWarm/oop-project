@@ -40,7 +40,7 @@ class ManageCoupon(tk.Frame):
     def create_getcoupon_widget(self): 
         self.get_couponwidget = [] 
         for coupon in self.coupon_list: 
-            self.button_widget = tk.Button(self,text=f"{coupon[0]} {coupon[1]} {coupon[2]}",command = lambda x=coupon[0]:self.modify_coupon(x))
+            self.button_widget = tk.Button(self,text=f"{coupon[0]} {coupon[1]} {coupon[2]}",command = lambda x=coupon[0],y=coupon[1],z=coupon[2]:self.modify_coupon(x,y,z))
             self.get_couponwidget.append(self.button_widget) 
 
     def add_coupon(self): 
@@ -64,10 +64,10 @@ class ManageCoupon(tk.Frame):
             widget.pack(in_ = None) 
             widget.pack_forget()
     
-    def modify_coupon(self,code): 
+    def modify_coupon(self,code,name,discount_value): 
         # print(code)
         self.hide_getwidget() 
-        self.create_modify_widget(code) 
+        self.create_modify_widget(code,name,discount_value) 
         self.show_modify() 
 
     def update_coupon(self,code): 
@@ -98,12 +98,14 @@ class ManageCoupon(tk.Frame):
         # print(message)
     
     
-    def create_modify_widget(self,code): 
+    def create_modify_widget(self,code,name,discount_value): 
 
         self.mdiscount_label = tk.Label(self, text="Discount Value:")
         self.mdiscount_label_input = tk.Entry(self) 
+        self.mdiscount_label_input.insert(0,discount_value)
         self.mname_label = tk.Label(self, text="Name:")
         self.mname_label_input = tk.Entry(self)  
+        self.mname_label_input.insert(0,name)
         self.mtitle = tk.Label(self, text="mofidy")
         self.modify_button_label = tk.Button(self,text="update",command= lambda x=code : self.update_coupon(x))
         self.delete_button_label = tk.Button(self,text="delete",command= lambda x=code : self.delete_button(x))
