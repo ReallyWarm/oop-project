@@ -76,8 +76,8 @@ class CreateAddressGUI(tk.Frame):
       
     def clear_text(self):
         self.username_entry.delete(0,'end')
-        self.username_entry.insert(0,"")
         self.company_entry.delete(0,'end')
+        self.country_entry.delete(0,'end')
         self.state_entry.delete(0,'end')
         self.city_entry.delete(0,'end')
         self.address_entry.delete(0,'end')
