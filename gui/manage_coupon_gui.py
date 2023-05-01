@@ -1,5 +1,6 @@
 import tkinter as tk 
 from tkinter import ttk
+from tkinter import messagebox
 import requests 
 import json 
 
@@ -91,6 +92,10 @@ class ManageCoupon(tk.Frame):
         code = self.code_label_input.get() 
         discount_value = self.discount_label_input.get()  
         dict_add = {code:{"name":name, "discount_value":discount_value}}
+        for coupon in self.coupon_list:  
+            if coupon[0] == code : 
+                messagebox.showinfo(title="notification",message="this code had already added")
+                return
         message = requests.post("http://127.0.0.1:8000/coupons/all",data=json.dumps(dict_add))
         self.name_label_input.delete(0,tk.END) 
         self.code_label_input.delete(0,tk.END) 
