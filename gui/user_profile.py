@@ -201,6 +201,7 @@ class Profile(tk.Frame):
         self.address_text = tk.Text(self,height=5,width=40)
         self.address_text.insert('end',self.address)
         self.address_text.pack()
+        
     def update_review(self):
         self.review = self.user_review() 
         self.review_title = tk.Label(self,text="Review", font=('Arail',12,'bold'))
