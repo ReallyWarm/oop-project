@@ -81,9 +81,10 @@ class Profile(tk.Frame):
         for key in user.keys(): 
             if key == 'username': 
                 name = user["username"]["user"]   
-                username = requests.get(f'http://127.0.0.1:8000/user//?username={name}').json()
-                return username['first_name']['_addresses']
+                address = requests.get(f'http://127.0.0.1:8000/customer/address?name={name}').json()
+                return address['data']
         return {"data":"guest"}
+
     
      
     def user_order(self):
@@ -91,8 +92,8 @@ class Profile(tk.Frame):
         for key in user.keys(): 
             if key == 'username': 
                 name = user["username"]["user"]   
-                username = requests.get(f'http://127.0.0.1:8000/user//?username={name}').json()
-                return username['first_name']['_my_order']
+                order = requests.get(f'http://127.0.0.1:8000/customer/order?name={name}').json()
+                return order['data']
         return {"data":"guest"}
      
     
@@ -101,8 +102,8 @@ class Profile(tk.Frame):
         for key in user.keys(): 
             if key == 'username': 
                 name = user["username"]["user"]   
-                username = requests.get(f'http://127.0.0.1:8000/user//?username={name}').json()
-                return username['first_name']['_my_review']
+                review = requests.get(f'http://127.0.0.1:8000/customer/review?name={name}').json()
+                return review['data']
         return {"data":"guest"}
      
     # idea delete all pages and paste a new item

@@ -246,6 +246,7 @@ class Window(tk.Tk):
         self.make_review_page.pack(fill=tk.BOTH, expand=1)
 
     def show_profile(self):
+        self.make_review_page.pack_forget()
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
         self.hide_tool_widget()
@@ -253,6 +254,11 @@ class Window(tk.Tk):
         self.sign_up_page.pack_forget()
         self.make_review_page.pack_forget()
         self.login_page.pack_forget()
+        self.cart_page.pack_forget()
+        self.make_payment_page.pack_forget()
+        self.admin_page.pack_forget()
+        self.managetool_page.pack_forget()
+        self.managecoupon_page.pack_forget() 
         self.managewholesale_page.pack_forget()
         self.profile_page.pack(fill=tk.BOTH,expand=1)
     

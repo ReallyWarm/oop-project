@@ -206,8 +206,9 @@ async def delete_wholesale(data : dict) ->dict:
 async def create_address(newaddress:dict)->dict:
     for customer in system.customerinfos:
         if customer.username == newaddress["name"]:
-            customer.create_address(newaddress["name"],newaddress["company"],newaddress["country"],newaddress[ "state"], newaddress["city"], newaddress["address"], newaddress["phone_number"],newaddress["postal_code"])
-            return {"data":f"You have create the address successfully.You address is {customer.address}"}
+            if len(customer.address) == 0:
+                customer.create_address(newaddress["name"],newaddress["company"],newaddress["country"],newaddress[ "state"], newaddress["city"], newaddress["address"], newaddress["phone_number"],newaddress["postal_code"])
+                return {"data":f"You have create the address successfully.You address is {customer.address}"}
             
     return{"data":"Unable to create the address."}
 
@@ -226,7 +227,7 @@ async def get_address(name:str)->dict:
   for customer in system.customerinfos:
       if customer.username == name:
           address = customer.get_address(name)
-          return {"data":f'Your address  {address}'}
+          return {"data":f'{address}'}
   return {"data":"Sorry cannot found your address in system. Please try again!"}    
       
 # edit the address       
@@ -243,14 +244,14 @@ async def check_order(name:str)->dict:
     for customer in system.customerinfos:
         if customer.username == name:
             order = customer.my_order
-            return {"data":f"Your order is {order}"}
+            return {"data":f"{order},"}
     return {"data":"Not found this order. Please try again"}    
 
 @app.get('/customer/review',tags=['customer'])
 async def check_review(name:str)->dict:
     for customer in system.customerinfos:
         if customer.username == name:
-            return {"data":f"Your review is {customer.my_reviewed}"}
+            return {"data":f"{customer.my_reviewed},"}
     return {"data":"Not found this review. Please try again"}
 
 # make review
