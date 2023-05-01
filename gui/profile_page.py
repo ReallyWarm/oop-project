@@ -25,7 +25,7 @@ class ProfileGUI(tk.Frame):
         self.edit_delete_address.pack()
         
     def show_profile(self):
-        self.user_profile.update_data() #bug
+        self.user_profile.update_data() 
         self.create_address.pack_forget()    
         self.edit_delete_address.pack_forget() 
         self.user_profile.pack(fill=tk.BOTH, expand=1)
