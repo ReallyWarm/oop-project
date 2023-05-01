@@ -120,9 +120,9 @@ class ManageTool(tk.Frame):
 
     def add_tool(self):
         
-        if self.ent1.get() is not '' and self.ent2.get() is not '' and  self.ent3.get() is not '' and  self.ent4.get() \
-            is not '' and  self.ent5.get() is not '' and  self.ent6.get() is not '' and  self.ent7.get() is not '' \
-            and  self.ent8.get() is not '':
+        if self.ent1.get() != '' and self.ent2.get() != '' and  self.ent3.get() != '' and  self.ent4.get() \
+            != '' and  self.ent5.get() != '' and  self.ent6.get() != '' and  self.ent7.get() != '' \
+            and  self.ent8.get() != '':
         
             input_data = {
                 "product_code": self.ent1.get(),
