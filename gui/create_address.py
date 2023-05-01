@@ -8,6 +8,9 @@ class CreateAddressGUI(tk.Frame):
         super().__init__(master)
         self.master = master
         self.create_widget()
+        self.create_button()
+    
+    
     def create_widget(self):
             # create label for page title
         self.title_label = tk.Label(self, text="Create the address", font=("Arial", 18, "bold"))
@@ -70,11 +73,24 @@ class CreateAddressGUI(tk.Frame):
         self.postal_entry = tk.Entry(self, width=30)
         self.postal_entry.grid(row=8, column=1, padx=10, pady=5)
    
-    
+      
+    def clear_text(self):
+        self.username_entry.delete(0,'end')
+        self.username_entry.insert(0,"")
+        self.company_entry.delete(0,'end')
+        self.state_entry.delete(0,'end')
+        self.city_entry.delete(0,'end')
+        self.address_entry.delete(0,'end')
+        self.phone_entry.delete(0,'end')
+        self.postal_entry.delete(0,'end')
+        
+    def create_button(self):
         # create save button
         self.save_button = tk.Button(self, text="Save", font=("Arial", 12), command=self.save_changes)
         self.save_button.grid(row=9, column=0, columnspan=2, pady=20)
-      
+          
+        self.refresh_button = tk.Button(self, text="Refresh", font=("Arial",12) ,command=self.clear_text)
+        self.refresh_button.grid(row=9, column=3,columnspan=2,pady=20)
         
     def save_changes(self):
         # save changes to user information
@@ -93,13 +109,9 @@ class CreateAddressGUI(tk.Frame):
         r1= requests.post("http://127.0.0.1:8000/customer/address/",data=json.dumps(self.user_info))
         res1 = json.loads(r1.text)
         # show message box indicating changes have been saved
-        if  res1 == {"data":'Unvailable to create a new address.'}:
+        if  res1 == {"data":'Unable to create the address.'}:
             messagebox.showinfo(title='Error',message="You don't have account in this system. Please try again")
             print(r1.json())
         else:
             messagebox.showinfo(title='Notice',message="Success creating the address")
             print(r1.json())
-        r2 = requests.get(f"http://127.0.0.1:8000/customer/address?name={self.name}")
-        res2 = json.loads(r2.text)
-        print(res2['data'])
-        
