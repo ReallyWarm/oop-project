@@ -269,7 +269,14 @@ class MakePayment(tk.Frame):
                 # print(addresses)
                 return username['first_name']['_addresses'],addresses
         return {"data":"guest"}
-    def confirm_button(self):  
+    def confirm_button(self):   
+        user =requests.get("http://127.0.0.1:8000/me").json()  
+        for key in user.keys(): 
+            if key == 'username': 
+                continue
+            else : 
+                messagebox.showinfo(title = "notification",message="you must login first")
+                return
         for index,i in enumerate(self.number_click): 
             if i % 2 == 1:
                 code  =  self.code_coupon[index]
