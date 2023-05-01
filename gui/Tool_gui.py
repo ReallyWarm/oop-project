@@ -72,10 +72,10 @@ class Tool_GUI(tk.Frame) :
         self.tool_price_label = tk.Label(self, text=self.tool_price, font=("Helvetica", 12))
         self.tool_price_label.place(x=200, y=350)
 
-        tk.Label(self, text='rating ', font=("Helvetica", 12)).place(x= 1100, y=60)
+        tk.Label(self, text='rating ', font=("Helvetica", 12)).place(x= 750, y=100)
 
         self.tool_rating_label = tk.Label(self, text=self.tool_rating, font=("Helvetica", 12))
-        self.tool_rating_label.place(x=1150, y=60)
+        self.tool_rating_label.place(x=800, y=100)
 
         self.tool_description_label = tk.Label(self, text=self.tool_description, font=("Helvetica", 12))
         self.tool_description_label.place(x=400, y=110)

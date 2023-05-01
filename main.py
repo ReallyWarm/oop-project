@@ -291,8 +291,8 @@ async def create_review(review: dict) -> dict:
                     if float(review["rating"]) <= 5.00:
                         reviewer.create_review(tool, review["head_review"], review["comment"], float(review["rating"]), review["date_of_review"])
                         return {"data": "A new review is added!"}
-                    else : 
-                        return {"data": "Invalid rating"}
+    return {"data": "Invalid rating"}
+
 # shopping cart
 @app.post("/system/shopping_cart/", tags = ['shopping_cart'])
 async def add_to_cart(chosed_item:dict):
