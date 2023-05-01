@@ -285,10 +285,11 @@ class MakePayment(tk.Frame):
                 dict_payment = {'card':card,'address':self.choose_address['_name'],'coupon':code}
                 message = requests.post("http://127.0.0.1:8000/cart/payment",data = json.dumps(dict_payment))
                 print(message.json())
-                self.final_price = 0
-                self.shipping_cost = 0
-                self.final_show = 0
-                self.choose_address = {}
+                if message.json()["status"] == "Payment success": 
+                    self.final_price = 0
+                    self.shipping_cost = 0
+                    self.final_show = 0
+                    self.choose_address = {}
                 messagebox.showinfo(title = "notification",message=message.json()["status"])
                 return 
         code  =  None
@@ -296,10 +297,11 @@ class MakePayment(tk.Frame):
         dict_payment = {'card':card,'address':self.choose_address['_name'],'coupon':code}
         message = requests.post("http://127.0.0.1:8000/cart/payment",data = json.dumps(dict_payment))
         print(message.json())
-        self.final_price = 0
-        self.shipping_cost = 0
-        self.final_show = 0
-        self.choose_address = {}
+        if message.json()["status"] == "Payment success": 
+            self.final_price = 0
+            self.shipping_cost = 0
+            self.final_show = 0
+            self.choose_address = {}
         messagebox.showinfo(title = "notification",message=message.json()["status"])
         return
     
