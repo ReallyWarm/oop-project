@@ -73,11 +73,12 @@ class Window(tk.Tk):
         self.managecoupon_page = self.admin_page.managecoupon
         self.create_cart_button()
         self.create_admin_button()
+        self.create_refresh_button()
         self.tool_data = self.get_tool_data()
         self.tool_widgets = [ ]
         self.make_tool_widget(self.get_tool_data())
         self.current_tool_widget = [ ]
-        self.current_home_widget = [self.cart_button,self.name] 
+        self.current_home_widget = [self.cart_button,self.name,self.refresh_button] 
         self.random_tool_list = self.random_tool_to_show()
 
         self.tool_page = self.tool_widgets[0].tool_page
@@ -124,7 +125,10 @@ class Window(tk.Tk):
         self.cart_button = tk.Button(self,text="cart",command=self.show_cart)
         self.cart_button.pack()  
         self.cart_button.place(x =600,y = 600)
-    
+    def create_refresh_button(self): 
+        self.refresh_button = tk.Button(self,text="refresh",command=self.show_home) 
+        self.refresh_button.pack() 
+        self.refresh_button.place(x=400,y=600)
     def create_admin_button(self):
         self.admin_button = tk.Button(self,text="admin",command=self.show_admin)
         self.admin_button.pack()  
@@ -171,12 +175,14 @@ class Window(tk.Tk):
         self.name.place(x=800,y=20)
         self.cart_button.pack(in_= self.home_page)
         self.admin_button.pack(in_= self.home_page) 
+        self.refresh_button.pack(in_= self.home_page)
         
 
     def hide_home_widget(self): 
         self.name.pack(in_=None)
         self.cart_button.pack(in_=None)
         self.admin_button.pack(in_=None)
+        self.refresh_button.pack(in_= None)
 
     def delete_name(self):
         self.name.destroy()
