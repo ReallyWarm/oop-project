@@ -1,6 +1,7 @@
 import tkinter as tk
 import requests, json
-from make_review import MakeReview
+from make_review import MakeReview 
+from tkinter import messagebox
 import io
 import urllib.request 
 from PIL import Image, ImageTk
@@ -24,7 +25,10 @@ class CartGui(tk.Frame):
         self.makepayment_button.pack()
         self.makepayment_button.place(x=660,y=500)
     def make_payment(self):
-        self.makepayment.final_price = self.final_price
+        if(self.master.authority == "guest"):
+            messagebox.showinfo(title="notification",message="Please login first")
+            return
+        self.makepayment.final_price = self.final_price 
         self.makepayment.final_show = self.final_price
         self.makepayment.update_payment()
         self.master.show_payment()

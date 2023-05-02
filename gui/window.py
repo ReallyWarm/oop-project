@@ -328,21 +328,26 @@ class Window(tk.Tk):
         self.sign_up_page.pack(fill=tk.BOTH, expand=1)
     
     def show_cart(self):
-        self.hide_home_widget()
-        self.sign_up_page.pack_forget()
-        self.tool_page.pack_forget()
-        self.home_page.pack_forget()
-        self.hide_tool_widget()
-        self.search_page.pack_forget()
-        self.login_page.pack_forget()
-        self.make_review_page.pack_forget()
-        self.make_payment_page.pack_forget()
-        self.admin_page.pack_forget()
-        self.managetool_page.pack_forget()
-        self.managecoupon_page.pack_forget() 
-        self.managewholesale_page.pack_forget()
-        self.cart_page.update_data()
-        self.cart_page.pack(fill=tk.BOTH, expand=1)
+        if self.authority == "admin": 
+            self.show_home()
+            messagebox.showinfo(title="notification", message="admin have no cart")
+        else : 
+
+            self.hide_home_widget()
+            self.sign_up_page.pack_forget()
+            self.tool_page.pack_forget()
+            self.home_page.pack_forget()
+            self.hide_tool_widget()
+            self.search_page.pack_forget()
+            self.login_page.pack_forget()
+            self.make_review_page.pack_forget()
+            self.make_payment_page.pack_forget()
+            self.admin_page.pack_forget()
+            self.managetool_page.pack_forget()
+            self.managecoupon_page.pack_forget() 
+            self.managewholesale_page.pack_forget()
+            self.cart_page.update_data()
+            self.cart_page.pack(fill=tk.BOTH, expand=1)
     
     def show_admin(self): 
         if self.authority == "admin":

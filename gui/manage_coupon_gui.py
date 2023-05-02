@@ -74,6 +74,9 @@ class ManageCoupon(tk.Frame):
     def update_coupon(self,code): 
         name = self.mname_label_input.get() 
         discount_value = self.mdiscount_label_input.get()  
+        if not discount_value.isdigit(): 
+            messagebox.showinfo(title="notification",message="discount_value must be integer")
+            return
         dict_put = {code:{"name":name,"discount_value":discount_value}}
         message = requests.put("http://127.0.0.1:8000/coupons/all",data=json.dumps(dict_put))
         # print(message.json())
@@ -91,6 +94,10 @@ class ManageCoupon(tk.Frame):
         name = self.name_label_input.get() 
         code = self.code_label_input.get() 
         discount_value = self.discount_label_input.get()  
+        if not discount_value.isdigit(): 
+            messagebox.showinfo(title="notification",message="discount_value must be integer")
+            return 
+        
         dict_add = {code:{"name":name, "discount_value":discount_value}}
         for coupon in self.coupon_list:  
             if coupon[0] == code : 

@@ -74,7 +74,13 @@ class ManageWholesale(tk.Frame):
 
     def update_wholesale(self,code): 
         amount = self.mamount_label_input.get() 
-        discount_value = self.mdiscount_label_input.get()  
+        discount_value = self.mdiscount_label_input.get() 
+        if not discount_value.isdigit(): 
+            messagebox.showinfo(title="notification",message="discount_value must be integer")
+            return 
+        if not amount.isdigit(): 
+            messagebox.showinfo(title="notification",message="amount must be integer")
+            return  
         dict_put = {"wholesale_modify":{"code":code,"amount":amount,"discount_value":discount_value}}
         message = requests.put("http://127.0.0.1:8000/wholesale/all",data=json.dumps(dict_put))
         # print(message.json())
@@ -91,7 +97,13 @@ class ManageWholesale(tk.Frame):
     def submit_button(self):  
         amount = self.amount_label_input.get() 
         code = self.code_label_input.get() 
-        discount_value = self.discount_label_input.get()  
+        discount_value = self.discount_label_input.get() 
+        if not discount_value.isdigit(): 
+            messagebox.showinfo(title="notification",message="discount_value must be integer")
+            return 
+        if not amount.isdigit(): 
+            messagebox.showinfo(title="notification",message="amount must be integer")
+            return 
         dict_add = {"wholesale_add":{"code":code, "amount":amount,"discount_value":discount_value}}
         for wholesale in self.wholesale_list:  
             if wholesale[0] == code : 
