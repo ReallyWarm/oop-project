@@ -316,7 +316,7 @@ async def get_cart():
         return {'GET CART':"No active cart"}
     
 @app.put("/system/shopping_cart/", tags = ['shopping_cart'])
-async def set_item_amount(chosed_item:dict):
+async def set_cart_item_amount(chosed_item:dict):
     for name, tool in system.category.search_by_name('').items():
         if name == chosed_item['tool_name']:
             system.get_active_cart().set_item_amount(tool,chosed_item['quantity'])
@@ -338,6 +338,66 @@ async def delete_item(chosed_item:dict):
             system.get_active_cart().delete_item(tool)
             return {'DELETE ITEM':"delete item successfully"}
     return {'DELETE ITEM':"Invalid Tool"}
+
+# wishlist
+@app.post("/system/wishlist/", tags = ['wishlist'])
+async def add_to_wishlist(chosed_item:dict):
+    for name, tool in system.category.search_by_name('').items():
+        if name == chosed_item['tool_name']:
+            status = system.add_to_wishlist(tool,chosed_item['quantity'])
+            if status == "Can not get wishlist":
+                return {'ADD TO WISHLIST':"Add to wishlist failed"}
+            return {'ADD TO WISHLIST':"Add to wishlist successfully"}
+    return {'ADD TO WISHLIST':"Invalid Tool"}
+
+@app.get("/system/wishlist/", tags = ['wishlist'])
+async def get_wishlist():
+    wishlist = system.get_wishlist()
+    if wishlist is not None:
+        return wishlist
+    else:
+        return {'GET WISHLIST':"can't get wishlist"}
+    
+@app.put("/system/wishlist/", tags = ['wishlist'])
+async def set_wishlist_item_amount(chosed_item:dict):
+    wishlist = system.get_wishlist()
+    if wishlist is None:
+        return {'GET WISHLIST':"can't get wishlist"}
+    for name, tool in system.category.search_by_name('').items():
+        if name == chosed_item['tool_name']:
+            wishlist.set_item_amount(tool,chosed_item['quantity'])
+            return {'SET ITEM':"Set item successfully"}
+    return {'SET ITEM':"Invalid Tool"}
+
+@app.delete("/system/wishlist/delete_wishlist/", tags= ['wishlist'])
+async def clear_wishlist():
+    wishlist = system.get_wishlist()
+    if wishlist is not None:
+        wishlist.clear_wishlist()
+        return {'CLEAR WISHLIST':"clear wishlist successfully"}
+    else:
+        return {'GET WISHLIST':"can't get wishlist"}
+
+@app.delete("/system/wishlist/delete_item/", tags= ['wishlist'])
+async def delete_item(chosed_item:dict):
+    wishlist = system.get_wishlist()
+    if wishlist is None:
+        return {'GET WISHLIST':"can't get wishlist"}
+    for name, tool in system.category.search_by_name('').items():
+        if name == chosed_item['tool_name']:
+            wishlist.delete_item(tool)
+            return {'DELETE ITEM':"delete item successfully"}
+    return {'DELETE ITEM':"Invalid Tool"}
+
+@app.post("/system/wishlist/send_to_cart", tags = ['wishlist'])
+async def wishlist_to_cart():
+    active_cart = system.get_active_cart()
+    customer_wishlist = system.get_wishlist()
+    status = system.wishlist_to_cart(customer_wishlist, active_cart)
+    if status == True:
+        return {'WISHLIST TO CART':"Send wishlist to cart successfully"}
+    else:
+        return {'WISHLIST TO CART':"Can't send wishlist to cart"}
 
 # LOGIN
 @app.post('/signup', summary="Create new user", response_model=dict)
