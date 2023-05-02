@@ -39,8 +39,6 @@ class Window(tk.Tk):
         pages_menu = tk.Menu(menubar, tearoff=0)
         pages_menu.add_command(label="Home", command=self.show_home)
         pages_menu.add_command(label="Search", command=self.show_search)
-        pages_menu.add_command(label="Login", command=self.show_login)
-        pages_menu.add_command(label="Sign Up", command=self.show_sign_up)
         # pages_menu.add_command(label="Create Address",command=self.show_create_address)
         # pages_menu.add_command(label="Edit and delete address",command=self.show_edit_address)
         pages_menu.add_command(label="Profile",command=self.show_profile)
@@ -72,14 +70,11 @@ class Window(tk.Tk):
         self.managetool_page = self.admin_page.managetool
         self.managecoupon_page = self.admin_page.managecoupon
         self.managewholesale_page = self.admin_page.managewholesale
-        self.create_cart_button()
-        self.create_admin_button()
-        self.create_refresh_button()
+        
         self.tool_data = self.get_tool_data()
         self.tool_widgets = [ ]
         self.make_all_tool_widget(self.get_tool_data())
         self.current_tool_widget = [ ]
-        self.current_home_widget = [self.cart_button,self.name,self.refresh_button] 
         self.random_tool_list = self.random_tool_to_show()
 
         self.tool_page = self.tool_widgets[0].tool_page
@@ -95,20 +90,24 @@ class Window(tk.Tk):
         self.image2_label = Label(self.home_page, image = self.image2)
         Label(self.home_page, image=self.image2).place(x=280, y=50)
         Label(self.home_page, text="30 days return", font=("Helvetica", 12)).place(x=300, y=210)
-        # Show the initial page
 
         self.image3 = self.get_image("https://cdn-icons-png.flaticon.com/512/649/649451.png?w=740&t=st=1682420117~exp=1682420717~hmac=9c97285763503fd2b3f9f47313bd2bf611bd598a64b4898c679bf95a2164bffc", 150, 150)
         self.image3_label = Label(self.home_page, image = self.image3)
         Label(self.home_page, image=self.image3).place(x=480, y=50)
         Label(self.home_page, text="wholesale price", font=("Helvetica", 12)).place(x=510, y=210)
-        # Show the initial page
 
         self.image4 = self.get_image("https://cdn-icons-png.flaticon.com/512/1175/1175149.png?w=740&t=st=1682420264~exp=1682420864~hmac=07b81a259160ed6af3e780639e51443439a980e4b926e81ed552e07f0a653679", 150, 150)
         self.image4_label = Label(self.home_page, image = self.image4)
         Label(self.home_page, image=self.image4).place(x=680, y=50)
         Label(self.home_page, text="wholesale price", font=("Helvetica", 12)).place(x=720, y=210)
-        # Show the initial page
 
+        self.create_login_button()
+        self.create_signup_button()
+        self.create_logout_button()
+        self.create_cart_button()
+        self.create_admin_button()
+        self.create_refresh_button()
+        # Show the initial page
         self.show_home()
 
     def make_tool_widget(self, name, image_link):
@@ -127,19 +126,35 @@ class Window(tk.Tk):
         for tool_widget in self.tool_widgets:
             if tool_widget.name == name:
                 return tool_widget
-        
+    def create_login_button(self):
+        self.login_button = tk.Button(self.home_page,text="Login",command=self.show_login)
+    def place_login_button(self):
+        self.login_button.place(x =690,y = 15)
+
+    def create_signup_button(self):
+        self.signup_button = tk.Button(self.home_page,text="Signup",command=self.show_sign_up)
+    def place_signup_button(self):
+        self.signup_button.place(x =740,y = 15)
+
+    def create_logout_button(self):
+        self.logout_button = tk.Button(self.home_page,text="Logout",command=self.login_page.do_logout)
+    def place_logout_button(self):
+        self.logout_button.place(x =740,y = 15)
+
     def create_cart_button(self): 
-        self.cart_button = tk.Button(self,text="cart",command=self.show_cart)
-        self.cart_button.pack()  
-        self.cart_button.place(x =600,y = 600)
+        self.cart_button = tk.Button(self.home_page,text="cart",command=self.show_cart)
+    def place_cart_button(self): 
+        self.cart_button.place(x =100,y = 15)
+
     def create_refresh_button(self): 
-        self.refresh_button = tk.Button(self,text="refresh",command=self.show_home) 
-        self.refresh_button.pack() 
-        self.refresh_button.place(x=400,y=600)
+        self.refresh_button = tk.Button(self.home_page,text="refresh",command=self.show_home) 
+    def place_refresh_button(self): 
+        self.refresh_button.place(x=145,y=15)
+
     def create_admin_button(self):
-        self.admin_button = tk.Button(self,text="admin",command=self.show_admin)
-        self.admin_button.pack()  
-        self.admin_button.place(x =500,y = 600)
+        self.admin_button = tk.Button(self.home_page,text="admin",command=self.show_admin)
+    def place_admin_button(self):  
+        self.admin_button.place(x =205,y = 15)
 
 
     def get_tool_data(self, name=''):
@@ -177,23 +192,32 @@ class Window(tk.Tk):
             row = 220 * (i//4)
             widget.set_coords(start_x+col, start_y+row)
     def show_home_widget(self):
-        self.delete_name()
-        self.name = tk.Label(self.home_page, text=self.first_name)
-        self.name.pack() 
-        self.name.place(x=800,y=20)
-        self.cart_button.pack(in_= self.home_page)
-        self.admin_button.pack(in_= self.home_page) 
-        self.refresh_button.pack(in_= self.home_page)
-        
+        self.update_home_name()
+        self.place_cart_button()
+        self.place_admin_button()
+        self.place_refresh_button()
+        if self.authority == "guest":
+            self.place_login_button()
+            self.place_signup_button()
+            self.logout_button.place_forget()
+        else:
+            self.login_button.pack_forget()
+            self.signup_button.pack_forget()
+            self.place_logout_button()
 
     def hide_home_widget(self): 
-        self.name.pack(in_=None)
-        self.cart_button.pack(in_=None)
-        self.admin_button.pack(in_=None)
-        self.refresh_button.pack(in_= None)
+        self.name.place_forget()
+        self.cart_button.place_forget()
+        self.admin_button.place_forget()
+        self.refresh_button.place_forget()
+        self.login_button.place_forget()
+        self.signup_button.place_forget()
+        self.logout_button.place_forget()
 
-    def delete_name(self):
-        self.name.destroy()
+    def update_home_name(self):
+        self.name.config(text=self.first_name)
+        self.name.pack()
+        self.name.place(x=800,y=15)
 
     def hide_tool_widget(self):
         for widget in self.current_tool_widget:
@@ -215,8 +239,7 @@ class Window(tk.Tk):
         self.show_tool()
 
     def show_home(self):  
-        self.first_name = self.first_name_user()
-        self.first_name = self.first_name["first_name"]
+        self.first_name = self.first_name_user()["first_name"]
         self.show_home_widget()
         # self.make_all_tool_widget(self.get_tool_data())
         self.tool_page.pack_forget()
@@ -239,6 +262,7 @@ class Window(tk.Tk):
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
         self.hide_tool_widget()
+        self.hide_home_widget()
         self.search_page.pack_forget()
         self.sign_up_page.pack_forget()
         self.make_review_page.pack_forget()
@@ -258,6 +282,7 @@ class Window(tk.Tk):
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
         self.hide_tool_widget()
+        self.hide_home_widget()
         self.search_page.pack_forget()
         self.sign_up_page.pack_forget()
         self.make_review_page.pack_forget()
@@ -275,6 +300,7 @@ class Window(tk.Tk):
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
         self.hide_tool_widget()
+        self.hide_home_widget()
         self.login_page.pack_forget()
         self.sign_up_page.pack_forget()
         self.cart_page.pack_forget()
@@ -291,6 +317,7 @@ class Window(tk.Tk):
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
         self.hide_tool_widget()
+        self.hide_home_widget()
         self.search_page.pack_forget()
         self.sign_up_page.pack_forget()
         self.cart_page.pack_forget()
@@ -306,6 +333,7 @@ class Window(tk.Tk):
     def show_tool(self): 
         self.home_page.pack_forget()
         self.hide_tool_widget()
+        self.hide_home_widget()
         self.search_page.pack_forget()
         self.sign_up_page.pack_forget()
         self.login_page.pack_forget()
@@ -323,6 +351,7 @@ class Window(tk.Tk):
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
         self.hide_tool_widget()
+        self.hide_home_widget()
         self.search_page.pack_forget()
         self.login_page.pack_forget()
         self.cart_page.pack_forget()
