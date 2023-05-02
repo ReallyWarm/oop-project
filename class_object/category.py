@@ -35,7 +35,7 @@ class Category:
         self._all_subtypes.append(subtype_of_tool)
 
     def subtype_name_add_tool(self, subtype_name:str, tool:'Tool') -> None:
-        subtype_of_tool = self.search_by_category(subtype_name)[subtype_name]
+        subtype_of_tool = self.search_by_subtype(subtype_name)[subtype_name]
         self.subtype_add_tool(subtype_of_tool, tool)
 
     def subtype_add_tool(self, subtype_of_tool:'SubtypeOfTool', tool:'Tool') -> None:
