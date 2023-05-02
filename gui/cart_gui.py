@@ -23,10 +23,11 @@ class CartGui(tk.Frame):
         self.makepayment_button = tk.Button(self,text="Make Payment",command=self.make_payment)
         self.makepayment_button.pack()
         self.makepayment_button.place(x=660,y=500)
-    def make_payment(self): 
-        self.master.show_payment()
+    def make_payment(self):
         self.makepayment.final_price = self.final_price
         self.makepayment.final_show = self.final_price
+        self.makepayment.update_payment()
+        self.master.show_payment()
     def update_data(self): 
         
         self.destroy_widget()

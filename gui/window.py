@@ -246,6 +246,7 @@ class Window(tk.Tk):
         self.make_review_page.pack(fill=tk.BOTH, expand=1)
 
     def show_profile(self):
+
         self.make_review_page.pack_forget()
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
@@ -260,6 +261,7 @@ class Window(tk.Tk):
         self.managetool_page.pack_forget()
         self.managecoupon_page.pack_forget() 
         self.managewholesale_page.pack_forget()
+        self.profile_page.show_profile()
         self.profile_page.pack(fill=tk.BOTH,expand=1)
     
     def show_search(self):
@@ -339,6 +341,7 @@ class Window(tk.Tk):
         self.managetool_page.pack_forget()
         self.managecoupon_page.pack_forget() 
         self.managewholesale_page.pack_forget()
+        self.cart_page.update_data()
         self.cart_page.pack(fill=tk.BOTH, expand=1)
     
     def show_admin(self): 

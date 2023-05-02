@@ -22,6 +22,7 @@ class ProfileGUI(tk.Frame):
     def show_edit_delete_address(self):
         self.user_profile.pack_forget()
         self.create_address.pack_forget()    
+        self.edit_delete_address.refresh_changes() 
         self.edit_delete_address.pack()
         
     def show_profile(self):

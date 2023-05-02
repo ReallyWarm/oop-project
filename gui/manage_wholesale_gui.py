@@ -22,7 +22,7 @@ class ManageWholesale(tk.Frame):
         self.back_to_admin_button.pack() 
         self.back_to_admin_button.place(x=800, y=5) 
 
-        self.upd_button = tk.Button(self,text="refresh",command=self.update_button)
+        self.upd_button = tk.Button(self,text="ส่งข้อมูล",command=self.update_button)
         self.upd_button.pack() 
         self.upd_button.place(x=800, y=50) 
         

@@ -291,6 +291,7 @@ class MakePayment(tk.Frame):
                     self.final_show = 0
                     self.choose_address = {}
                 messagebox.showinfo(title = "notification",message=message.json()["status"])
+                self.update_payment()
                 return 
         code  =  None
         card = sd.askstring("credit card", "Please enter credit card:") 
@@ -303,5 +304,6 @@ class MakePayment(tk.Frame):
             self.final_show = 0
             self.choose_address = {}
         messagebox.showinfo(title = "notification",message=message.json()["status"])
+        self.update_payment()
         return
     
