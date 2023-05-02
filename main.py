@@ -314,6 +314,14 @@ async def get_cart():
         return system.get_active_cart()
     else:
         return {'GET CART':"No active cart"}
+    
+@app.put("/system/shopping_cart/", tags = ['shopping_cart'])
+async def set_item_amount(chosed_item:dict):
+    for name, tool in system.category.search_by_name('').items():
+        if name == chosed_item['tool_name']:
+            system.get_active_cart().set_item_amount(tool,chosed_item['quantity'])
+            return {'SET ITEM':"Set item successfully"}
+    return {'SET ITEM':"Invalid Tool"}
 
 @app.delete("/system/shopping_cart/delete_cart/", tags= ['shopping_cart'])
 async def clear_cart():
