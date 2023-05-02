@@ -48,9 +48,14 @@ class Category:
         for type in self._all_types:
             if category_name_lower in type.typename.lower():
                 searched[type.typename] = type
-            
+
+        return searched
+
+    def search_by_subtype(self, subtype_name:str) -> dict:
+        searched = { }
+        subtype_name_lower = subtype_name.lower()  
         for subtype in self._all_subtypes:
-            if category_name_lower in subtype.subtypename.lower():
+            if subtype_name_lower in subtype.subtypename.lower():
                 searched[subtype.subtypename] = subtype
 
         return searched
