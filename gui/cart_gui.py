@@ -28,6 +28,9 @@ class CartGui(tk.Frame):
         if(self.master.authority == "guest"):
             messagebox.showinfo(title="notification",message="Please login first")
             return
+        if len(self.in_cart) == 0:
+            messagebox.showinfo(title="notification",message="Please add item first")
+            return
         self.makepayment.final_price = self.final_price 
         self.makepayment.final_show = self.final_price
         self.makepayment.update_payment()
