@@ -344,7 +344,7 @@ class Window(tk.Tk):
         self.managecoupon_page.pack_forget() 
         self.profile_page.pack_forget()
         self.managewholesale_page.pack_forget()
-        self.tool_page.pack(fill=tk.BOTH, expand=1)
+        self.tool_page.show_page()
 
     def show_sign_up(self):
         self.tool_page.pack_forget()

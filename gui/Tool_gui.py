@@ -1,6 +1,7 @@
 import tkinter as tk
 import requests, json
 from make_review import MakeReview
+from tkinter import messagebox
 import io
 import urllib.request 
 from PIL import Image, ImageTk
@@ -40,6 +41,17 @@ class Tool_GUI(tk.Frame) :
 
     def delete_amoung(self):
         self.chosen_amoung_lable.destroy()
+
+    def get_amoung(self):
+        name = self.name 
+        if ' ' in name : 
+            name = name.replace(' ','%20')
+        r = requests.get(f'http://127.0.0.1:8000/system/category/show_tools/?tool_name={self.name}')
+        self.tool_amoung = r.json()['tool amount']
+        if self.tool_amoung > 1:
+            self.chosen_amoung = 1
+        else:
+            self.chosen_amoung = 0
 
     def get_tool_details(self): 
         name = self.name 
@@ -134,6 +146,9 @@ class Tool_GUI(tk.Frame) :
             pass
 
     def add_tool_to_cart(self):
+        if self.tool_amoung <= 0:
+            messagebox.showinfo(title = "notification",message="Out of stock!")
+            return
         input_data = {"tool_name": self.tool_name, "quantity": self.chosen_amoung}
         r = requests.post(f'http://127.0.0.1:8000/system/shopping_cart/', json=input_data)
         self.delete_amoung()
@@ -156,6 +171,12 @@ class Tool_GUI(tk.Frame) :
         im = Image.open(io.BytesIO(raw_data))  # create a PIL Image object from the image data
         im = im.resize((width,height))
         return ImageTk.PhotoImage(im)
+    
+    def show_page(self):
+        self.get_amoung()
+        self.delete_amoung()
+        self.show_amoung()
+        self.pack(fill=tk.BOTH, expand=1)
     
     def Home(self):  
         self.master.show_home() 
