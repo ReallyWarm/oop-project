@@ -139,6 +139,7 @@ class ManageTool(tk.Frame):
             respon = json.loads(r.text)
             if respon == {'ADD Tool':"add tool successfully"}:
                 tk.messagebox.showinfo(title="ADD_TOOL Response", message="ADD Tool successfully added")
+                self.master.make_tool_widget(self.ent2.get(), self.ent6.get())
             elif respon =={'ADD Tool':"Already have this Tool"}:
                 tk.messagebox.showinfo(title="ADD_TOOL Response", message="Already have this Tool")
             print(respon)

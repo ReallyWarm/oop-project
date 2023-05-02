@@ -77,7 +77,7 @@ class Window(tk.Tk):
         self.create_refresh_button()
         self.tool_data = self.get_tool_data()
         self.tool_widgets = [ ]
-        self.make_tool_widget(self.get_tool_data())
+        self.make_all_tool_widget(self.get_tool_data())
         self.current_tool_widget = [ ]
         self.current_home_widget = [self.cart_button,self.name,self.refresh_button] 
         self.random_tool_list = self.random_tool_to_show()
@@ -111,16 +111,17 @@ class Window(tk.Tk):
 
         self.show_home()
 
-   
+    def make_tool_widget(self, name, image_link):
+        widget = ToolWidget(name=name, image=self.get_image(image_link,150,150), master=self)
+        widget.set_button_command(command=lambda w=widget:self.to_tool_page(w))
+        self.tool_widgets.append(widget)
 
-    def make_tool_widget(self, dict_json):
-        # print(self.first_name)
+    def make_all_tool_widget(self, dict_json):
+        self.tool_widgets.clear()
         for key, value in dict_json.items():
             name = key
-            image = self.get_image(value.get('_image')[0],150,150) 
-            widget = ToolWidget(name=name, image=image, master=self)
-            widget.set_button_command(command=lambda w=widget:self.to_tool_page(w))
-            self.tool_widgets.append(widget)
+            image = value.get('_image')[0]
+            self.make_tool_widget(name, image)
         
     def create_cart_button(self): 
         self.cart_button = tk.Button(self,text="cart",command=self.show_cart)
@@ -136,8 +137,8 @@ class Window(tk.Tk):
         self.admin_button.place(x =500,y = 600)
 
 
-    def get_tool_data(self):
-        return requests.get(f'http://127.0.0.1:8000/system/category/tools?search=').json()
+    def get_tool_data(self, name=''):
+        return requests.get(f'http://127.0.0.1:8000/system/category/tools?search={name}').json()
     
     def first_name_user(self): 
         user = requests.get("http://127.0.0.1:8000/me").json() 
@@ -167,8 +168,9 @@ class Window(tk.Tk):
         for i, widget in enumerate(self.current_tool_widget):
             widget.button.pack(in_=page)
             widget.description.pack(in_=page)
-            row = 400 * (i//4)
-            widget.set_coords(start_x+(i*200), start_y+row)
+            col = 200 * (i%4)
+            row = 220 * (i//4)
+            widget.set_coords(start_x+col, start_y+row)
     def show_home_widget(self):
         self.delete_name()
         self.name = tk.Label(self.home_page, text=self.first_name)
@@ -211,7 +213,7 @@ class Window(tk.Tk):
         self.first_name = self.first_name_user()
         self.first_name = self.first_name["first_name"]
         self.show_home_widget()
-        self.make_tool_widget(self.get_tool_data())
+        # self.make_all_tool_widget(self.get_tool_data())
         self.tool_page.pack_forget()
         self.search_page.pack_forget()
         self.login_page.pack_forget()
