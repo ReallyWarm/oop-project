@@ -59,3 +59,6 @@ class Wishlist:
 
     def calculate_price(self) -> None:
         self._total_price = sum([item.items_price for item in self._wish_product])
+
+    def __str__(self) -> str:
+        return str(self.__class__)+'\n'+', '.join(f'{key} : {value}' for key, value in self.__dict__.items())
