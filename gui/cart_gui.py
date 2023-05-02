@@ -146,7 +146,6 @@ class CartGui(tk.Frame):
         self.list_tool = []
         status = False
         for item in range(len(self.in_cart)):
-            print(item) 
             list_components= []
             self.item_info = self.in_cart[item]
             self.get_tool_info = self.item_info['_tool']
