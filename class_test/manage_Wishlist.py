@@ -32,7 +32,7 @@ if __name__ == '__main__':
     print(wishlist)
 
     # add to cart 
-    wishlist.add_item(wishlist.get_item(test_drill).tool, 20) 
+    wishlist.set_item_amount(test_drill, 20) 
     print(wishlist)
 
      # remove product 
