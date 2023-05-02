@@ -5,7 +5,7 @@ if TYPE_CHECKING:
     from order import Order
     from discount import Coupon
 from user import User
-from wishlish import Wishlist
+from wishlist import Wishlist
 from shoppingcart import ShoppingCart
 from address import Address
 from review import Review

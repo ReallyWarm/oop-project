@@ -1,6 +1,6 @@
 import sys
 sys.path.append('./class_object/')
-from wishlish import Wishlist
+from wishlist import Wishlist
 from category import TypeOfTool, SubtypeOfTool
 from tool import Tool
 from system import System 
