@@ -7,6 +7,7 @@ import json
 class ManageCoupon(tk.Frame): 
     def __init__(self,master): 
         super().__init__(master)
+        self.event = None
         self.coupon_list = []
         self.get_couponwidget = [] 
         self.add_couponwidget = []
@@ -21,14 +22,9 @@ class ManageCoupon(tk.Frame):
         self.back_to_admin_button = tk.Button(self,text="back",command=self.Back)
         self.back_to_admin_button.pack() 
         self.back_to_admin_button.place(x=800, y=5) 
-
-        self.upd_button = tk.Button(self,text="ส่งข้อมูล",command=self.update_button)
-        self.upd_button.pack() 
-        self.upd_button.place(x=800, y=50) 
         
     def get_coupon_info(self): 
         coupon_all = requests.get("http://127.0.0.1:8000/coupons/all").json()
-        # print(coupon_all)
         self.coupon_list = []
         for key in coupon_all: 
             components = [] 
@@ -66,7 +62,6 @@ class ManageCoupon(tk.Frame):
             widget.pack_forget()
     
     def modify_coupon(self,code,name,discount_value): 
-        # print(code)
         self.hide_getwidget() 
         self.create_modify_widget(code,name,discount_value) 
         self.show_modify() 
@@ -77,16 +72,24 @@ class ManageCoupon(tk.Frame):
         if not discount_value.isdigit(): 
             messagebox.showinfo(title="notification",message="discount_value must be integer")
             return
+        
+        if int(discount_value) <= 0 : 
+            messagebox.showinfo(title="notification",message="discount_value must be positive integer") 
+            return
         dict_put = {code:{"name":name,"discount_value":discount_value}}
         message = requests.put("http://127.0.0.1:8000/coupons/all",data=json.dumps(dict_put))
         # print(message.json())
         self.mname_label_input.delete(0,tk.END)
         self.mdiscount_label_input.delete(0,tk.END) 
+        self.get_coupon_info()
+        self.handle_selection(self.event)
 
         # print(code,name,discount_value)
     def delete_button(self,code):  
         dict_delete = {"code":code}
         message = requests.delete("http://127.0.0.1:8000/coupons/all",data=json.dumps(dict_delete))
+        self.get_coupon_info()
+        self.handle_selection(self.event)
         # print(message.json())
         # print("hi2",code)
 
@@ -97,7 +100,9 @@ class ManageCoupon(tk.Frame):
         if not discount_value.isdigit(): 
             messagebox.showinfo(title="notification",message="discount_value must be integer")
             return 
-        
+        if int(discount_value) <= 0 : 
+            messagebox.showinfo(title="notification",message="discount_value must be positive integer") 
+            return
         dict_add = {code:{"name":name, "discount_value":discount_value}}
         for coupon in self.coupon_list:  
             if coupon[0] == code : 
@@ -107,6 +112,7 @@ class ManageCoupon(tk.Frame):
         self.name_label_input.delete(0,tk.END) 
         self.code_label_input.delete(0,tk.END) 
         self.discount_label_input.delete(0,tk.END)
+        self.get_coupon_info()
         # print(message)
     
     
@@ -132,19 +138,16 @@ class ManageCoupon(tk.Frame):
         for i,m_widget in enumerate(self.modify_couponwidget): 
             m_widget.pack(in_ =self) 
             m_widget.place(x=300,y=100 + 50*i)
-    
-    def update_button(self): 
-        self.get_coupon_info()  
-        self.hide_add_coupon()
-        self.show_selected()
 
     def do_dropdown(self): 
         self.choice = tk.StringVar(self, value="chose to do")
         self.combo = ttk.Combobox(self, textvariable=self.choice)
         self.combo["values"] = ("add coupon","modify coupon")
+        self.combo.bind("<<ComboboxSelected>>",self.handle_selection)
         self.combo.place(x = 550, y = 50) 
     
-    def show_selected(self):
+    def handle_selection(self,event):
+        self.event = event
         print(self.choice.get())
         if self.choice.get() == "modify coupon":
             self.create_getcoupon_widget()

@@ -331,8 +331,9 @@ class Window(tk.Tk):
     
     def show_cart(self):
         if self.authority == "admin": 
-            self.show_home()
             messagebox.showinfo(title="notification", message="admin have no cart")
+            self.show_home()
+            return
         else : 
 
             self.hide_home_widget()
