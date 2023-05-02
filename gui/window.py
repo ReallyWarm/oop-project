@@ -154,6 +154,7 @@ class Window(tk.Tk):
                 self.authority = user['authority']
                 firstname = requests.get(f'http://127.0.0.1:8000/user/?username={username}').json()
                 return firstname
+        self.authority = "guest"
         return {"first_name":"guest"}
     def random_tool_to_show(self):
         random_tool = []
