@@ -54,8 +54,7 @@ class Wishlist:
         self.update_wish_items()
         for wish_item in self.wish_product:
             cart.add_by_item(wish_item)
-        self._wish_product.clear()
-        self.calculate_price()
+        self.clear_wishlist()
 
     def calculate_price(self) -> None:
         self._total_price = sum([item.items_price for item in self._wish_product])
