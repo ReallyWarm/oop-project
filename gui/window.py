@@ -59,7 +59,7 @@ class Window(tk.Tk):
         self.admin_page = AdminGui(self)
         self.cart_page = CartGui(self)
         self.search_page = SearchPage(link='category', search_type='Category', master=self)
-        self.search_page.add_new_search(link='category/tools', search_type='Tool')
+        self.search_page.add_new_search(link='category/subtype/tools', search_type='Tool')
         self.login_page = LoginPage(self)
         self.sign_up_page = SignupPage(self)
         
@@ -122,6 +122,11 @@ class Window(tk.Tk):
             name = key
             image = value.get('_image')[0]
             self.make_tool_widget(name, image)
+
+    def get_tool_widget(self, name):
+        for tool_widget in self.tool_widgets:
+            if tool_widget.name == name:
+                return tool_widget
         
     def create_cart_button(self): 
         self.cart_button = tk.Button(self,text="cart",command=self.show_cart)
@@ -138,7 +143,7 @@ class Window(tk.Tk):
 
 
     def get_tool_data(self, name=''):
-        return requests.get(f'http://127.0.0.1:8000/system/category/tools?search={name}').json()
+        return requests.get(f'http://127.0.0.1:8000/system/category/subtype/tools?search={name}').json()
     
     def first_name_user(self): 
         user = requests.get("http://127.0.0.1:8000/me").json() 
@@ -164,7 +169,6 @@ class Window(tk.Tk):
 
         self.hide_tool_widget()
         self.current_tool_widget = widgets_list
-        row = 0
         for i, widget in enumerate(self.current_tool_widget):
             widget.button.pack(in_=page)
             widget.description.pack(in_=page)
