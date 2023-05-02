@@ -25,7 +25,7 @@ class Window(tk.Tk):
         super().__init__(*args, **kwargs)
         self.geometry("900x700")
         self.resizable(False, False)
-        self.title("Login/Search App")
+        self.title("ดุดัน ไม่เกรงใจใคร ฟอร์ดเรนเจอร์แร็พเตอร์")
         self.photo = None 
 
         # Create the menu bar
@@ -470,7 +470,7 @@ class Window(tk.Tk):
         self.profile_page.pack_forget()
         self.managecoupon_page.pack_forget()
         self.managewholesale_page.pack(fill=tk.BOTH, expand=1)
-        
+
 if __name__ == "__main__":
     app = Window()
     app.mainloop()
