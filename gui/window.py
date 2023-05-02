@@ -10,6 +10,7 @@ from search_gui import SearchPage
 from PIL import Image, ImageTk  
 from Tool_gui import Tool_GUI
 from cart_gui import CartGui
+from wishlist_gui import WishlistGui
 from tool_widget import ToolWidget
 from admin_gui import AdminGui
 import random
@@ -52,6 +53,7 @@ class Window(tk.Tk):
 
         self.admin_page = AdminGui(self)
         self.cart_page = CartGui(self)
+        self.wishlist_page = WishlistGui(self)
         self.search_page = SearchPage(link='category', search_type='Category', master=self)
         self.search_page.add_new_search(link='category/subtype/tools', search_type='Tool')
         self.login_page = LoginPage(self)
@@ -68,6 +70,7 @@ class Window(tk.Tk):
         self.create_signup_button()
         self.create_logout_button()
         self.create_cart_button()
+        self.create_wishlist_button()
         self.create_admin_button()
         self.create_refresh_button()
         
@@ -147,15 +150,20 @@ class Window(tk.Tk):
     def place_cart_button(self): 
         self.cart_button.place(x =100,y = 15)
 
+    def create_wishlist_button(self): 
+        self.wishlist_button = tk.Button(self.home_page,text="wishlist",command=self.show_wishlist)
+    def place_wishlist_button(self): 
+        self.wishlist_button.place(x =145,y = 15)
+
     def create_refresh_button(self): 
         self.refresh_button = tk.Button(self.home_page,text="refresh",command=self.show_home) 
     def place_refresh_button(self): 
-        self.refresh_button.place(x=145,y=15)
+        self.refresh_button.place(x=205,y=15)
 
     def create_admin_button(self):
         self.admin_button = tk.Button(self.home_page,text="admin",command=self.show_admin)
     def place_admin_button(self):  
-        self.admin_button.place(x =205,y = 15)
+        self.admin_button.place(x =265,y = 15)
 
     def get_tool_data(self, name=''):
         return requests.get(f'http://127.0.0.1:8000/system/category/subtype/tools?search={name}').json()
@@ -195,6 +203,7 @@ class Window(tk.Tk):
     def show_home_widget(self):
         self.update_home_name()
         self.place_cart_button()
+        self.place_wishlist_button()
         self.place_admin_button()
         self.place_refresh_button()
         if self.authority == "guest":
@@ -250,6 +259,7 @@ class Window(tk.Tk):
         self.make_review_page.pack_forget()
         self.admin_page.pack_forget()
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.profile_page.pack_forget()
         self.managewholesale_page.pack_forget()
         self.home_page.pack(fill=tk.BOTH, expand=1)
@@ -268,6 +278,7 @@ class Window(tk.Tk):
         self.make_review_page.pack_forget()
         self.login_page.pack_forget()
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
         self.managetool_page.pack_forget()
@@ -287,6 +298,7 @@ class Window(tk.Tk):
         self.make_review_page.pack_forget()
         self.login_page.pack_forget()
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
         self.managetool_page.pack_forget()
@@ -303,6 +315,7 @@ class Window(tk.Tk):
         self.login_page.pack_forget()
         self.sign_up_page.pack_forget()
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
         self.managetool_page.pack_forget()
@@ -320,6 +333,7 @@ class Window(tk.Tk):
         self.search_page.pack_forget()
         self.sign_up_page.pack_forget()
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.make_review_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
@@ -337,6 +351,7 @@ class Window(tk.Tk):
         self.sign_up_page.pack_forget()
         self.login_page.pack_forget()
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.make_review_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
@@ -354,6 +369,7 @@ class Window(tk.Tk):
         self.search_page.pack_forget()
         self.login_page.pack_forget()
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.make_review_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
@@ -384,10 +400,37 @@ class Window(tk.Tk):
             self.managewholesale_page.pack_forget()
             self.cart_page.update_data()
             self.cart_page.pack(fill=tk.BOTH, expand=1)
+
+    def show_wishlist(self):
+        if self.authority == "admin": 
+            messagebox.showinfo(title="notification", message="admin have no wishlist")
+            self.show_home()
+            return
+        elif self.authority == "guest": 
+            messagebox.showinfo(title="notification", message="guest have no wishlist")
+            self.show_home()
+            return
+        else : 
+            self.hide_home_widget()
+            self.sign_up_page.pack_forget()
+            self.tool_page.pack_forget()
+            self.home_page.pack_forget()
+            self.hide_tool_widget()
+            self.search_page.pack_forget()
+            self.login_page.pack_forget()
+            self.make_review_page.pack_forget()
+            self.make_payment_page.pack_forget()
+            self.admin_page.pack_forget()
+            self.managetool_page.pack_forget()
+            self.managecoupon_page.pack_forget() 
+            self.managewholesale_page.pack_forget()
+            self.cart_page.pack_forget()
+            self.wishlist_page.show_page()
     
     def show_admin(self): 
         if self.authority == "admin":
             self.cart_page.pack_forget()
+            self.wishlist_page.pack_forget()
             self.hide_home_widget()
             self.sign_up_page.pack_forget()
             self.tool_page.pack_forget()
@@ -407,6 +450,7 @@ class Window(tk.Tk):
     
     def show_payment(self):
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.hide_home_widget()
         self.sign_up_page.pack_forget()
         self.tool_page.pack_forget()
@@ -423,6 +467,7 @@ class Window(tk.Tk):
 
     def show_managetool(self): 
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.hide_home_widget()
         self.sign_up_page.pack_forget()
         self.tool_page.pack_forget()
@@ -439,6 +484,7 @@ class Window(tk.Tk):
 
     def show_managecoupon(self): 
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.hide_home_widget()
         self.sign_up_page.pack_forget()
         self.tool_page.pack_forget()
@@ -456,6 +502,7 @@ class Window(tk.Tk):
     
     def show_managewholesale(self): 
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.hide_home_widget()
         self.sign_up_page.pack_forget()
         self.tool_page.pack_forget()

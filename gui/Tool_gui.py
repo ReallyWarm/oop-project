@@ -29,6 +29,9 @@ class Tool_GUI(tk.Frame) :
         self.add_to_cart_button = tk.Button(self,text="add to cart",command=self.add_tool_to_cart)
         self.add_to_cart_button.pack()
         self.add_to_cart_button.place(x=180,y=450)
+        self.add_to_wishlist_button = tk.Button(self,text="add to wishlist",command=self.add_tool_to_wishlist)
+        self.add_to_wishlist_button.pack()
+        self.add_to_wishlist_button.place(x=180,y=475)
         self.decresse_amoung_button = tk.Button(self,text="-",command=self.decresse_amoung, font=("Helvetica", 24))
         self.decresse_amoung_button.pack()
         self.decresse_amoung_button.place(x=310,y=400)
@@ -154,7 +157,17 @@ class Tool_GUI(tk.Frame) :
         self.delete_amoung()
         self.chosen_amoung = 1
         self.show_amoung()
-        
+    
+    def add_tool_to_wishlist(self):
+        if self.tool_amoung <= 0:
+            messagebox.showinfo(title = "notification",message="Out of stock!")
+            return
+        input_data = {"tool_name": self.tool_name, "quantity": self.chosen_amoung}
+        r = requests.post(f'http://127.0.0.1:8000/system/wishlist/', json=input_data)
+        print(r.json())
+        self.delete_amoung()
+        self.chosen_amoung = 1
+        self.show_amoung()
 
     def decresse_amoung(self):
         if self.chosen_amoung > 1:
