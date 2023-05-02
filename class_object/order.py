@@ -19,50 +19,50 @@ class Order:
         self._delivery_time = delivery_time        
 
     @property
-    def orders(self):
+    def orders(self) -> list:
         return self._orders
     
     @property
-    def payment_id(self):
+    def payment_id(self) -> str:
         return self._payment_id
     
     @property
-    def payment_date(self):
+    def payment_date(self) -> datetime:
         return self._payment_date
     
     @property
-    def total_price(self):
+    def total_price(self) -> float:
         return self._total_price
     
     @property
-    def shipping_price(self):
+    def shipping_price(self) -> float:
         return self._shipping_price
     
     @property
-    def discount_price(self):
+    def discount_price(self) -> float:
         return self._discount_price
     
     @property
-    def final_price(self):
+    def final_price(self) -> float:
         return self._final_price
     
     @property
-    def address(self):
+    def address(self) -> 'Address':
         return self._address
     
     @property
-    def shipment(self):
+    def shipment(self) -> str:
         return self._shipment
     
     @property
-    def status(self):
+    def status(self) -> str:
         return self._status
     
     @property
-    def delivery_time(self):
+    def delivery_time(self) -> datetime:
         return self._delivery_time
 
-    def update_order(self, status:str='In the delivery process', delivery_time:datetime=datetime.now()):
+    def update_order(self, status:str='In the delivery process', delivery_time:datetime=datetime.now()) -> None:
         self._status = status
         self._delivery_time = delivery_time
 

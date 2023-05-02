@@ -53,7 +53,7 @@ class System():
         except:
             return self._system_cart
     
-    def search_user(self, username:str) -> 'CustomerInfo' or 'Admin':
+    def search_user(self, username:str) -> 'CustomerInfo' | 'Admin':
         for user in self._customerinfos:
             if user.username == username:
                 return user
@@ -71,16 +71,16 @@ class System():
             if coupon.code == coupon_code: 
                 return coupon
             
-    def get_current_user(self):
+    def get_current_user(self) -> dict:
         return self._authentication.get_current_user()
             
-    def get_login(self):
+    def get_login(self) -> 'CustomerInfo' | 'Admin':
         login_user = self.get_current_user()
         user_name = login_user.get('user')
         current_user = self.search_user(user_name)
         return current_user
     
-    def check_admin(self):
+    def check_admin(self) -> bool:
         user = self.get_current_user()
         admin_username = user.get('user')
         for admin in self._admins:
@@ -145,11 +145,11 @@ class System():
                 self._server_coupons.remove(coupon) 
                 return
             
-    def create_tool(self, product_code, tool_name, tool_description, tool_brand, tool_amount, tool_image, tool_price, subtype_of_tool):
+    def create_tool(self, product_code, tool_name, tool_description, tool_brand, tool_amount, tool_image, tool_price, subtype_of_tool) -> None:
         new_tool = Tool(product_code, tool_name, tool_description, tool_brand, tool_amount, tool_image, tool_price, subtype_of_tool)
         self._category.subtype_name_add_tool(subtype_of_tool, new_tool)
         
-    def delete_tool(self, tool):
+    def delete_tool(self, tool) -> None:
         for tool_in_list in self._category._all_tools: 
             if tool_in_list.name == tool.name:
                 self._category._all_tools.remove(tool_in_list)

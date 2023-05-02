@@ -10,14 +10,14 @@ class Wishlist:
         self._total_price = 0.00
 
     @property
-    def total_price(self): 
+    def total_price(self) -> float: 
         return self._total_price
     
     @property
     def wish_product(self) -> list:
         return self._wish_product
     
-    def get_item(self, tool:'Tool') -> 'Item' or None:
+    def get_item(self, tool:'Tool') -> 'Item' | None:
         for wish_item in self.wish_product:
             if tool is wish_item.tool:
                 return wish_item
@@ -56,5 +56,5 @@ class Wishlist:
         self._wish_product.clear()
         self.calculate_price()
 
-    def calculate_price(self):
+    def calculate_price(self) -> None:
         self._total_price = sum([item.items_price for item in self._wish_product])

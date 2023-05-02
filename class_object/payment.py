@@ -14,27 +14,27 @@ class Payment:
         self.__final_price = self.__total_price + shipping_price - self.__discount_price
 
     @property
-    def total_price(self):
+    def total_price(self) -> float:
         return self.__total_price
     
     @property
-    def shipping_price(self):
+    def shipping_price(self) -> float:
         return self.__shipping_price
     
     @property
-    def discount_price(self):
+    def discount_price(self) -> float:
         return self.__discount_price
     
     @property
-    def final_price(self):
+    def final_price(self) -> float:
         return self.__final_price
     
     @property
-    def date_create(self):
+    def date_create(self) -> datetime:
         return self.__date_create
     
     @property
-    def payment_id(self):
+    def payment_id(self) -> str:
         return self.__id
         
     def make_payment(self):
@@ -55,5 +55,5 @@ class Payment:
         ''' do payment stuff here but we this is just for demo purposes'''
         return True
         
-    def create_order(self, order_items, address):
+    def create_order(self, order_items, address) -> 'Order':
         return Order(order_items, self.__id, self.__date_create, self.__total_price, self.__shipping_price, self.__discount_price, self.__final_price, address)

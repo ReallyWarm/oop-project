@@ -26,7 +26,7 @@ class ShoppingCart:
     def cart(self) -> list:
         return self._cart
     
-    def get_item(self, tool:'Tool') -> 'Item' or None:
+    def get_item(self, tool:'Tool') -> 'Item' | None:
         for cart_item in self.cart:
             if tool is cart_item.tool:
                 return cart_item

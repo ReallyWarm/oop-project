@@ -1,11 +1,12 @@
 import os
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
-
-from user import User
-
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
+
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from user import User
 
 class Authenticate():
     os.environ['API_TOKEN'] = ''
