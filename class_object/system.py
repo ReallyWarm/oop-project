@@ -4,6 +4,7 @@ if TYPE_CHECKING:
     from customerinfo import CustomerInfo
 from category import Category
 from shoppingcart import ShoppingCart
+from wishlist import Wishlist
 from discount import Coupon, Wholesale
 from tool import Tool
 from admin import Admin
@@ -52,6 +53,13 @@ class System():
             return current_user.my_shoppingcart
         except:
             return self._system_cart
+        
+    def get_wishlist(self) -> Wishlist | None:
+        try:
+            current_user = self.get_login()
+            return current_user.my_wishlist
+        except:
+            return None
     
     def search_user(self, username:str) -> CustomerInfo | Admin:
         for user in self._customerinfos:
@@ -94,6 +102,21 @@ class System():
             return "Item amount exceeds the available tool in stock"
         else:
             active_cart.add_item(tool, buy_amount)
+
+    def add_to_wishlist(self, tool:Tool, buy_amount:int):
+        customer_wishlist = self.get_wishlist()
+        if customer_wishlist is None:
+            return "Can not get wishlist"
+        elif tool.amount < buy_amount:
+            return "Item amount exceeds the available tool in stock"
+        else:
+            customer_wishlist.add_item(tool, buy_amount)
+
+    def wishlist_to_cart(self, wishlist:Wishlist, cart:ShoppingCart) -> bool:
+        if wishlist is not None and cart is not None:
+            wishlist.send_to_cart(cart)
+            return True
+        return False
 
     def add_admin(self, admin:Admin) -> None:
         self._admins.append(admin)
