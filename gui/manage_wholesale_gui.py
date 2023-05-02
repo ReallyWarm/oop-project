@@ -7,6 +7,7 @@ import json
 class ManageWholesale(tk.Frame): 
     def __init__(self,master): 
         super().__init__(master)
+        self.event = None
         self.wholeale_list = []
         self.get_wholesalewidget = [] 
         self.add_wholesalewidget = []
@@ -22,9 +23,6 @@ class ManageWholesale(tk.Frame):
         self.back_to_admin_button.pack() 
         self.back_to_admin_button.place(x=800, y=5) 
 
-        self.upd_button = tk.Button(self,text="ส่งข้อมูล",command=self.update_button)
-        self.upd_button.pack() 
-        self.upd_button.place(x=800, y=50) 
         
     def get_wholesale_info(self): 
         wholesale_all = requests.get("http://127.0.0.1:8000/wholesale/all").json()
@@ -78,21 +76,29 @@ class ManageWholesale(tk.Frame):
         if not discount_value.isdigit(): 
             messagebox.showinfo(title="notification",message="discount_value must be integer")
             return 
+        if int(discount_value) <= 0 : 
+            messagebox.showinfo(title="notification",message="discount_value must be positive integer") 
+            return
         if not amount.isdigit(): 
             messagebox.showinfo(title="notification",message="amount must be integer")
             return  
+        if int(amount) <= 0 : 
+            messagebox.showinfo(title="notification",message="amount must be positive integer") 
+            return
         dict_put = {"wholesale_modify":{"code":code,"amount":amount,"discount_value":discount_value}}
         message = requests.put("http://127.0.0.1:8000/wholesale/all",data=json.dumps(dict_put))
         # print(message.json())
         self.mamount_label_input.delete(0,tk.END)
         self.mdiscount_label_input.delete(0,tk.END) 
+        self.get_wholesale_info() 
+        self.show_selected(self.event)
 
         # print(code,name,discount_value)
     def delete_button(self,code):  
         dict_delete = {"code":code}
         message = requests.delete("http://127.0.0.1:8000/wholesale/all",data=json.dumps(dict_delete))
-        # print(message.json())
-        # print("hi2",code)
+        self.get_wholesale_info() 
+        self.show_selected(self.event)
 
     def submit_button(self):  
         amount = self.amount_label_input.get() 
@@ -101,9 +107,15 @@ class ManageWholesale(tk.Frame):
         if not discount_value.isdigit(): 
             messagebox.showinfo(title="notification",message="discount_value must be integer")
             return 
+        if int(discount_value) <= 0 : 
+            messagebox.showinfo(title="notification",message="discount_value must be positive integer") 
+            return
         if not amount.isdigit(): 
             messagebox.showinfo(title="notification",message="amount must be integer")
             return 
+        if int(amount) <= 0 : 
+            messagebox.showinfo(title="notification",message="amount must be positive integer") 
+            return
         dict_add = {"wholesale_add":{"code":code, "amount":amount,"discount_value":discount_value}}
         for wholesale in self.wholesale_list:  
             if wholesale[0] == code : 
@@ -113,6 +125,7 @@ class ManageWholesale(tk.Frame):
         self.amount_label_input.delete(0,tk.END) 
         self.code_label_input.delete(0,tk.END) 
         self.discount_label_input.delete(0,tk.END)
+        self.get_wholesale_info() 
         # print(message)
     
     
@@ -138,19 +151,17 @@ class ManageWholesale(tk.Frame):
         for i,m_widget in enumerate(self.modify_wholesalewidget): 
             m_widget.pack(in_ =self) 
             m_widget.place(x=300,y=100 + 50*i)
-    
-    def update_button(self): 
-        self.get_wholesale_info()  
-        self.hide_add_wholesale()
-        self.show_selected()
 
     def do_dropdown(self): 
         self.choice = tk.StringVar(self, value="chose to do")
         self.combo = ttk.Combobox(self, textvariable=self.choice)
         self.combo["values"] = ("add wholesale","modify wholesale")
+        self.combo.bind("<<ComboboxSelected>>",self.show_selected)
         self.combo.place(x = 550, y = 50) 
+
     
-    def show_selected(self):
+    def show_selected(self,event):
+        self.event = event
         print(self.choice.get())
         if self.choice.get() == "modify wholesale":
             self.create_getwholesale_widget()
