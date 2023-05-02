@@ -1,11 +1,12 @@
-from datetime import datetime
+from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from address import Address
+from datetime import datetime
 
 class Order:
     def __init__(self, orders:list, payment_id:str, payment_date:datetime, total_price:float, shipping_price:float, discount_price:float, final_price:float, 
-                 address:'Address', shipment:str='EMS', status:str='In the product management process.', delivery_time:datetime=None) -> None:
+                 address:Address, shipment:str='EMS', status:str='In the product management process.', delivery_time:datetime=None) -> None:
         self._orders = orders
         self._payment_id = payment_id
         self._payment_date = payment_date
@@ -47,7 +48,7 @@ class Order:
         return self._final_price
     
     @property
-    def address(self) -> 'Address':
+    def address(self) -> Address:
         return self._address
     
     @property

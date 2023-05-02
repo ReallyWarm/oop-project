@@ -1,8 +1,9 @@
-from tool import Item
+from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from tool import Tool
     from shoppingcart import ShoppingCart
+from tool import Item
 
 class Wishlist:
     def __init__(self) -> None:
@@ -17,7 +18,7 @@ class Wishlist:
     def wish_product(self) -> list:
         return self._wish_product
     
-    def get_item(self, tool:'Tool') -> 'Item' | None:
+    def get_item(self, tool:'Tool') -> 'Item' or None:
         for wish_item in self.wish_product:
             if tool is wish_item.tool:
                 return wish_item

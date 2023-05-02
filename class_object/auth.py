@@ -1,12 +1,13 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from user import User
+
 import os
 from fastapi import HTTPException, status
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from passlib.context import CryptContext
-
-from typing import TYPE_CHECKING
-if TYPE_CHECKING:
-    from user import User
 
 class Authenticate():
     os.environ['API_TOKEN'] = ''

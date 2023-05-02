@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from discount import Wholesale
@@ -28,7 +29,7 @@ class Tool:
     def wholesales(self) -> list:
         return self._wholesale
     
-    def add_wholesale(self, wholesale:'Wholesale') -> None:
+    def add_wholesale(self, wholesale:Wholesale) -> None:
         self._wholesale.append(wholesale)
 
     @property
@@ -63,7 +64,7 @@ class Tool:
     def amount(self, value) -> None:
         self._amount = value
     
-    def add_review(self, review:'Review') -> None:
+    def add_review(self, review:Review) -> None:
         self._reviews.append(review)
         self.__n_review += 1
         self.__rated_review += review._rating
@@ -99,7 +100,7 @@ class Tool:
         return str(self.__class__)+'\n'+', '.join(f'{key} : {value}' for key, value in self.__dict__.items())
 
 class Item:
-    def __init__(self, tool:'Tool', buy_amount:int) -> None: 
+    def __init__(self, tool:Tool, buy_amount:int) -> None: 
         self._tool = tool
         self._buy_amount = buy_amount
         self._items_price = 0.00
@@ -107,7 +108,7 @@ class Item:
         self.update_item()
 
     @property
-    def tool(self) -> 'Tool':
+    def tool(self) -> Tool:
         return self._tool
     
     @property
@@ -126,7 +127,7 @@ class Item:
         self._buy_amount = amount
         self.update_item()
 
-    def find_wholesale(self) -> None | 'Wholesale':
+    def find_wholesale(self) -> Wholesale | None:
         tool_wholesale = None
         last_amount = 0
         for wholesale in self.tool.wholesales:

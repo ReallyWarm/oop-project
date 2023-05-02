@@ -1,7 +1,8 @@
-from tool import Item
+from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from tool import Tool
+from tool import Item
 
 class ShoppingCart: 
     def __init__(self) -> None:
@@ -26,13 +27,13 @@ class ShoppingCart:
     def cart(self) -> list:
         return self._cart
     
-    def get_item(self, tool:'Tool') -> 'Item' | None:
+    def get_item(self, tool:Tool) -> Item | None:
         for cart_item in self.cart:
             if tool is cart_item.tool:
                 return cart_item
         return None
 
-    def add_item(self, tool:'Tool', buy_amount:int) -> None:
+    def add_item(self, tool:Tool, buy_amount:int) -> None:
         cart_item = self.get_item(tool)
         if cart_item is not None:
             cart_item.set_buy_amount(buy_amount)
@@ -40,7 +41,7 @@ class ShoppingCart:
             self._cart.append(Item(tool, buy_amount))
         self.calculate_price()
 
-    def add_by_item(self, item:'Item') -> None:
+    def add_by_item(self, item:Item) -> None:
         cart_item = self.get_item(item.tool)
         if cart_item is not None:
             cart_item.set_buy_amount(item.buy_amount)
@@ -48,12 +49,12 @@ class ShoppingCart:
             self._cart.append(item)
         self.calculate_price()
         
-    def set_item_amount(self, tool:'Tool', buy_amount:int) -> None:
+    def set_item_amount(self, tool:Tool, buy_amount:int) -> None:
         item = self.get_item(tool)
         item.set_buy_amount(buy_amount)
         self.calculate_price()
 
-    def delete_item(self, tool:'Tool') -> None:
+    def delete_item(self, tool:Tool) -> None:
         item = self.get_item(tool)
         self._cart.remove(item)
         self.calculate_price()
