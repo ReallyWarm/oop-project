@@ -44,15 +44,11 @@ class Window(tk.Tk):
         pages_menu.add_command(label="Profile",command=self.show_profile)
         menubar.add_cascade(label="Pages", menu=pages_menu)
 
-
         # Create the account bar
 
         # Create the pages
         self.home_page = tk.Frame(self)
-        tk.Label(self.home_page, text="This is the Home page").pack()
-        tk.Label(self.home_page, text="Recommended Tools", font=("Helvetica", 30)).place(x=260, y=280)
-        self.name = tk.Label(self.home_page, text=self.first_name)
-
+        self.create_home_page()
 
         self.admin_page = AdminGui(self)
         self.cart_page = CartGui(self)
@@ -60,17 +56,22 @@ class Window(tk.Tk):
         self.search_page.add_new_search(link='category/subtype/tools', search_type='Tool')
         self.login_page = LoginPage(self)
         self.sign_up_page = SignupPage(self)
-        
-    
         self.profile_page = ProfileGUI(self)
-      
-
 
         self.make_payment_page = self.cart_page.makepayment
         self.managetool_page = self.admin_page.managetool
         self.managecoupon_page = self.admin_page.managecoupon
         self.managewholesale_page = self.admin_page.managewholesale
+
+        # Create home page button
+        self.create_login_button()
+        self.create_signup_button()
+        self.create_logout_button()
+        self.create_cart_button()
+        self.create_admin_button()
+        self.create_refresh_button()
         
+        # Make tool widget
         self.tool_data = self.get_tool_data()
         self.tool_widgets = [ ]
         self.make_all_tool_widget(self.get_tool_data())
@@ -79,6 +80,14 @@ class Window(tk.Tk):
 
         self.tool_page = self.tool_widgets[0].tool_page
         self.make_review_page = self.tool_widgets[0].make_review_page
+
+        # Show the initial page
+        self.show_home()
+
+    def create_home_page(self):
+        tk.Label(self.home_page, text="This is the Home page").pack()
+        tk.Label(self.home_page, text="Recommended Tools", font=("Helvetica", 30)).place(x=260, y=280)
+        self.name = tk.Label(self.home_page, text=self.first_name)
 
         self.image1 = self.get_image("https://cdn-icons-png.flaticon.com/512/649/649438.png?w=740&t=st=1682418903~exp=1682419503~hmac=9f666ca6e05c302741f8531345f3fc24865b0a54bd5eed15bd969a63e2e7f431", 150, 150)
         self.image1_label = Label(self.home_page, image = self.image1)
@@ -101,15 +110,6 @@ class Window(tk.Tk):
         Label(self.home_page, image=self.image4).place(x=680, y=50)
         Label(self.home_page, text="wholesale price", font=("Helvetica", 12)).place(x=720, y=210)
 
-        self.create_login_button()
-        self.create_signup_button()
-        self.create_logout_button()
-        self.create_cart_button()
-        self.create_admin_button()
-        self.create_refresh_button()
-        # Show the initial page
-        self.show_home()
-
     def make_tool_widget(self, name, image_link):
         widget = ToolWidget(name=name, image=self.get_image(image_link,150,150), master=self)
         widget.set_button_command(command=lambda w=widget:self.to_tool_page(w))
@@ -126,6 +126,7 @@ class Window(tk.Tk):
         for tool_widget in self.tool_widgets:
             if tool_widget.name == name:
                 return tool_widget
+            
     def create_login_button(self):
         self.login_button = tk.Button(self.home_page,text="Login",command=self.show_login)
     def place_login_button(self):
@@ -156,7 +157,6 @@ class Window(tk.Tk):
     def place_admin_button(self):  
         self.admin_button.place(x =205,y = 15)
 
-
     def get_tool_data(self, name=''):
         return requests.get(f'http://127.0.0.1:8000/system/category/subtype/tools?search={name}').json()
     
@@ -171,6 +171,7 @@ class Window(tk.Tk):
                 return firstname
         self.authority = "guest"
         return {"first_name":"guest"}
+    
     def random_tool_to_show(self):
         random_tool = []
         while len(random_tool) < 4:
@@ -191,6 +192,7 @@ class Window(tk.Tk):
             col = 200 * (i%4)
             row = 220 * (i//4)
             widget.set_coords(start_x+col, start_y+row)
+
     def show_home_widget(self):
         self.update_home_name()
         self.place_cart_button()
@@ -256,7 +258,6 @@ class Window(tk.Tk):
         self.managetool_page.pack_forget()
         self.managecoupon_page.pack_forget() 
         self.show_tool_widget(self.random_tool_list, start_x=75, start_y=350)
-
         
     def show_review(self): 
         self.tool_page.pack_forget()
@@ -277,7 +278,6 @@ class Window(tk.Tk):
         self.make_review_page.pack(fill=tk.BOTH, expand=1)
 
     def show_profile(self):
-
         self.make_review_page.pack_forget()
         self.tool_page.pack_forget()
         self.home_page.pack_forget()
@@ -471,6 +471,7 @@ class Window(tk.Tk):
         self.profile_page.pack_forget()
         self.managecoupon_page.pack_forget()
         self.managewholesale_page.pack(fill=tk.BOTH, expand=1)
+        
 if __name__ == "__main__":
     app = Window()
     app.mainloop()
