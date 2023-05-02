@@ -37,7 +37,11 @@ async def add_subtypeoftool(subtype_data:dict):
 async def search_category(search:str=''):
     return system.category.search_by_category(search)
 
-@app.get("/system/category/tools/")
+@app.get("/system/category/subtype/")
+async def search_category(search:str=''):
+    return system.category.search_by_subtype(search)
+
+@app.get("/system/category/subtype/tools/")
 async def search_category(search:str=''):
     return system.category.search_by_name(search)
 
@@ -61,7 +65,7 @@ async def get_tool(tool_name:str):
                     }
     return {'GET Tool':'Invalid Tool'}
 
-@app.post("/system/category/tools/", tags = ['Manage Tool'])
+@app.post("/system/category/subtype/tools/", tags = ['Manage Tool'])
 async def add_tool(tool_data:dict):
     for name, tool in system.category.search_by_name('').items():
         if tool_data["tool_name"] == name:
@@ -70,7 +74,7 @@ async def add_tool(tool_data:dict):
                        tool_data["tool_amount"], tool_data["tool_image"], tool_data["tool_price"], tool_data['tool_category'])
     return {'ADD Tool':"add tool successfully"}
 
-@app.put("/system/category/tools/", tags = ['Manage Tool'])
+@app.put("/system/category/subtype/tools/", tags = ['Manage Tool'])
 async def modify_tool(changing_tool_data:dict):
     print(changing_tool_data["tool_name"])
     print("------------------------------------------------------")
@@ -86,7 +90,7 @@ async def modify_tool(changing_tool_data:dict):
             return {'MODIFY Tool':"change tool infomation successfully"}        
     return {'MODIFY Tool':'Invalid Tool'}
 
-@app.delete("/system/category/tools/", tags = ['Manage Tool'])
+@app.delete("/system/category/subtype/tools/", tags = ['Manage Tool'])
 async def delete_tool(deleting_tool:str):
     for name, tool in system.category.search_by_name('').items():
         if name == deleting_tool:

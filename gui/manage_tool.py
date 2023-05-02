@@ -135,7 +135,7 @@ class ManageTool(tk.Frame):
 	            "tool_category": self.ent8.get()
             }
 
-            r = requests.post("http://127.0.0.1:8000/system/category/tools/", json=input_data)
+            r = requests.post("http://127.0.0.1:8000/system/category/subtype/tools/", json=input_data)
             respon = json.loads(r.text)
             if respon == {'ADD Tool':"add tool successfully"}:
                 tk.messagebox.showinfo(title="ADD_TOOL Response", message="ADD Tool successfully added")
@@ -279,7 +279,7 @@ class ManageTool(tk.Frame):
 	            "tool_category": self.ent8.get()
             }
 
-            r = requests.put("http://127.0.0.1:8000/system/category/tools/", json=input_data)
+            r = requests.put("http://127.0.0.1:8000/system/category/subtype/tools/", json=input_data)
             respon = json.loads(r.text)
             if respon == {"MODIFY Tool": "change tool infomation successfully"}:
                 tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="MODIFY Tool successfully")
@@ -379,7 +379,7 @@ class ManageTool(tk.Frame):
         # self.status = "writed"
 
     def delete_tool(self):
-        r = requests.delete(f'http://127.0.0.1:8000/system/category/tools/?deleting_tool={self.tool_name}')
+        r = requests.delete(f'http://127.0.0.1:8000/system/category/subtype/tools/?deleting_tool={self.tool_name}')
         respon = json.loads(r.text)
         if respon == {'DELETE Tool':"delete tool successfully"}:
             tk.messagebox.showinfo(title="DELETE_TOOL Response", message="delete tool successfully")

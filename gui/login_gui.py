@@ -23,9 +23,6 @@ class LoginPage(tk.Frame):
         self.login_button = tk.Button(self, text="Login", command=self.do_login)
         self.login_button.pack()
 
-        self.logout_button = tk.Button(self, text="Logout", command=self.do_logout)
-        self.logout_button.pack()
-
         self.all_entry = []
         self.all_entry.extend([self.username_entry, self.password_entry])
 
