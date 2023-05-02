@@ -127,6 +127,7 @@ class Tool_GUI(tk.Frame) :
 
     def incresse_amoung(self):
         if self.tool_amoung > self.chosen_amoung:
+            self.delete_amoung()
             self.chosen_amoung += 1
             self.show_amoung()
             #print("added")
@@ -143,7 +144,8 @@ class Tool_GUI(tk.Frame) :
         
 
     def decresse_amoung(self):
-        if self.chosen_amoung > 0:
+        if self.chosen_amoung > 1:
+            self.delete_amoung()
             self.chosen_amoung -= 1
             self.show_amoung()
         else:
