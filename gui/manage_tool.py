@@ -207,6 +207,7 @@ class ManageTool(tk.Frame):
         if ' ' in self.input_name : 
             self.input_name = self.input_name.replace(' ','%20')
         r = requests.get(f'http://127.0.0.1:8000/system/category/show_tools/?tool_name={self.input_name}')
+        print(r.json())
         respon = json.loads(r.text)
         if respon == {'GET Tool':'Invalid Tool'}:
             tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="WRONG NAME INPUT")
@@ -283,6 +284,8 @@ class ManageTool(tk.Frame):
             respon = json.loads(r.text)
             if respon == {"MODIFY Tool": "change tool infomation successfully"}:
                 tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="MODIFY Tool successfully")
+            elif respon == {'MODIFY Tool':'do not have this type of tool'}:
+                tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="MODIFY Tool':'do not have this type of tool")
         else :
             tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="Need more information")
 

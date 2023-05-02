@@ -76,10 +76,13 @@ async def add_tool(tool_data:dict):
 
 @app.put("/system/category/subtype/tools/", tags = ['Manage Tool'])
 async def modify_tool(changing_tool_data:dict):
-    print(changing_tool_data["tool_name"])
-    print("------------------------------------------------------")
+    # if system.category.search_by_subtype(changing_tool_data['tool_category']) == "":
+    #     return {'MODIFY Tool':'do not have this type of tool'}
+    print(system.category.search_by_subtype(changing_tool_data['tool_category']))
+    for type in system.category.search_by_subtype('').items():
+        if type != changing_tool_data["tool_category"]:
+            return {'MODIFY Tool':'do not have this type of tool'}
     for name, tool in system.category.search_by_name('').items():
-        print(name)
         if name == changing_tool_data["tool_name"]:
             system.modify_tool(tool,changing_tool_data["tool_name"],
                                changing_tool_data["tool_description"],
