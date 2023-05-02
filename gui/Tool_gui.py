@@ -129,10 +129,8 @@ class Tool_GUI(tk.Frame) :
         if self.tool_amoung > self.chosen_amoung:
             self.delete_amoung()
             self.chosen_amoung += 1
-            self.show_amoung()
-            #print("added")
+            self.show_amoung()  
         else:
-            #print("Passed")
             pass
 
     def add_tool_to_cart(self):

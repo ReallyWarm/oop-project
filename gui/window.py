@@ -165,7 +165,6 @@ class Window(tk.Tk):
         for key in user.keys(): 
             if key == 'username': 
                 username = user["username"]["user"]  
-                # print(user) 
                 self.authority = user['authority']
                 firstname = requests.get(f'http://127.0.0.1:8000/user/?username={username}').json()
                 return firstname

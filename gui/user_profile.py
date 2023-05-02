@@ -159,7 +159,7 @@ class Profile(tk.Frame):
         self.username = self.user_name_data()
         self.username_label = tk.Label(self, text=self.username, font=("Arial", 18, "bold"))
         self.username_label.pack()
-        # print(self.username)
+        
         
     def update_firstname(self):
         self.firstname = self.user_firstname()
@@ -167,7 +167,7 @@ class Profile(tk.Frame):
         self.firstname_title.pack()
         self.firstname_label = tk.Label (self,text=self.firstname,font=("Arial", 12))
         self.firstname_label.pack()
-        # print(self.firstname)
+        
     
     
     def update_lastname(self):
@@ -176,7 +176,7 @@ class Profile(tk.Frame):
         self.lastname_title.pack()
         self.lastname_label = tk.Label(self,text=self.lastname,font=('Arail',12))
         self.lastname_label.pack()
-        # print(self.lastname)
+        
     
     def update_email(self):
         self.email = self.user_email()
@@ -184,7 +184,7 @@ class Profile(tk.Frame):
         self.email_title.pack()
         self.email_label = tk.Label(self,text=self.email,font=('Arail',12))
         self.email_label.pack()
-        # print(self.email)
+        
         
     def update_company(self):
         self.company =self.user_company()
@@ -192,7 +192,7 @@ class Profile(tk.Frame):
         self.company_title.pack()
         self.company_label = tk.Label(self,text=self.company,font=('Arail',12))
         self.company_label.pack()
-        # print(self.company)
+        
     
     def update_address(self):
         self.address = self.user_address()

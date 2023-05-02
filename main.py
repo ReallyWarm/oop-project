@@ -76,22 +76,20 @@ async def add_tool(tool_data:dict):
 
 @app.put("/system/category/subtype/tools/", tags = ['Manage Tool'])
 async def modify_tool(changing_tool_data:dict):
-    # if system.category.search_by_subtype(changing_tool_data['tool_category']) == "":
-    #     return {'MODIFY Tool':'do not have this type of tool'}
-    print(system.category.search_by_subtype(changing_tool_data['tool_category']))
-    for type in system.category.search_by_subtype('').items():
-        if type != changing_tool_data["tool_category"]:
-            return {'MODIFY Tool':'do not have this type of tool'}
-    for name, tool in system.category.search_by_name('').items():
-        if name == changing_tool_data["tool_name"]:
-            system.modify_tool(tool,changing_tool_data["tool_name"],
-                               changing_tool_data["tool_description"],
-                                changing_tool_data["tool_brand"], 
-                                changing_tool_data["tool_price"],
-                                changing_tool_data["product_code"], 
-                                changing_tool_data['tool_category'])
-            return {'MODIFY Tool':"change tool infomation successfully"}        
-    return {'MODIFY Tool':'Invalid Tool'}
+    for type,obj in system.category.search_by_subtype('').items():
+        if type == changing_tool_data["tool_category"]:
+            for name, tool in system.category.search_by_name('').items():
+                if name == changing_tool_data["tool_name"]:
+                    system.modify_tool(tool,changing_tool_data["tool_name"],
+                                    changing_tool_data["tool_description"],
+                                        changing_tool_data["tool_brand"], 
+                                        changing_tool_data["tool_price"],
+                                        changing_tool_data["product_code"], 
+                                        changing_tool_data['tool_category'])
+                    return {'MODIFY Tool':"change tool infomation successfully"}        
+            return {'MODIFY Tool':'Invalid Tool'}
+    return {'MODIFY Tool':'do not have this type of tool'}
+
 
 @app.delete("/system/category/subtype/tools/", tags = ['Manage Tool'])
 async def delete_tool(deleting_tool:str):

@@ -173,7 +173,7 @@ class System():
             tool.change_code(code)
         if type_of_tool is not None :
             tool.change_type_of_tool(type_of_tool)
-            search_type = self._category.search_by_category(type_of_tool)
+            search_type = self._category.search_by_subtype(type_of_tool)
             selected_type = search_type[type_of_tool]
             self.delete_tool(tool)
             self._category.subtype_add_tool(selected_type, tool)

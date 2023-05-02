@@ -26,7 +26,6 @@ class ManageTool(tk.Frame):
         self.bt1.place(x = 700, y = 50)
 
     def show_selected(self):
-        print(self.choice.get())
         if self.show_now == 0:
             if self.choice.get() == "add tool":
                 self.create_add_tool_widget()
@@ -142,7 +141,6 @@ class ManageTool(tk.Frame):
                 self.master.make_tool_widget(self.ent2.get(), self.ent6.get())
             elif respon =={'ADD Tool':"Already have this Tool"}:
                 tk.messagebox.showinfo(title="ADD_TOOL Response", message="Already have this Tool")
-            print(respon)
         else :
             tk.messagebox.showinfo(title="ADD_TOOL Response", message="Need more information")
 
@@ -207,7 +205,6 @@ class ManageTool(tk.Frame):
         if ' ' in self.input_name : 
             self.input_name = self.input_name.replace(' ','%20')
         r = requests.get(f'http://127.0.0.1:8000/system/category/show_tools/?tool_name={self.input_name}')
-        print(r.json())
         respon = json.loads(r.text)
         if respon == {'GET Tool':'Invalid Tool'}:
             tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="WRONG NAME INPUT")
