@@ -14,7 +14,7 @@ class ManageTool(tk.Frame):
         self.todo_dropdown()
         self.back_button()
         self.show_now = 0
-        self.status = "empty"
+        # self.status = "empty"
         # self.create_widget()
 
     def todo_dropdown(self):
@@ -169,34 +169,38 @@ class ManageTool(tk.Frame):
             self.ent6.destroy()
 
         if self.show_now == 2 or self.show_now == 3:
-            if self.status == "writed":
-                pass
-            else:
-                self.search.destroy()
-                self.search_ent.destroy()
-                self.search_button.destroy()
+            # if self.status == "writed":
+            #     pass
+            # else:
+            self.search.destroy()
+            self.search_ent.destroy()
+            self.search_button.destroy()
         
-        self.status = "empty"
+        # self.status = "empty"
 
 # ---------------------------------------------------------------- modify tool -------------------------------------------------------------
 
     def search_to_modify(self):
+        self.text1 = tk.Label(self, text="manage tool", fg="#333", font=("Helvetica", 18, "bold"))
+        self.text1.pack()
+        self.text1.place(x=200)
         self.search =  tk.Label(self, text="search product:", font=("Helvetica", 12))
         self.search.pack()
         self.search.place(x=500 , y=100)
         self.search_ent = tk.Entry(self, font=("Helvetica", 12), bd=1, relief=tk.SOLID)
         self.search_ent.pack()
         self.search_ent.place(x=500, y=200, width=400)
-        self.search_button = tk.Button(self, text="Search", font=("Helvetica", 12, "bold"), bg="#333", fg="#fff", command=self.manage_tool_status_check)
+        self.search_button = tk.Button(self, text="Search", font=("Helvetica", 12, "bold"), bg="#333", fg="#fff", command=self.manage_tool_widget)
         self.search_button.pack()
         self.search_button.place(x=500, y=300)
 
-    def manage_tool_status_check(self):
-        if self.status == "writed":
-            self.delete_widget()
-            self.manage_tool_widget()
-        else:
-            self.manage_tool_widget()
+    # for write again
+    # def manage_tool_status_check(self):
+    #     if self.status == "writed":
+    #         self.delete_widget()
+    #         self.manage_tool_widget()
+    #     else:
+    #         self.manage_tool_widget()
 
     def manage_tool_widget(self):
         self.input_name = self.search_ent.get()
@@ -213,9 +217,7 @@ class ManageTool(tk.Frame):
         self.tool_price = r.json()['tool price']
         self.tool_category = r.json()['tool category']
 
-        self.text1 = tk.Label(self, text="manage tool", fg="#333", font=("Helvetica", 18, "bold"))
-        self.text1.pack()
-        self.text1.place(x=200)
+        
 
         self.text2 =  tk.Label(self, text="product code:", font=("Helvetica", 12))
         self.text2.pack()
@@ -263,7 +265,7 @@ class ManageTool(tk.Frame):
         self.button.pack()
         self.button.place(x=180, y=550)
 
-        self.status = "writed"
+        # self.status = "writed"
 
     def modify_tool(self):
         if self.ent1.get() != '' and self.ent2.get() != '' and  self.ent3.get() != '' and  self.ent4.get() != '' and  self.ent7.get() != ''  and  self.ent8.get() != '':
@@ -287,26 +289,29 @@ class ManageTool(tk.Frame):
     #-------------------------------------------------------------------- delete tool -----------------------------------------------------------
 
     def search_to_delete(self):
+        self.text1 = tk.Label(self, text="delete tool", fg="#333", font=("Helvetica", 18, "bold"))
+        self.text1.pack()
+        self.text1.place(x=200)
         self.search =  tk.Label(self, text="search product:", font=("Helvetica", 12))
         self.search.pack()
         self.search.place(x=500 , y=100)
         self.search_ent = tk.Entry(self, font=("Helvetica", 12), bd=1, relief=tk.SOLID)
         self.search_ent.pack()
         self.search_ent.place(x=500, y=200, width=400)
-        self.search_button = tk.Button(self, text="Search", font=("Helvetica", 12, "bold"), bg="#333", fg="#fff", command=self.delete_tool_status_check)
+        self.search_button = tk.Button(self, text="Search", font=("Helvetica", 12, "bold"), bg="#333", fg="#fff", command=self.delete_tool_widget)
         self.search_button.pack()
         self.search_button.place(x=500, y=300)
 
-    def delete_tool_status_check(self):
-        if self.status == "writed":
-            self.delete_widget()
-            self.delete_tool_widget()
-        else:
-            self.delete_tool_widget()
+    # def delete_tool_status_check(self):
+    #     if self.status == "writed":
+    #         self.delete_widget()
+    #         self.delete_tool_widget()
+    #     else:
+    #         self.delete_tool_widget()
 
     def delete_tool_widget(self):
-        if self.status == "writed":
-            self.delete_widget()
+        # if self.status == "writed":
+        #     self.delete_widget()
         self.input_name = self.search_ent.get()
         if ' ' in self.input_name : 
             self.input_name = self.input_name.replace(' ','%20')
@@ -371,7 +376,7 @@ class ManageTool(tk.Frame):
         self.button.pack()
         self.button.place(x=180, y=550)
 
-        self.status = "writed"
+        # self.status = "writed"
 
     def delete_tool(self):
         r = requests.delete(f'http://127.0.0.1:8000/system/category/tools/?deleting_tool={self.tool_name}')
