@@ -206,7 +206,7 @@ class Profile(tk.Frame):
         self.review = self.user_review() 
         self.review_title = tk.Label(self,text="Review", font=('Arail',12,'bold'))
         self.review_title.pack()
-        self.review_text = tk.Text(self,height=5,width=40,yscrollcommand=self.scorll_bar.set)
+        self.review_text = tk.Text(self,height=5,width=40)
         self.review_text.insert('end',self.review)  
         self.review_text.pack()
         
@@ -214,7 +214,7 @@ class Profile(tk.Frame):
         self.order = self.user_order()
         self.order_title = tk.Label(self,text="Order", font=('Arail',12,'bold'))
         self.order_title.pack()
-        self.order_text = tk.Text(self,height=5,width=40,yscrollcommand=self.scorll_bar.set)
+        self.order_text = tk.Text(self,height=5,width=40)
         self.order_text.insert('end',self.order)
         self.order_text.pack()
         
