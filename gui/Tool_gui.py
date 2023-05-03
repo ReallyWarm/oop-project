@@ -11,10 +11,10 @@ class Tool_GUI(tk.Frame) :
         super().__init__(master) 
         self.master = master 
         self.name = name
-        self.chosen_amoung = 1
+        self.chosen_amount = 1
         self.create_widget()
         self.get_tool_details()
-        self.show_amoung()
+        self.show_amount()
 
     def create_widget(self): 
         self.back_button = tk.Button(self,text="home",command=self.Home)
@@ -23,38 +23,38 @@ class Tool_GUI(tk.Frame) :
         self.review_button = tk.Button(self,text="review",command=self.show_make_review)
         self.review_button.pack()
         self.review_button.place(x=80,y=500)
-        self.incresse_amoung_button = tk.Button(self,text="+",command=self.incresse_amoung, font=("Helvetica", 24))
-        self.incresse_amoung_button.pack()
-        self.incresse_amoung_button.place(x=50,y=400)
+        self.incresse_amount_button = tk.Button(self,text="+",command=self.incresse_amount, font=("Helvetica", 24))
+        self.incresse_amount_button.pack()
+        self.incresse_amount_button.place(x=50,y=400)
         self.add_to_cart_button = tk.Button(self,text="add to cart",command=self.add_tool_to_cart)
         self.add_to_cart_button.pack()
         self.add_to_cart_button.place(x=180,y=450)
         self.add_to_wishlist_button = tk.Button(self,text="add to wishlist",command=self.add_tool_to_wishlist)
         self.add_to_wishlist_button.pack()
         self.add_to_wishlist_button.place(x=180,y=475)
-        self.decresse_amoung_button = tk.Button(self,text="-",command=self.decresse_amoung, font=("Helvetica", 24))
-        self.decresse_amoung_button.pack()
-        self.decresse_amoung_button.place(x=310,y=400)
+        self.decresse_amount_button = tk.Button(self,text="-",command=self.decresse_amount, font=("Helvetica", 24))
+        self.decresse_amount_button.pack()
+        self.decresse_amount_button.place(x=310,y=400)
         # self.get_tool_details()
 
-    def show_amoung(self):
-        self.chosen_amoung_lable = tk.Label(self, text=self.chosen_amoung, font=("Helvetica", 24))
-        self.chosen_amoung_lable.pack()
-        self.chosen_amoung_lable.place(x=190,y=400)
+    def show_amount(self):
+        self.chosen_amount_lable = tk.Label(self, text=self.chosen_amount, font=("Helvetica", 24))
+        self.chosen_amount_lable.pack()
+        self.chosen_amount_lable.place(x=190,y=400)
 
-    def delete_amoung(self):
-        self.chosen_amoung_lable.destroy()
+    def delete_amount(self):
+        self.chosen_amount_lable.destroy()
 
-    def get_amoung(self):
+    def get_amount(self):
         name = self.name 
         if ' ' in name : 
             name = name.replace(' ','%20')
         r = requests.get(f'http://127.0.0.1:8000/system/category/show_tools/?tool_name={self.name}')
-        self.tool_amoung = r.json()['tool amount']
-        if int(self.tool_amoung) > 1:
-            self.chosen_amoung = 1
+        self.tool_amount = r.json()['tool amount']
+        if int(self.tool_amount) > 1:
+            self.chosen_amount = 1
         else:
-            self.chosen_amoung = 0
+            self.chosen_amount = 0
 
     def get_tool_details(self): 
         name = self.name 
@@ -65,7 +65,7 @@ class Tool_GUI(tk.Frame) :
         self.tool_name = r.json()['tool name']
         self.tool_description = r.json()['tool description']
         self.tool_brand = r.json()['tool brand']
-        self.tool_amoung = int(r.json()['tool amount'])
+        self.tool_amount = int(r.json()['tool amount'])
         self.tool_price = r.json()['tool price']
         self.tool_image = r.json()['tool image']
         self.tool_wholesale = r.json()['tool wholesale']
@@ -140,40 +140,40 @@ class Tool_GUI(tk.Frame) :
             for detail in range(3,5):
                 review[detail].place(x=500, y=280+long*(detail-3)+100*amount)
 
-    def incresse_amoung(self):
-        if int(self.tool_amoung) > self.chosen_amoung:
-            self.delete_amoung()
-            self.chosen_amoung += 1
-            self.show_amoung()  
+    def incresse_amount(self):
+        if int(self.tool_amount) > self.chosen_amount:
+            self.delete_amount()
+            self.chosen_amount += 1
+            self.show_amount()  
         else:
             pass
 
     def add_tool_to_cart(self):
-        if int(self.tool_amoung) <= 0:
+        if int(self.tool_amount) <= 0:
             messagebox.showinfo(title = "notification",message="Out of stock!")
             return
-        input_data = {"tool_name": self.tool_name, "quantity": self.chosen_amoung}
+        input_data = {"tool_name": self.tool_name, "quantity": self.chosen_amount}
         r = requests.post(f'http://127.0.0.1:8000/system/shopping_cart/', json=input_data)
-        self.delete_amoung()
-        self.chosen_amoung = 1
-        self.show_amoung()
+        self.delete_amount()
+        self.chosen_amount = 1
+        self.show_amount()
     
     def add_tool_to_wishlist(self):
-        if int(self.tool_amoung) <= 0:
+        if int(self.tool_amount) <= 0:
             messagebox.showinfo(title = "notification",message="Out of stock!")
             return
-        input_data = {"tool_name": self.tool_name, "quantity": self.chosen_amoung}
+        input_data = {"tool_name": self.tool_name, "quantity": self.chosen_amount}
         r = requests.post(f'http://127.0.0.1:8000/system/wishlist/', json=input_data)
         print(r.json())
-        self.delete_amoung()
-        self.chosen_amoung = 1
-        self.show_amoung()
+        self.delete_amount()
+        self.chosen_amount = 1
+        self.show_amount()
 
-    def decresse_amoung(self):
-        if self.chosen_amoung > 1:
-            self.delete_amoung()
-            self.chosen_amoung -= 1
-            self.show_amoung()
+    def decresse_amount(self):
+        if self.chosen_amount > 1:
+            self.delete_amount()
+            self.chosen_amount -= 1
+            self.show_amount()
         else:
             pass
     
@@ -186,9 +186,9 @@ class Tool_GUI(tk.Frame) :
         return ImageTk.PhotoImage(im)
     
     def show_page(self):
-        self.get_amoung()
-        self.delete_amoung()
-        self.show_amoung()
+        self.get_amount()
+        self.delete_amount()
+        self.show_amount()
         self.pack(fill=tk.BOTH, expand=1)
     
     def Home(self):  
