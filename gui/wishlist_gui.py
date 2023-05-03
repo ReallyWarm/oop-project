@@ -16,7 +16,7 @@ class WishlistGui(tk.Frame):
 
         self.send_to_cart_button = tk.Button(self,text="Send to Cart",command=self.send_to_cart)
         self.send_to_cart_button.pack()
-        self.send_to_cart_button.place(x=660,y=500)
+        self.send_to_cart_button.place(x=800,y=650)
 
     def send_to_cart(self):
         if len(self.in_wishlist) == 0:

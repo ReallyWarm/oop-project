@@ -19,19 +19,19 @@ class Tool_GUI(tk.Frame) :
     def create_widget(self): 
         self.back_button = tk.Button(self,text="home",command=self.Home)
         self.back_button.pack()
-        self.back_button.place(x=20,y=500)
+        self.back_button.place(x=790,y=15)
         self.review_button = tk.Button(self,text="review",command=self.show_make_review)
         self.review_button.pack()
-        self.review_button.place(x=80,y=500)
+        self.review_button.place(x=178,y=520)
         self.increase_amount_button = tk.Button(self,text="+",command=self.increase_amount, font=("Helvetica", 24))
         self.increase_amount_button.pack()
         self.increase_amount_button.place(x=50,y=400)
         self.add_to_cart_button = tk.Button(self,text="add to cart",command=self.add_tool_to_cart)
         self.add_to_cart_button.pack()
-        self.add_to_cart_button.place(x=180,y=450)
+        self.add_to_cart_button.place(x=165,y=450)
         self.add_to_wishlist_button = tk.Button(self,text="add to wishlist",command=self.add_tool_to_wishlist)
         self.add_to_wishlist_button.pack()
-        self.add_to_wishlist_button.place(x=180,y=475)
+        self.add_to_wishlist_button.place(x=155,y=475)
         self.decrease_amount_button = tk.Button(self,text="-",command=self.decrease_amount, font=("Helvetica", 24))
         self.decrease_amount_button.pack()
         self.decrease_amount_button.place(x=310,y=400)
@@ -80,28 +80,28 @@ class Tool_GUI(tk.Frame) :
         self.tool_name_label.place(x=400, y=50)
 
         self.tool_code_label = tk.Label(self, text=self.tool_code, font=("Helvetica", 12))
-        self.tool_code_label.place(x=800, y=60)
+        self.tool_code_label.place(x=800, y=55)
 
-        tk.Label(self, text="price", font=("Helvetica", 12)).place(x=150, y=350)
+        tk.Label(self, text="price", font=("Helvetica", 12)).place(x=150, y=360)
 
         self.tool_price_label = tk.Label(self, text=self.tool_price, font=("Helvetica", 12))
-        self.tool_price_label.place(x=200, y=350)
+        self.tool_price_label.place(x=200, y=360)
 
-        tk.Label(self, text='rating ', font=("Helvetica", 12)).place(x= 750, y=100)
+        tk.Label(self, text='rating ', font=("Helvetica", 12)).place(x= 750, y=80)
 
         self.tool_rating_label = tk.Label(self, text=self.tool_rating, font=("Helvetica", 12))
-        self.tool_rating_label.place(x=800, y=100)
+        self.tool_rating_label.place(x=800, y=80)
 
         self.tool_description_label = tk.Label(self, text=self.tool_description, font=("Helvetica", 12))
-        self.tool_description_label.place(x=400, y=110)
+        self.tool_description_label.place(x=400, y=150)
 
         self.tool_brand_label = tk.Label(self, text=self.tool_brand, font=("Helvetica", 12))
         self.tool_brand_label.place(x=400, y=80)
 
-        tk.Label(self, text='amount ', font=("Helvetica", 12)).place(x= 400, y=150)
+        tk.Label(self, text='amount ', font=("Helvetica", 12)).place(x= 400, y=110)
 
         self.tool_amount_label = tk.Label(self, text=self.tool_amount, font=("Helvetica", 12))
-        self.tool_amount_label.place(x=500 , y=150)
+        self.tool_amount_label.place(x=490 , y=110)
 
         tk.Label(self, text='review ', font=("Helvetica", 12)).place(x= 400, y=250)
 
