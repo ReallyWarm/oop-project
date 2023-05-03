@@ -23,18 +23,18 @@ class Tool_GUI(tk.Frame) :
         self.review_button = tk.Button(self,text="review",command=self.show_make_review)
         self.review_button.pack()
         self.review_button.place(x=80,y=500)
-        self.incresse_amount_button = tk.Button(self,text="+",command=self.incresse_amount, font=("Helvetica", 24))
-        self.incresse_amount_button.pack()
-        self.incresse_amount_button.place(x=50,y=400)
+        self.increase_amount_button = tk.Button(self,text="+",command=self.increase_amount, font=("Helvetica", 24))
+        self.increase_amount_button.pack()
+        self.increase_amount_button.place(x=50,y=400)
         self.add_to_cart_button = tk.Button(self,text="add to cart",command=self.add_tool_to_cart)
         self.add_to_cart_button.pack()
         self.add_to_cart_button.place(x=180,y=450)
         self.add_to_wishlist_button = tk.Button(self,text="add to wishlist",command=self.add_tool_to_wishlist)
         self.add_to_wishlist_button.pack()
         self.add_to_wishlist_button.place(x=180,y=475)
-        self.decresse_amount_button = tk.Button(self,text="-",command=self.decresse_amount, font=("Helvetica", 24))
-        self.decresse_amount_button.pack()
-        self.decresse_amount_button.place(x=310,y=400)
+        self.decrease_amount_button = tk.Button(self,text="-",command=self.decrease_amount, font=("Helvetica", 24))
+        self.decrease_amount_button.pack()
+        self.decrease_amount_button.place(x=310,y=400)
         # self.get_tool_details()
 
     def show_amount(self):
@@ -140,7 +140,7 @@ class Tool_GUI(tk.Frame) :
             for detail in range(3,5):
                 review[detail].place(x=500, y=280+long*(detail-3)+100*amount)
 
-    def incresse_amount(self):
+    def increase_amount(self):
         if int(self.tool_amount) > self.chosen_amount:
             self.delete_amount()
             self.chosen_amount += 1
@@ -169,7 +169,7 @@ class Tool_GUI(tk.Frame) :
         self.chosen_amount = 1
         self.show_amount()
 
-    def decresse_amount(self):
+    def decrease_amount(self):
         if self.chosen_amount > 1:
             self.delete_amount()
             self.chosen_amount -= 1
