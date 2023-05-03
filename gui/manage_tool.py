@@ -281,8 +281,8 @@ class ManageTool(tk.Frame):
             respon = json.loads(r.text)
             if respon == {"MODIFY Tool": "change tool infomation successfully"}:
                 tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="MODIFY Tool successfully")
-            elif respon == {'MODIFY Tool':'do not have this type of tool'}:
-                tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="MODIFY Tool':'do not have this type of tool")
+            elif respon == {'MODIFY Tool':'do not have this subtype of tool'}:
+                tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="do not have this subtype of tool")
         else :
             tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="Need more information")
 

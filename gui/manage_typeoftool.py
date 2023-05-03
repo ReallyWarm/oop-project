@@ -39,7 +39,7 @@ class ManagetypeOfTool(tk.Frame):
         if self.ent1.get() != '':
         
             input_data = {
-                "name": self.ent1.get()
+                "type_of_tool": self.ent1.get()
             }
 
             r = requests.post("http://127.0.0.1:8000/system/category/typeoftools/", json=input_data)
@@ -55,8 +55,8 @@ class ManagetypeOfTool(tk.Frame):
         if self.ent1.get() != '' and self.ent2.get():
         
             input_data = {
-                "type": self.ent1.get(),
-	            "name":self.ent2.get(),
+                "type_of_tool": self.ent1.get(),
+	            "subtype_if_tool":self.ent2.get(),
             }
 
             r = requests.post("http://127.0.0.1:8000/system/category/subtypeoftools/", json=input_data)

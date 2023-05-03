@@ -22,24 +22,24 @@ def object_to_dict(object):
 # CATEGORY
 @app.post("/system/category/typeoftools/")
 async def add_typeoftool(type_data:dict):
-    for name, type_of_tool in system.category.search_by_category('').items():
-        if str(name) == type_data['name']:
-            return {"ADD TypeOfTool": "Already have a type of tool"}
-    new_typeoftool = TypeOfTool(type_data['name'])
+    type_of_tool_in_system = system.category.search_by_category(type_data['type_of_tool'])
+    if type_of_tool_in_system.get(type_data['type_of_tool']) != None:
+        return {"ADD TypeOfTool": "Already have a type of tool"}
+    new_typeoftool = TypeOfTool(type_data['type_of_tool'])
     system.category.add_type(new_typeoftool)
     return {"ADD TypeOfTool": "Add type of tool successfully"}
 
 @app.post("/system/category/subtypeoftools/")
 async def add_subtypeoftool(subtype_data:dict):
-    for name, type_of_tool in system.category.search_by_subtype('').items():
-        if str(name) == subtype_data['name']:
-            return {'ADD SubtypeOfTool': "Already have a subtype of tool"}
-        
-    for name, type_of_tool in system.category.search_by_category('').items():
-        if str(name) == subtype_data['type']:
-            new_subtypeoftool = SubtypeOfTool(subtype_data['name'])
-            system.category.type_name_add_subtype(subtype_data['type'], new_subtypeoftool)
-            return {'ADD SubtypeOfTool':"Add subtype of tool successfully"}
+    subtype_of_tool_in_system = system.category.search_by_subtype(subtype_data['subtype_of_tool'])
+    if subtype_of_tool_in_system.get(subtype_data['subtype_of_tool']) != None:
+        return {'ADD SubtypeOfTool': "Already have a subtype of tool"}
+    
+    type_of_tool_in_system = system.category.search_by_category(subtype_data['type_of_tool'])
+    if type_of_tool_in_system.get(subtype_data['type_of_tool']) != None:    
+        new_subtypeoftool = SubtypeOfTool(subtype_data['subtype_of_tool'])
+        system.category.type_name_add_subtype(subtype_data['type_of_tool'], new_subtypeoftool)
+        return {'ADD SubtypeOfTool':"Add subtype of tool successfully"}
     return {"ADD SubtypeOfTool":"do not have this type of tool"}
 
 # SEARCH
@@ -58,55 +58,55 @@ async def search_category(search:str=''):
 # MANAGE TOOL
 @app.get("/system/category/show_tools/", tags = ['Manage Tool'])
 async def get_tool(tool_name:str):
-    for name, tool in system.category.search_by_name('').items():
-        if str(name) == tool_name:
-            return {'tool code':tool.code,
-                    'tool name':tool.name,
-                    'tool description':tool.description,
-                    'tool brand':tool.brand,
-                    'tool amount':tool.amount,
-                    'tool image':tool.image,
-                    'tool price':tool.price,
-                    'tool wholesale':tool.wholesales,
-                    'tool reviews':tool.review_list,
-                    'tool rating' : tool.rating,
-                    'tool category':tool.type_of_tool,
+    tool_in_system = system.category.search_by_name(tool_name)
+    if tool_in_system.get(tool_name) is not None:
+            return {'tool code':tool_in_system[tool_name].code,
+                    'tool name':tool_in_system[tool_name].name,
+                    'tool description':tool_in_system[tool_name].description,
+                    'tool brand':tool_in_system[tool_name].brand,
+                    'tool amount':tool_in_system[tool_name].amount,
+                    'tool image':tool_in_system[tool_name].image,
+                    'tool price':tool_in_system[tool_name].price,
+                    'tool wholesale':tool_in_system[tool_name].wholesales,
+                    'tool reviews':tool_in_system[tool_name].review_list,
+                    'tool rating' : tool_in_system[tool_name].rating,
+                    'tool category':tool_in_system[tool_name].type_of_tool,
                     'input': tool_name
                     }
     return {'GET Tool':'Invalid Tool'}
 
 @app.post("/system/category/subtype/tools/", tags = ['Manage Tool'])
 async def add_tool(tool_data:dict):
-    for name, tool in system.category.search_by_name('').items():
-        if tool_data["tool_name"] == name:
-            return {'ADD Tool':"Already have this Tool"}
+    tool_in_system = system.category.search_by_name(tool_data["tool_name"])
+    if tool_in_system.get(tool_data["tool_name"]) is not None:
+        return {'ADD Tool':"Already have this Tool"}
     system.create_tool(tool_data["product_code"], tool_data["tool_name"], tool_data["tool_description"], tool_data["tool_brand"],
                        tool_data["tool_amount"], tool_data["tool_image"], tool_data["tool_price"], tool_data['tool_category'])
     return {'ADD Tool':"add tool successfully"}
 
 @app.put("/system/category/subtype/tools/", tags = ['Manage Tool'])
 async def modify_tool(changing_tool_data:dict):
-    for type,obj in system.category.search_by_subtype('').items():
-        if type == changing_tool_data["tool_category"]:
-            for name, tool in system.category.search_by_name('').items():
-                if name == changing_tool_data["tool_name"]:
-                    system.modify_tool(tool,changing_tool_data["tool_name"],
-                                    changing_tool_data["tool_description"],
+    subtype_in_system = system.category.search_by_subtype(changing_tool_data["tool_category"])
+    if subtype_in_system.get(changing_tool_data["tool_category"]) is not None:
+        tool_in_system = system.category.search_by_name(changing_tool_data["tool_name"])
+        if tool_in_system.get(changing_tool_data["tool_name"]) is not None:
+            system.modify_tool(tool_in_system[changing_tool_data["tool_name"]],
+                                        changing_tool_data["tool_name"],
+                                        changing_tool_data["tool_description"],
                                         changing_tool_data["tool_brand"], 
                                         changing_tool_data["tool_price"],
                                         changing_tool_data["product_code"], 
                                         changing_tool_data['tool_category'])
-                    return {'MODIFY Tool':"change tool infomation successfully"}        
-            return {'MODIFY Tool':'Invalid Tool'}
-    return {'MODIFY Tool':'do not have this type of tool'}
+            return {'MODIFY Tool':"change tool infomation successfully"}        
+    return {'MODIFY Tool':'do not have this subtype of tool'}
 
 
 @app.delete("/system/category/subtype/tools/", tags = ['Manage Tool'])
 async def delete_tool(deleting_tool:str):
-    for name, tool in system.category.search_by_name('').items():
-        if name == deleting_tool:
-            system.delete_tool(tool)
-            return {'DELETE Tool':"delete tool successfully"}   
+    tool_in_system = system.category.search_by_name(deleting_tool)
+    if tool_in_system.get(deleting_tool) is not None:
+        system.delete_tool(tool_in_system[deleting_tool])
+        return {'DELETE Tool':"delete tool successfully"}   
     return {'DELETE Tool':'Invalid Tool'}
 
 
@@ -275,50 +275,38 @@ async def check_review(name:str)->dict:
 # make review
 @app.get('/tool/review_list',tags=['review'])
 async def get_reveiw(name:str) -> dict:
-    for tool_name, tool in system.category.search_by_name('').items():
-        if tool_name == name:
-            return {"Data": tool.review_list}
+    tool_in_system = system.category.search_by_name(name)
+    if tool_in_system.get(name) != None:
+        return {"Data": tool_in_system[name].review_list}
     return {"data": "Not found this tool. Please try again"}
 
 
 @app.get('/tool/rating',tags=['review'])
 async def get_rating(name:str) -> dict:
-    for tool_name, tool in system.category.search_by_name('').items():
-        if tool_name == name:
-            return {"Data": tool.rating}
+    tool_in_system = system.category.search_by_name(name)
+    if tool_in_system.get(name) != None:
+        return {"Data": tool_in_system[name].rating}
     return {"data":"Not found this tool. Please try again"}
 
 
 @app.post('/tool/make_review',tags=['review'])
 async def create_review(review: dict) -> dict:
-    check = 0
-    check2 = 0 
-    for tool_name, tool in system.category.search_by_name('').items(): 
-        if tool_name == review["tool"]: 
-            check = 1 
-    if(check != 1): 
-        return {"data": "Not found this tool. Please try again"}
-    for reviewer in system.customerinfos: 
-        if reviewer.first_name == review["User"]: 
-            check2 = 1 
-    if(check2 != 1):  
-        return {"data": "Not found this tool. Please try again"}
-    for tool_name, tool in system.category.search_by_name('').items():
-        if tool_name == review["tool"]:
-            for reviewer in system.customerinfos:
-                if reviewer.first_name == review["User"]:
-                    if float(review["rating"]) <= 5.00:
-                        reviewer.create_review(tool, review["head_review"], review["comment"], float(review["rating"]), review["date_of_review"])
-                        return {"data": "A new review is added!"}
-    return {"data": "Invalid rating"}
+    tool_in_system = system.category.search_by_name(review["tool"])
+    if tool_in_system.get(review["tool"]) != None:
+        for reviewer in system.customerinfos:
+            if reviewer.first_name == review["User"]:
+                if float(review["rating"]) <= 5.00:
+                    reviewer.create_review(tool_in_system[review["tool"]], review["head_review"], review["comment"], float(review["rating"]), review["date_of_review"])
+                    return {"data": "A new review is added!"}
+        return{"data": "You must login first"}
 
 # shopping cart
 @app.post("/system/shopping_cart/", tags = ['shopping_cart'])
 async def add_to_cart(chosed_item:dict):
-    for name, tool in system.category.search_by_name('').items():
-        if name == chosed_item['tool_name']:
-            system.add_to_cart(tool,chosed_item['quantity'])
-            return {'ADD TO CART':"add to cart successfully"}
+    tool_in_system = system.category.search_by_name(chosed_item['tool_name'])
+    if tool_in_system.get(chosed_item['tool_name']) != None:
+        system.add_to_cart(tool_in_system[chosed_item['tool_name']],chosed_item['quantity'])
+        return {'ADD TO CART':"add to cart successfully"}
     return {'ADD TO CART':"Invalid Tool"}
 
 @app.get("/system/shopping_cart/", tags = ['shopping_cart'])
@@ -330,10 +318,10 @@ async def get_cart():
     
 @app.put("/system/shopping_cart/", tags = ['shopping_cart'])
 async def set_cart_item_amount(chosed_item:dict):
-    for name, tool in system.category.search_by_name('').items():
-        if name == chosed_item['tool_name']:
-            system.get_active_cart().set_item_amount(tool,chosed_item['quantity'])
-            return {'SET ITEM':"Set item successfully"}
+    tool_in_system = system.category.search_by_name(chosed_item['tool_name'])
+    if tool_in_system.get(chosed_item['tool_name']) != None:
+        system.get_active_cart().set_item_amount(tool_in_system[chosed_item['tool_name']],chosed_item['quantity'])
+        return {'SET ITEM':"Set item successfully"}
     return {'SET ITEM':"Invalid Tool"}
 
 @app.delete("/system/shopping_cart/delete_cart/", tags= ['shopping_cart'])
@@ -346,21 +334,21 @@ async def clear_cart():
 
 @app.delete("/system/shopping_cart/delete_item/", tags= ['shopping_cart'])
 async def delete_item(chosed_item:dict):
-    for name, tool in system.category.search_by_name('').items():
-        if name == chosed_item['tool_name']:
-            system.get_active_cart().delete_item(tool)
+    tool_in_system = system.category.search_by_name(chosed_item['tool_name'])
+    if tool_in_system.get(chosed_item['tool_name']) != None:
+            system.get_active_cart().delete_item(tool_in_system[chosed_item['tool_name']])
             return {'DELETE ITEM':"delete item successfully"}
     return {'DELETE ITEM':"Invalid Tool"}
 
 # wishlist
 @app.post("/system/wishlist/", tags = ['wishlist'])
 async def add_to_wishlist(chosed_item:dict):
-    for name, tool in system.category.search_by_name('').items():
-        if name == chosed_item['tool_name']:
-            status = system.add_to_wishlist(tool,chosed_item['quantity'])
-            if status == "Can not get wishlist":
-                return {'ADD TO WISHLIST':"Add to wishlist failed"}
-            return {'ADD TO WISHLIST':"Add to wishlist successfully"}
+    tool_in_system = system.category.search_by_name(chosed_item['tool_name'])
+    if tool_in_system.get(chosed_item['tool_name']) != None:
+        status = system.add_to_wishlist(tool_in_system[chosed_item['tool_name']],chosed_item['quantity'])
+        if status == "Can not get wishlist":
+            return {'ADD TO WISHLIST':"Add to wishlist failed"}
+        return {'ADD TO WISHLIST':"Add to wishlist successfully"}
     return {'ADD TO WISHLIST':"Invalid Tool"}
 
 @app.get("/system/wishlist/", tags = ['wishlist'])
@@ -376,9 +364,9 @@ async def set_wishlist_item_amount(chosed_item:dict):
     wishlist = system.get_wishlist()
     if wishlist is None:
         return {'GET WISHLIST':"can't get wishlist"}
-    for name, tool in system.category.search_by_name('').items():
-        if name == chosed_item['tool_name']:
-            wishlist.set_item_amount(tool,chosed_item['quantity'])
+    tool_in_system = system.category.search_by_name(chosed_item['tool_name'])
+    if tool_in_system.get(chosed_item['tool_name']) != None:
+            wishlist.set_item_amount(tool_in_system[chosed_item['tool_name']],chosed_item['quantity'])
             return {'SET ITEM':"Set item successfully"}
     return {'SET ITEM':"Invalid Tool"}
 
@@ -396,9 +384,9 @@ async def delete_item(chosed_item:dict):
     wishlist = system.get_wishlist()
     if wishlist is None:
         return {'GET WISHLIST':"can't get wishlist"}
-    for name, tool in system.category.search_by_name('').items():
-        if name == chosed_item['tool_name']:
-            wishlist.delete_item(tool)
+    tool_in_system = system.category.search_by_name(chosed_item['tool_name'])
+    if tool_in_system.get(chosed_item['tool_name']) != None:
+            wishlist.delete_item(tool_in_system[chosed_item['tool_name']])
             return {'DELETE ITEM':"delete item successfully"}
     return {'DELETE ITEM':"Invalid Tool"}
 
