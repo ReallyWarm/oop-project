@@ -256,10 +256,14 @@ async def edit_address(address:dict) ->dict:
 
 @app.get('/customer/order',tags=['customer'])
 async def check_order(name:str)->dict:
+    dict_sent = {}
     for customer in system.customerinfos:
-        if customer.username == name:
-            order = customer.my_order
-            return {"data":f"{order},"}
+            if customer.username == name:
+                my_order = customer.my_order
+                for order in my_order: 
+                    dict_sent[order.payment_id] = {"order":order.orders,"total price":order.total_price}
+                    # dict_sent2[order.payment_id] = order.total_price
+                return dict_sent
     return {"data":"Not found this order. Please try again"}    
 
 @app.get('/customer/review',tags=['customer'])
