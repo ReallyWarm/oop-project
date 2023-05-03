@@ -30,10 +30,6 @@ class MakePayment(tk.Frame):
         self.show_coupon_info()
 
     def create_normal_widget(self): 
-        self.back_button = tk.Button(self,text="back",command=self.back)
-        self.back_button.pack()
-        self.back_button.place(x=500,y=500)
-
         self.update_payment_button = tk.Button(self,text="update payment",command=self.update_payment).place(x=400,y=400)
 
         self.receipt_label = tk.Label(self,text="receipt", font=("Helvetica", 12, "bold")).place(x=150, y=25)
@@ -45,9 +41,7 @@ class MakePayment(tk.Frame):
         self.name_label = tk.Label(self,text="tool name").place(x = 50, y = 125)
         self.price_label = tk.Label(self,text="tool price").place(x = 125, y = 125)
         self.amoung_label = tk.Label(self,text="tool Quantity").place(x = 200, y = 125)
-        self.total_price_label = tk.Label(self,text="total price").place(x = 275, y = 125)
-
-        
+        self.total_price_label = tk.Label(self,text="total price").place(x = 275, y = 125)   
 
         self.decolate_2 = tk.Label(self,text="___________________________________________________________________").place(x=25, y=500)
 
@@ -152,11 +146,11 @@ class MakePayment(tk.Frame):
     def create_widget(self): 
         self.back_button = tk.Button(self,text="back",command=self.back)
         self.back_button.pack()
-        self.back_button.place(x=20,y=500)
+        self.back_button.place(x=500,y=500)
 
         self.confirm_label = tk.Button(self,text="confirm",command=self.confirm_button)
         self.confirm_label.pack()
-        self.confirm_label.place(x=500,y=500)
+        self.confirm_label.place(x=400,y=500)
         
 
     def get_coupon_info(self): 
@@ -198,7 +192,7 @@ class MakePayment(tk.Frame):
         check2 =0
         for index,i in enumerate(self.number_click): 
             if i % 2 == 1 :
-                discount = int(coupon[index][1])*self.final_price/100
+                discount = int(coupon[index][1])*self.total_price/100
                 self.to_use_coupon(discount)
                 check2 = 1
         if check2==0 :
@@ -281,21 +275,19 @@ class MakePayment(tk.Frame):
         for index,i in enumerate(self.number_click): 
             if i % 2 == 1:
                 code  =  self.code_coupon[index]
-                card = sd.askstring("credit card", "Please enter credit card:") 
-                dict_payment = {'card':card,'address':self.choose_address['_name'],'coupon':code}
-                message = requests.post("http://127.0.0.1:8000/cart/payment",data = json.dumps(dict_payment))
-                print(message.json())
-                if message.json()["status"] == "Payment success": 
-                    self.final_price = 0
-                    self.shipping_cost = 0
-                    self.final_show = 0
-                    self.choose_address = {}
-                messagebox.showinfo(title = "notification",message=message.json()["status"])
-                self.update_payment()
+                self.make_payment_box(code)
                 return 
         code  =  None
+        self.make_payment_box(code)
+        return
+    
+    def make_payment_box(self, code):
+        address = self.choose_address.get('_name')
+        if address is None:
+            messagebox.showinfo(title = "notification",message="You must select address first")
+            return
         card = sd.askstring("credit card", "Please enter credit card:") 
-        dict_payment = {'card':card,'address':self.choose_address['_name'],'coupon':code}
+        dict_payment = {'card':card,'address':address,'coupon':code}
         message = requests.post("http://127.0.0.1:8000/cart/payment",data = json.dumps(dict_payment))
         print(message.json())
         if message.json()["status"] == "Payment success": 
@@ -305,5 +297,3 @@ class MakePayment(tk.Frame):
             self.choose_address = {}
         messagebox.showinfo(title = "notification",message=message.json()["status"])
         self.update_payment()
-        return
-    

@@ -26,7 +26,6 @@ class ManageTool(tk.Frame):
         self.bt1.place(x = 700, y = 50)
 
     def show_selected(self):
-        print(self.choice.get())
         if self.show_now == 0:
             if self.choice.get() == "add tool":
                 self.create_add_tool_widget()
@@ -129,9 +128,9 @@ class ManageTool(tk.Frame):
 	            "tool_name":self.ent2.get(),
 	            "tool_description": self.ent3.get(),
 	            "tool_brand": self.ent4.get(),
-	            "tool_amount": self.ent5.get(),
+	            "tool_amount": int(self.ent5.get()),
 	            "tool_image": self.ent6.get(),
-	            "tool_price": self.ent7.get(),
+	            "tool_price": float(self.ent7.get()),
 	            "tool_category": self.ent8.get()
             }
 
@@ -142,7 +141,6 @@ class ManageTool(tk.Frame):
                 self.master.make_tool_widget(self.ent2.get(), self.ent6.get())
             elif respon =={'ADD Tool':"Already have this Tool"}:
                 tk.messagebox.showinfo(title="ADD_TOOL Response", message="Already have this Tool")
-            print(respon)
         else :
             tk.messagebox.showinfo(title="ADD_TOOL Response", message="Need more information")
 
@@ -275,7 +273,7 @@ class ManageTool(tk.Frame):
 	            "tool_name":self.ent2.get(),
 	            "tool_description": self.ent3.get(),
 	            "tool_brand": self.ent4.get(),
-	            "tool_price": self.ent7.get(),
+	            "tool_price": float(self.ent7.get()),
 	            "tool_category": self.ent8.get()
             }
 
@@ -283,6 +281,8 @@ class ManageTool(tk.Frame):
             respon = json.loads(r.text)
             if respon == {"MODIFY Tool": "change tool infomation successfully"}:
                 tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="MODIFY Tool successfully")
+            elif respon == {'MODIFY Tool':'do not have this type of tool'}:
+                tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="MODIFY Tool':'do not have this type of tool")
         else :
             tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="Need more information")
 
@@ -386,7 +386,7 @@ class ManageTool(tk.Frame):
         elif respon == {'DELETE Tool':'Invalid Tool'}:
             tk.messagebox.showinfo(title="DELETE_TOOL Response", message="WRONG NAME INPUT")
 
-    
+        self.master.delete_tool_widget(self.tool_name)
 
     def Back(self): 
         self.master.show_admin()

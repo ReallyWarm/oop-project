@@ -26,7 +26,6 @@ class ManageWholesale(tk.Frame):
         
     def get_wholesale_info(self): 
         wholesale_all = requests.get("http://127.0.0.1:8000/wholesale/all").json()
-        # print(coupon_all)
         self.wholesale_list = []
         for key in wholesale_all: 
             components = [] 
@@ -34,12 +33,11 @@ class ManageWholesale(tk.Frame):
             components.append(wholesale_all[key]['discount_value']) 
             components.append(wholesale_all[key]['amount'])
             self.wholesale_list.append(components) 
-        # print(self.coupon_list)
+
 
     def create_getwholesale_widget(self): 
         self.get_wholesalewidget = [] 
         for wholesale in self.wholesale_list: 
-            print(f"{wholesale[0]} {wholesale[2]} {wholesale[1]}")
             self.button_widget = tk.Button(self,text=f"{wholesale[0]} {wholesale[2]} {wholesale[1]}",command = lambda x=wholesale[0],y=wholesale[2],z=wholesale[1]:self.modify_wholesale(x,y,z))
             self.get_wholesalewidget.append(self.button_widget) 
 
@@ -65,7 +63,6 @@ class ManageWholesale(tk.Frame):
             widget.pack_forget()
     
     def modify_wholesale(self,code,amount,discount_value): 
-        # print(code)
         self.hide_getwidget() 
         self.create_modify_widget(code,amount,discount_value) 
         self.show_modify() 
@@ -87,13 +84,11 @@ class ManageWholesale(tk.Frame):
             return
         dict_put = {"wholesale_modify":{"code":code,"amount":amount,"discount_value":discount_value}}
         message = requests.put("http://127.0.0.1:8000/wholesale/all",data=json.dumps(dict_put))
-        # print(message.json())
         self.mamount_label_input.delete(0,tk.END)
         self.mdiscount_label_input.delete(0,tk.END) 
         self.get_wholesale_info() 
         self.show_selected(self.event)
 
-        # print(code,name,discount_value)
     def delete_button(self,code):  
         dict_delete = {"code":code}
         message = requests.delete("http://127.0.0.1:8000/wholesale/all",data=json.dumps(dict_delete))
@@ -126,7 +121,7 @@ class ManageWholesale(tk.Frame):
         self.code_label_input.delete(0,tk.END) 
         self.discount_label_input.delete(0,tk.END)
         self.get_wholesale_info() 
-        # print(message)
+
     
     
     def create_modify_widget(self,code,amount,discount_value): 
@@ -162,7 +157,6 @@ class ManageWholesale(tk.Frame):
     
     def show_selected(self,event):
         self.event = event
-        print(self.choice.get())
         if self.choice.get() == "modify wholesale":
             self.create_getwholesale_widget()
             self.show_getwidget()

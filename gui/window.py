@@ -10,6 +10,7 @@ from search_gui import SearchPage
 from PIL import Image, ImageTk  
 from Tool_gui import Tool_GUI
 from cart_gui import CartGui
+from wishlist_gui import WishlistGui
 from tool_widget import ToolWidget
 from admin_gui import AdminGui
 import random
@@ -25,7 +26,7 @@ class Window(tk.Tk):
         super().__init__(*args, **kwargs)
         self.geometry("900x700")
         self.resizable(False, False)
-        self.title("Login/Search App")
+        self.title("ดุดัน ไม่เกรงใจใคร ฟอร์ดเรนเจอร์แร็พเตอร์")
         self.photo = None 
 
         # Create the menu bar
@@ -52,6 +53,7 @@ class Window(tk.Tk):
 
         self.admin_page = AdminGui(self)
         self.cart_page = CartGui(self)
+        self.wishlist_page = WishlistGui(self)
         self.search_page = SearchPage(link='category', search_type='Category', master=self)
         self.search_page.add_new_search(link='category/subtype/tools', search_type='Tool')
         self.login_page = LoginPage(self)
@@ -62,12 +64,14 @@ class Window(tk.Tk):
         self.managetool_page = self.admin_page.managetool
         self.managecoupon_page = self.admin_page.managecoupon
         self.managewholesale_page = self.admin_page.managewholesale
+        self.managetypeoftool_page = self.admin_page.managetypeoftool
 
         # Create home page button
         self.create_login_button()
         self.create_signup_button()
         self.create_logout_button()
         self.create_cart_button()
+        self.create_wishlist_button()
         self.create_admin_button()
         self.create_refresh_button()
         
@@ -147,15 +151,20 @@ class Window(tk.Tk):
     def place_cart_button(self): 
         self.cart_button.place(x =100,y = 15)
 
+    def create_wishlist_button(self): 
+        self.wishlist_button = tk.Button(self.home_page,text="wishlist",command=self.show_wishlist)
+    def place_wishlist_button(self): 
+        self.wishlist_button.place(x =145,y = 15)
+
     def create_refresh_button(self): 
         self.refresh_button = tk.Button(self.home_page,text="refresh",command=self.show_home) 
     def place_refresh_button(self): 
-        self.refresh_button.place(x=145,y=15)
+        self.refresh_button.place(x=205,y=15)
 
     def create_admin_button(self):
         self.admin_button = tk.Button(self.home_page,text="admin",command=self.show_admin)
     def place_admin_button(self):  
-        self.admin_button.place(x =205,y = 15)
+        self.admin_button.place(x =265,y = 15)
 
     def get_tool_data(self, name=''):
         return requests.get(f'http://127.0.0.1:8000/system/category/subtype/tools?search={name}').json()
@@ -165,7 +174,6 @@ class Window(tk.Tk):
         for key in user.keys(): 
             if key == 'username': 
                 username = user["username"]["user"]  
-                # print(user) 
                 self.authority = user['authority']
                 firstname = requests.get(f'http://127.0.0.1:8000/user/?username={username}').json()
                 return firstname
@@ -193,9 +201,17 @@ class Window(tk.Tk):
             row = 220 * (i//4)
             widget.set_coords(start_x+col, start_y+row)
 
+    def delete_tool_widget(self, tool_name):
+        self.hide_tool_widget()
+        for widget in self.tool_widgets:
+            if widget.name == tool_name:
+                self.tool_widgets.remove(widget)
+                return
+
     def show_home_widget(self):
         self.update_home_name()
         self.place_cart_button()
+        self.place_wishlist_button()
         self.place_admin_button()
         self.place_refresh_button()
         if self.authority == "guest":
@@ -251,12 +267,14 @@ class Window(tk.Tk):
         self.make_review_page.pack_forget()
         self.admin_page.pack_forget()
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.profile_page.pack_forget()
         self.managewholesale_page.pack_forget()
         self.home_page.pack(fill=tk.BOTH, expand=1)
         self.make_payment_page.pack_forget()
         self.managetool_page.pack_forget()
         self.managecoupon_page.pack_forget() 
+        self.managetypeoftool_page.pack_forget()
         self.show_tool_widget(self.random_tool_list, start_x=75, start_y=350)
         
     def show_review(self): 
@@ -269,12 +287,14 @@ class Window(tk.Tk):
         self.make_review_page.pack_forget()
         self.login_page.pack_forget()
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
         self.managetool_page.pack_forget()
         self.managecoupon_page.pack_forget() 
         self.profile_page.pack_forget()
         self.managewholesale_page.pack_forget()
+        self.managetypeoftool_page.pack_forget()
         self.make_review_page.pack(fill=tk.BOTH, expand=1)
 
     def show_profile(self):
@@ -288,12 +308,14 @@ class Window(tk.Tk):
         self.make_review_page.pack_forget()
         self.login_page.pack_forget()
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
         self.managetool_page.pack_forget()
         self.managecoupon_page.pack_forget() 
         self.managewholesale_page.pack_forget()
         self.profile_page.show_profile()
+        self.managetypeoftool_page.pack_forget()
         self.profile_page.pack(fill=tk.BOTH,expand=1)
     
     def show_search(self):
@@ -304,12 +326,14 @@ class Window(tk.Tk):
         self.login_page.pack_forget()
         self.sign_up_page.pack_forget()
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
         self.managetool_page.pack_forget()
         self.managecoupon_page.pack_forget() 
         self.managewholesale_page.pack_forget()
         self.profile_page.pack_forget()
+        self.managetypeoftool_page.pack_forget()
         self.search_page.pack(fill=tk.BOTH, expand=1)
         self.make_review_page.pack_forget()
 
@@ -321,6 +345,7 @@ class Window(tk.Tk):
         self.search_page.pack_forget()
         self.sign_up_page.pack_forget()
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.make_review_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
@@ -328,6 +353,7 @@ class Window(tk.Tk):
         self.managecoupon_page.pack_forget() 
         self.profile_page.pack_forget()
         self.managewholesale_page.pack_forget()
+        self.managetypeoftool_page.pack_forget()
         self.login_page.pack(fill=tk.BOTH, expand=1)
 
     def show_tool(self): 
@@ -338,6 +364,7 @@ class Window(tk.Tk):
         self.sign_up_page.pack_forget()
         self.login_page.pack_forget()
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.make_review_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
@@ -345,7 +372,8 @@ class Window(tk.Tk):
         self.managecoupon_page.pack_forget() 
         self.profile_page.pack_forget()
         self.managewholesale_page.pack_forget()
-        self.tool_page.pack(fill=tk.BOTH, expand=1)
+        self.managetypeoftool_page.pack_forget()
+        self.tool_page.show_page()
 
     def show_sign_up(self):
         self.tool_page.pack_forget()
@@ -355,12 +383,14 @@ class Window(tk.Tk):
         self.search_page.pack_forget()
         self.login_page.pack_forget()
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.make_review_page.pack_forget()
         self.make_payment_page.pack_forget()
         self.admin_page.pack_forget()
         self.managetool_page.pack_forget()
         self.managecoupon_page.pack_forget() 
         self.managewholesale_page.pack_forget()
+        self.managetypeoftool_page.pack_forget()
         self.sign_up_page.pack(fill=tk.BOTH, expand=1)
     
     def show_cart(self):
@@ -384,11 +414,40 @@ class Window(tk.Tk):
             self.managecoupon_page.pack_forget() 
             self.managewholesale_page.pack_forget()
             self.cart_page.update_data()
+            self.managetypeoftool_page.pack_forget()
             self.cart_page.pack(fill=tk.BOTH, expand=1)
+
+    def show_wishlist(self):
+        if self.authority == "admin": 
+            messagebox.showinfo(title="notification", message="admin have no wishlist")
+            self.show_home()
+            return
+        elif self.authority == "guest": 
+            messagebox.showinfo(title="notification", message="guest have no wishlist")
+            self.show_home()
+            return
+        else : 
+            self.hide_home_widget()
+            self.sign_up_page.pack_forget()
+            self.tool_page.pack_forget()
+            self.home_page.pack_forget()
+            self.hide_tool_widget()
+            self.search_page.pack_forget()
+            self.login_page.pack_forget()
+            self.make_review_page.pack_forget()
+            self.make_payment_page.pack_forget()
+            self.admin_page.pack_forget()
+            self.managetool_page.pack_forget()
+            self.managecoupon_page.pack_forget() 
+            self.managewholesale_page.pack_forget()
+            self.cart_page.pack_forget()
+            self.wishlist_page.show_page()
+            self.managetypeoftool_page.pack_forget()
     
     def show_admin(self): 
         if self.authority == "admin":
             self.cart_page.pack_forget()
+            self.wishlist_page.pack_forget()
             self.hide_home_widget()
             self.sign_up_page.pack_forget()
             self.tool_page.pack_forget()
@@ -401,6 +460,7 @@ class Window(tk.Tk):
             self.managetool_page.pack_forget()
             self.managecoupon_page.pack_forget() 
             self.managewholesale_page.pack_forget()
+            self.managetypeoftool_page.pack_forget()
             self.admin_page.pack(fill=tk.BOTH, expand=1)
         else : 
             self.show_home()
@@ -408,6 +468,7 @@ class Window(tk.Tk):
     
     def show_payment(self):
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.hide_home_widget()
         self.sign_up_page.pack_forget()
         self.tool_page.pack_forget()
@@ -420,10 +481,12 @@ class Window(tk.Tk):
         self.managetool_page.pack_forget()
         self.managecoupon_page.pack_forget() 
         self.managewholesale_page.pack_forget()
+        self.managetypeoftool_page.pack_forget()
         self.make_payment_page.pack(fill=tk.BOTH, expand=1) 
 
     def show_managetool(self): 
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.hide_home_widget()
         self.sign_up_page.pack_forget()
         self.tool_page.pack_forget()
@@ -436,10 +499,12 @@ class Window(tk.Tk):
         self.make_payment_page.pack_forget() 
         self.managecoupon_page.pack_forget() 
         self.managewholesale_page.pack_forget()
+        self.managetypeoftool_page.pack_forget()
         self.managetool_page.pack(fill=tk.BOTH, expand=1)
 
     def show_managecoupon(self): 
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.hide_home_widget()
         self.sign_up_page.pack_forget()
         self.tool_page.pack_forget()
@@ -454,9 +519,11 @@ class Window(tk.Tk):
         self.managecoupon_page.pack(fill=tk.BOTH, expand=1)
         self.profile_page.pack_forget()
         self.managewholesale_page.pack_forget()
+        self.managetypeoftool_page.pack_forget()
     
     def show_managewholesale(self): 
         self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
         self.hide_home_widget()
         self.sign_up_page.pack_forget()
         self.tool_page.pack_forget()
@@ -470,8 +537,34 @@ class Window(tk.Tk):
         self.managetool_page.pack_forget()
         self.profile_page.pack_forget()
         self.managecoupon_page.pack_forget()
+        self.managetypeoftool_page.pack_forget()
         self.managewholesale_page.pack(fill=tk.BOTH, expand=1)
-        
+
+    def show_managetypeoftool(self): 
+        self.cart_page.pack_forget()
+        self.wishlist_page.pack_forget()
+        self.hide_home_widget()
+        self.sign_up_page.pack_forget()
+        self.tool_page.pack_forget()
+        self.home_page.pack_forget()
+        self.hide_tool_widget()
+        self.search_page.pack_forget()
+        self.login_page.pack_forget()
+        self.admin_page.pack_forget()
+        self.make_review_page.pack_forget()
+        self.make_payment_page.pack_forget()
+        self.managetool_page.pack_forget()
+        self.profile_page.pack_forget()
+        self.managecoupon_page.pack_forget()
+        self.managewholesale_page.pack_forget()
+        self.managetypeoftool_page.pack(fill=tk.BOTH, expand=1)
+def on_closing():
+    app.destroy()
+    print("Closing...")
+    r = requests.post('http://127.0.0.1:8000/logout')
+    print(r, r.json())
+
 if __name__ == "__main__":
     app = Window()
+    app.protocol("WM_DELETE_WINDOW", on_closing)
     app.mainloop()

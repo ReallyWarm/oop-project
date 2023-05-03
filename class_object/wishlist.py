@@ -1,8 +1,9 @@
-from tool import Item
+from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from tool import Tool
     from shoppingcart import ShoppingCart
+from tool import Item
 
 class Wishlist:
     def __init__(self) -> None:
@@ -10,7 +11,7 @@ class Wishlist:
         self._total_price = 0.00
 
     @property
-    def total_price(self): 
+    def total_price(self) -> float: 
         return self._total_price
     
     @property
@@ -53,8 +54,10 @@ class Wishlist:
         self.update_wish_items()
         for wish_item in self.wish_product:
             cart.add_by_item(wish_item)
-        self._wish_product.clear()
-        self.calculate_price()
+        self.clear_wishlist()
 
-    def calculate_price(self):
+    def calculate_price(self) -> None:
         self._total_price = sum([item.items_price for item in self._wish_product])
+
+    def __str__(self) -> str:
+        return str(self.__class__)+'\n'+', '.join(f'{key} : {value}' for key, value in self.__dict__.items())

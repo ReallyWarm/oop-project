@@ -22,15 +22,25 @@ def object_to_dict(object):
 # CATEGORY
 @app.post("/system/category/typeoftools/")
 async def add_typeoftool(type_data:dict):
+    for name, type_of_tool in system.category.search_by_category('').items():
+        if str(name) == type_data['name']:
+            return {"ADD TypeOfTool": "Already have a type of tool"}
     new_typeoftool = TypeOfTool(type_data['name'])
     system.category.add_type(new_typeoftool)
-    return {"ADD TypeOfTool": new_typeoftool}
+    return {"ADD TypeOfTool": "Add type of tool successfully"}
 
 @app.post("/system/category/subtypeoftools/")
 async def add_subtypeoftool(subtype_data:dict):
-    new_subtypeoftool = SubtypeOfTool(subtype_data['name'])
-    system.category.type_name_add_subtype(subtype_data['type'], new_subtypeoftool)
-    return {'ADD SubtypeOfTool':new_subtypeoftool}
+    for name, type_of_tool in system.category.search_by_subtype('').items():
+        if str(name) == subtype_data['name']:
+            return {'ADD SubtypeOfTool': "Already have a subtype of tool"}
+        
+    for name, type_of_tool in system.category.search_by_category('').items():
+        if str(name) == subtype_data['type']:
+            new_subtypeoftool = SubtypeOfTool(subtype_data['name'])
+            system.category.type_name_add_subtype(subtype_data['type'], new_subtypeoftool)
+            return {'ADD SubtypeOfTool':"Add subtype of tool successfully"}
+    return {"ADD SubtypeOfTool":"do not have this type of tool"}
 
 # SEARCH
 @app.get("/system/category/")
@@ -76,19 +86,20 @@ async def add_tool(tool_data:dict):
 
 @app.put("/system/category/subtype/tools/", tags = ['Manage Tool'])
 async def modify_tool(changing_tool_data:dict):
-    print(changing_tool_data["tool_name"])
-    print("------------------------------------------------------")
-    for name, tool in system.category.search_by_name('').items():
-        print(name)
-        if name == changing_tool_data["tool_name"]:
-            system.modify_tool(tool,changing_tool_data["tool_name"],
-                               changing_tool_data["tool_description"],
-                                changing_tool_data["tool_brand"], 
-                                changing_tool_data["tool_price"],
-                                changing_tool_data["product_code"], 
-                                changing_tool_data['tool_category'])
-            return {'MODIFY Tool':"change tool infomation successfully"}        
-    return {'MODIFY Tool':'Invalid Tool'}
+    for type,obj in system.category.search_by_subtype('').items():
+        if type == changing_tool_data["tool_category"]:
+            for name, tool in system.category.search_by_name('').items():
+                if name == changing_tool_data["tool_name"]:
+                    system.modify_tool(tool,changing_tool_data["tool_name"],
+                                    changing_tool_data["tool_description"],
+                                        changing_tool_data["tool_brand"], 
+                                        changing_tool_data["tool_price"],
+                                        changing_tool_data["product_code"], 
+                                        changing_tool_data['tool_category'])
+                    return {'MODIFY Tool':"change tool infomation successfully"}        
+            return {'MODIFY Tool':'Invalid Tool'}
+    return {'MODIFY Tool':'do not have this type of tool'}
+
 
 @app.delete("/system/category/subtype/tools/", tags = ['Manage Tool'])
 async def delete_tool(deleting_tool:str):
@@ -316,6 +327,14 @@ async def get_cart():
         return system.get_active_cart()
     else:
         return {'GET CART':"No active cart"}
+    
+@app.put("/system/shopping_cart/", tags = ['shopping_cart'])
+async def set_cart_item_amount(chosed_item:dict):
+    for name, tool in system.category.search_by_name('').items():
+        if name == chosed_item['tool_name']:
+            system.get_active_cart().set_item_amount(tool,chosed_item['quantity'])
+            return {'SET ITEM':"Set item successfully"}
+    return {'SET ITEM':"Invalid Tool"}
 
 @app.delete("/system/shopping_cart/delete_cart/", tags= ['shopping_cart'])
 async def clear_cart():
@@ -332,6 +351,66 @@ async def delete_item(chosed_item:dict):
             system.get_active_cart().delete_item(tool)
             return {'DELETE ITEM':"delete item successfully"}
     return {'DELETE ITEM':"Invalid Tool"}
+
+# wishlist
+@app.post("/system/wishlist/", tags = ['wishlist'])
+async def add_to_wishlist(chosed_item:dict):
+    for name, tool in system.category.search_by_name('').items():
+        if name == chosed_item['tool_name']:
+            status = system.add_to_wishlist(tool,chosed_item['quantity'])
+            if status == "Can not get wishlist":
+                return {'ADD TO WISHLIST':"Add to wishlist failed"}
+            return {'ADD TO WISHLIST':"Add to wishlist successfully"}
+    return {'ADD TO WISHLIST':"Invalid Tool"}
+
+@app.get("/system/wishlist/", tags = ['wishlist'])
+async def get_wishlist():
+    wishlist = system.get_wishlist()
+    if wishlist is not None:
+        return wishlist
+    else:
+        return {'GET WISHLIST':"can't get wishlist"}
+    
+@app.put("/system/wishlist/", tags = ['wishlist'])
+async def set_wishlist_item_amount(chosed_item:dict):
+    wishlist = system.get_wishlist()
+    if wishlist is None:
+        return {'GET WISHLIST':"can't get wishlist"}
+    for name, tool in system.category.search_by_name('').items():
+        if name == chosed_item['tool_name']:
+            wishlist.set_item_amount(tool,chosed_item['quantity'])
+            return {'SET ITEM':"Set item successfully"}
+    return {'SET ITEM':"Invalid Tool"}
+
+@app.delete("/system/wishlist/delete_wishlist/", tags= ['wishlist'])
+async def clear_wishlist():
+    wishlist = system.get_wishlist()
+    if wishlist is not None:
+        wishlist.clear_wishlist()
+        return {'CLEAR WISHLIST':"clear wishlist successfully"}
+    else:
+        return {'GET WISHLIST':"can't get wishlist"}
+
+@app.delete("/system/wishlist/delete_item/", tags= ['wishlist'])
+async def delete_item(chosed_item:dict):
+    wishlist = system.get_wishlist()
+    if wishlist is None:
+        return {'GET WISHLIST':"can't get wishlist"}
+    for name, tool in system.category.search_by_name('').items():
+        if name == chosed_item['tool_name']:
+            wishlist.delete_item(tool)
+            return {'DELETE ITEM':"delete item successfully"}
+    return {'DELETE ITEM':"Invalid Tool"}
+
+@app.post("/system/wishlist/send_to_cart", tags = ['wishlist'])
+async def wishlist_to_cart():
+    active_cart = system.get_active_cart()
+    customer_wishlist = system.get_wishlist()
+    status = system.wishlist_to_cart(customer_wishlist, active_cart)
+    if status == True:
+        return {'WISHLIST TO CART':"Send wishlist to cart successfully"}
+    else:
+        return {'WISHLIST TO CART':"Can't send wishlist to cart"}
 
 # LOGIN
 @app.post('/signup', summary="Create new user", response_model=dict)
@@ -393,6 +472,5 @@ async def make_payment(payment_data:dict):
     return {"status":status}
 
 if __name__ == "__main__": 
-    print(system.search_user('NorNor007').first_name)
     import uvicorn
     uvicorn.run("main:app", reload=True)

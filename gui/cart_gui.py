@@ -23,10 +23,13 @@ class CartGui(tk.Frame):
         self.makepayment = MakePayment(master=self.master,submaster=self) 
         self.makepayment_button = tk.Button(self,text="Make Payment",command=self.make_payment)
         self.makepayment_button.pack()
-        self.makepayment_button.place(x=660,y=500)
+        self.makepayment_button.place(x=800,y=650)
     def make_payment(self):
         if(self.master.authority == "guest"):
             messagebox.showinfo(title="notification",message="Please login first")
+            return
+        if len(self.in_cart) == 0:
+            messagebox.showinfo(title="notification",message="Please add item first")
             return
         self.makepayment.final_price = self.final_price 
         self.makepayment.final_show = self.final_price
@@ -113,7 +116,14 @@ class CartGui(tk.Frame):
         # print(r.json())
         self.in_cart = r.json()['_cart'] # got list // dict
         # self.item_info = self.in_cart[0] # got dict tool with info
-        self.get_info_in_list()
+        updated = self.get_info_in_list()
+
+        # request new cart data again for out of stock items
+        if updated:
+            r = requests.get(f'http://127.0.0.1:8000/system/shopping_cart/')
+            self.in_cart = r.json()['_cart']
+            self.get_info_in_list()
+
         self.total_price = r.json()['_total_price']
         self.shipping_cost = r.json()['_shipping_price']
         self.final_price = r.json()['_final_price']
@@ -134,14 +144,32 @@ class CartGui(tk.Frame):
 
     def get_info_in_list(self):
         self.list_tool = []
+        status = False
         for item in range(len(self.in_cart)):
-            print(item) 
             list_components= []
             self.item_info = self.in_cart[item]
             self.get_tool_info = self.item_info['_tool']
 
+            tool_name = self.get_tool_info['_name']
+            amount = self.item_info['_buy_amount']
+            tool_stock = self.get_tool_info['_amount']
+            if tool_stock <= 0:
+                messagebox.showinfo(title="notification",message=f"The {tool_name} has been out of stock.")
+                input_data = {"tool_name": tool_name}
+                r = requests.delete(f'http://127.0.0.1:8000/system/shopping_cart/delete_item/', json=input_data)
+                print(r, r.json())
+                status = True
+                continue
+
+            elif tool_stock < amount:
+                messagebox.showinfo(title="notification",message=f"The {tool_name}'s stock has been updated.")
+                input_data = {"tool_name": self.tool_name, "quantity": tool_stock}
+                r = requests.put(f'http://127.0.0.1:8000/system/shopping_cart/', json=input_data)
+                status = True
+                print(r, r.json())
+
             # require data
-            self.tool_name = self.get_tool_info['_name']
+            self.tool_name = tool_name
             #self.item_tool_name = tk.Label(self, text=self.tool_name, font=("Helvetica", 12))
             
             self.tool_image = self.get_tool_info['_image']
@@ -150,7 +178,7 @@ class CartGui(tk.Frame):
             self.total_price = self.item_info['_items_price']
             #self.item_total_price = tk.Label(self, text=self.total_price, font=("Helvetica", 12)) 
 
-            self.amount = self.item_info['_buy_amount']
+            self.amount = amount
             #self.item_quantity = tk.Label(self, text=self.amount, font=("Helvetica", 12))
             
             self.tool_price = self.get_tool_info['_price']
@@ -164,7 +192,7 @@ class CartGui(tk.Frame):
             self.list_tool.append(list_components)
 
         # print(self.list_tool)
-            
+        return status
         
 
     def get_image(self,url,width,height) -> ImageTk.PhotoImage: 
