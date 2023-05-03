@@ -128,9 +128,9 @@ class ManageTool(tk.Frame):
 	            "tool_name":self.ent2.get(),
 	            "tool_description": self.ent3.get(),
 	            "tool_brand": self.ent4.get(),
-	            "tool_amount": self.ent5.get(),
+	            "tool_amount": int(self.ent5.get()),
 	            "tool_image": self.ent6.get(),
-	            "tool_price": self.ent7.get(),
+	            "tool_price": float(self.ent7.get()),
 	            "tool_category": self.ent8.get()
             }
 
@@ -273,7 +273,7 @@ class ManageTool(tk.Frame):
 	            "tool_name":self.ent2.get(),
 	            "tool_description": self.ent3.get(),
 	            "tool_brand": self.ent4.get(),
-	            "tool_price": self.ent7.get(),
+	            "tool_price": float(self.ent7.get()),
 	            "tool_category": self.ent8.get()
             }
 

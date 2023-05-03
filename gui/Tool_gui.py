@@ -154,6 +154,7 @@ class Tool_GUI(tk.Frame) :
             return
         input_data = {"tool_name": self.tool_name, "quantity": self.chosen_amount}
         r = requests.post(f'http://127.0.0.1:8000/system/shopping_cart/', json=input_data)
+        print(r, r.json())
         self.delete_amount()
         self.chosen_amount = 1
         self.show_amount()
@@ -164,7 +165,7 @@ class Tool_GUI(tk.Frame) :
             return
         input_data = {"tool_name": self.tool_name, "quantity": self.chosen_amount}
         r = requests.post(f'http://127.0.0.1:8000/system/wishlist/', json=input_data)
-        print(r.json())
+        print(r, r.json())
         self.delete_amount()
         self.chosen_amount = 1
         self.show_amount()
