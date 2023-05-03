@@ -33,10 +33,14 @@ async def add_typeoftool(type_data:dict):
 async def add_subtypeoftool(subtype_data:dict):
     for name, type_of_tool in system.category.search_by_subtype('').items():
         if str(name) == subtype_data['name']:
-            return {"ADD TypeOfTool": "Already have a subtype of tool"}
-    new_subtypeoftool = SubtypeOfTool(subtype_data['name'])
-    system.category.type_name_add_subtype(subtype_data['type'], new_subtypeoftool)
-    return {'ADD SubtypeOfTool':"Add subtype of tool successfully"}
+            return {'ADD SubtypeOfTool': "Already have a subtype of tool"}
+        
+    for name, type_of_tool in system.category.search_by_category('').items():
+        if str(name) == subtype_data['type']:
+            new_subtypeoftool = SubtypeOfTool(subtype_data['name'])
+            system.category.type_name_add_subtype(subtype_data['type'], new_subtypeoftool)
+            return {'ADD SubtypeOfTool':"Add subtype of tool successfully"}
+    return {"ADD SubtypeOfTool":"do not have this type of tool"}
 
 # SEARCH
 @app.get("/system/category/")
