@@ -51,7 +51,7 @@ class Tool_GUI(tk.Frame) :
             name = name.replace(' ','%20')
         r = requests.get(f'http://127.0.0.1:8000/system/category/show_tools/?tool_name={self.name}')
         self.tool_amoung = r.json()['tool amount']
-        if self.tool_amoung > 1:
+        if int(self.tool_amoung) > 1:
             self.chosen_amoung = 1
         else:
             self.chosen_amoung = 0
@@ -65,7 +65,7 @@ class Tool_GUI(tk.Frame) :
         self.tool_name = r.json()['tool name']
         self.tool_description = r.json()['tool description']
         self.tool_brand = r.json()['tool brand']
-        self.tool_amoung = r.json()['tool amount']
+        self.tool_amoung = int(r.json()['tool amount'])
         self.tool_price = r.json()['tool price']
         self.tool_image = r.json()['tool image']
         self.tool_wholesale = r.json()['tool wholesale']
@@ -141,7 +141,7 @@ class Tool_GUI(tk.Frame) :
                 review[detail].place(x=500, y=280+long*(detail-3)+100*amount)
 
     def incresse_amoung(self):
-        if self.tool_amoung > self.chosen_amoung:
+        if int(self.tool_amoung) > self.chosen_amoung:
             self.delete_amoung()
             self.chosen_amoung += 1
             self.show_amoung()  
@@ -149,7 +149,7 @@ class Tool_GUI(tk.Frame) :
             pass
 
     def add_tool_to_cart(self):
-        if self.tool_amoung <= 0:
+        if int(self.tool_amoung) <= 0:
             messagebox.showinfo(title = "notification",message="Out of stock!")
             return
         input_data = {"tool_name": self.tool_name, "quantity": self.chosen_amoung}
@@ -159,7 +159,7 @@ class Tool_GUI(tk.Frame) :
         self.show_amoung()
     
     def add_tool_to_wishlist(self):
-        if self.tool_amoung <= 0:
+        if int(self.tool_amoung) <= 0:
             messagebox.showinfo(title = "notification",message="Out of stock!")
             return
         input_data = {"tool_name": self.tool_name, "quantity": self.chosen_amoung}
