@@ -98,6 +98,11 @@ class Tool_GUI(tk.Frame) :
         self.tool_brand_label = tk.Label(self, text=self.tool_brand, font=("Helvetica", 12))
         self.tool_brand_label.place(x=400, y=80)
 
+        tk.Label(self, text='amount ', font=("Helvetica", 12)).place(x= 400, y=150)
+
+        self.tool_amount_label = tk.Label(self, text=self.tool_amount, font=("Helvetica", 12))
+        self.tool_amount_label.place(x=500 , y=150)
+
         tk.Label(self, text='review ', font=("Helvetica", 12)).place(x= 400, y=250)
 
         review_list = []
