@@ -239,6 +239,9 @@ class MakePayment(tk.Frame):
         self.address_label.pack()
         self.address_label.place(x=600,y=305)
         dict_add,list_add = self.get_address()
+        for index in range(30): 
+            blank = tk.Label(self,text="                                                                                                       ")
+            blank.place(x=600,y=330+5*index)
         for i,address in enumerate(list_add):
             self.address_button = tk.Button(self,text=f"{address[0]} {address[1]} {address[3]} {address[4]} {address[5]}",command = lambda x = i: self.on_click_address(x))
             self.address_button.pack()
