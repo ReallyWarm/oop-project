@@ -349,6 +349,11 @@ async def delete_item(chosed_item:dict):
             return {'DELETE ITEM':"delete item successfully"}
     return {'DELETE ITEM':"Invalid Tool"}
 
+@app.post("/system/shopping_cart/refresh", tags = ['shopping_cart'])
+async def update_cart_item():
+    status = system.get_active_cart().update_cart_items()
+    return status
+
 # wishlist
 @app.post("/system/wishlist/", tags = ['wishlist'])
 async def add_to_wishlist(chosed_item:dict):

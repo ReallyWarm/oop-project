@@ -19,11 +19,11 @@ class CartGui(tk.Frame):
         self.create_normal_widget()
         self.show_total_cart_widget()
         
-        # self.update_data()
         self.makepayment = MakePayment(master=self.master,submaster=self) 
         self.makepayment_button = tk.Button(self,text="Make Payment",command=self.make_payment)
         self.makepayment_button.pack()
         self.makepayment_button.place(x=800,y=650)
+
     def make_payment(self):
         if(self.master.authority == "guest"):
             messagebox.showinfo(title="notification",message="Please login first")
@@ -35,12 +35,13 @@ class CartGui(tk.Frame):
         self.makepayment.final_show = self.final_price
         self.makepayment.update_payment()
         self.master.show_payment()
+
     def update_data(self): 
         
         self.destroy_widget()
         self.widget.destroy()
         self.get_cart_data()
-        #self.get_info_in_list()
+
         self.show_item_widget()
         self.show_total_cart_widget()
 
@@ -105,24 +106,22 @@ class CartGui(tk.Frame):
             self.widget.place(x = 180,y = 120+120*item)
 
     def destroy_widget(self):
-        #print("destroyed")
         self.total.destroy()
         self.shipping.destroy()
         self.final_cost.destroy()
-        
 
     def get_cart_data(self):
-        r = requests.get(f'http://127.0.0.1:8000/system/shopping_cart/')
-        # print(r.json())
-        self.in_cart = r.json()['_cart'] # got list // dict
-        # self.item_info = self.in_cart[0] # got dict tool with info
-        updated = self.get_info_in_list()
+        r = requests.post(f'http://127.0.0.1:8000/system/shopping_cart/refresh')
+        status = r.json()
+        for tool_name, stock_status in status.items():
+            if stock_status == "Out of stock":
+                messagebox.showinfo(title="notification",message=f"The {tool_name} has been out of stock.")
+            elif stock_status == "Stock updated":
+                messagebox.showinfo(title="notification",message=f"The {tool_name}'s stock has been updated.")
 
-        # request new cart data again for out of stock items
-        if updated:
-            r = requests.get(f'http://127.0.0.1:8000/system/shopping_cart/')
-            self.in_cart = r.json()['_cart']
-            self.get_info_in_list()
+        r = requests.get(f'http://127.0.0.1:8000/system/shopping_cart/')
+        self.in_cart = r.json()['_cart'] # got list // dict
+        self.get_info_in_list()
 
         self.total_price = r.json()['_total_price']
         self.shipping_cost = r.json()['_shipping_price']
@@ -138,9 +137,6 @@ class CartGui(tk.Frame):
                 self.widget.pack() 
                 self.widget.place(x = 20+160*j,y = 120+120*i)
         self.update_data()
-        # canvas = tk.Canvas()
-        # canvas.pack()
-        # self.invinsble_square = canvas.create_rectangle(50, 50, 600, 600, fill="white")
 
     def get_info_in_list(self):
         self.list_tool = []
@@ -150,39 +146,12 @@ class CartGui(tk.Frame):
             self.item_info = self.in_cart[item]
             self.get_tool_info = self.item_info['_tool']
 
-            tool_name = self.get_tool_info['_name']
-            amount = self.item_info['_buy_amount']
-            tool_stock = self.get_tool_info['_amount']
-            if tool_stock <= 0:
-                messagebox.showinfo(title="notification",message=f"The {tool_name} has been out of stock.")
-                input_data = {"tool_name": tool_name}
-                r = requests.delete(f'http://127.0.0.1:8000/system/shopping_cart/delete_item/', json=input_data)
-                print(r, r.json())
-                status = True
-                continue
-
-            elif tool_stock < amount:
-                messagebox.showinfo(title="notification",message=f"The {tool_name}'s stock has been updated.")
-                input_data = {"tool_name": self.tool_name, "quantity": tool_stock}
-                r = requests.put(f'http://127.0.0.1:8000/system/shopping_cart/', json=input_data)
-                status = True
-                print(r, r.json())
-
             # require data
-            self.tool_name = tool_name
-            #self.item_tool_name = tk.Label(self, text=self.tool_name, font=("Helvetica", 12))
-            
+            self.tool_name = self.get_tool_info['_name']
             self.tool_image = self.get_tool_info['_image']
-            # self.item_tool_image = tk.Label(self, image=self.tool_image[0])
-
             self.total_price = self.item_info['_items_price']
-            #self.item_total_price = tk.Label(self, text=self.total_price, font=("Helvetica", 12)) 
-
-            self.amount = amount
-            #self.item_quantity = tk.Label(self, text=self.amount, font=("Helvetica", 12))
-            
+            self.amount = self.item_info['_buy_amount']     
             self.tool_price = self.get_tool_info['_price']
-            #self.item_tool_price = tk.Label(self, text=self.tool_price, font=("Helvetica", 12))
 
             list_components.append(self.tool_name) 
             list_components.append(self.tool_image[0])  

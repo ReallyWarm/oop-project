@@ -22,26 +22,6 @@ class WishlistGui(tk.Frame):
         if len(self.in_wishlist) == 0:
             messagebox.showinfo(title="notification",message="Please add item first")
             return
-        r = requests.get(f'http://127.0.0.1:8000/system/wishlist/')
-        in_wishlist = r.json()['_wish_product']
-        for item in in_wishlist:
-            item_info = item
-            tool_info = item_info['_tool']
-
-            tool_name = tool_info['_name']
-            tool_stock = tool_info['_amount']
-            amount = item_info['_buy_amount']
-            if tool_stock <= 0:
-                messagebox.showinfo(title="notification",message=f"The {tool_name} has been out of stock.")
-                input_data = {"tool_name": tool_name}
-                r = requests.delete(f'http://127.0.0.1:8000/system/wishlist/delete_item/', json=input_data)
-                print(r, r.json())
-
-            elif tool_stock < amount:
-                messagebox.showinfo(title="notification",message=f"The {tool_name}'s stock has been updated.")
-                input_data = {"tool_name": self.tool_name, "quantity": tool_stock}
-                r = requests.put(f'http://127.0.0.1:8000/system/wishlist/', json=input_data)
-                print(r, r.json())
 
         r = requests.post(f'http://127.0.0.1:8000/system/wishlist/send_to_cart')
         print(r, r.json())
@@ -128,16 +108,12 @@ class WishlistGui(tk.Frame):
             list_components= []
             self.item_info = self.in_wishlist[item]
             self.get_tool_info = self.item_info['_tool']
-
-            tool_name = self.get_tool_info['_name']
-            amount = self.item_info['_buy_amount']
-            tool_stock = self.get_tool_info['_amount']
-
+            
             # require data
-            self.tool_name = tool_name      
+            self.tool_name = self.get_tool_info['_name']  
             self.tool_image = self.get_tool_info['_image']
             self.total_price = self.item_info['_items_price'] 
-            self.amount = amount
+            self.amount = self.item_info['_buy_amount']
             self.tool_price = self.get_tool_info['_price']
 
             list_components.append(self.tool_name) 
