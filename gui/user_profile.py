@@ -78,7 +78,16 @@ class Profile(tk.Frame):
             if key == 'username': 
                 name = user["username"]["user"]   
                 order = requests.get(f'http://127.0.0.1:8000/customer/order?name={name}').json()
-                return order['data']
+                print(order)
+                string_sent = ""
+                for pay_id in order.keys(): 
+                    string_sent  += "payment id :" + str(pay_id)
+                    string_sent += "\n" 
+                    for tool in order[pay_id]: 
+                        string_sent += str(tool["_tool"]["_name"]) + " amount : " +str(tool['_buy_amount']) + " price_per_unit  " +str(tool["_tool"]["_price"]) +" item_price " +str(tool['_items_price'])
+                        string_sent += "\n" 
+                    string_sent += "\n" + "\n"
+                return string_sent
         return {"data":"guest"}
      
     
@@ -123,6 +132,7 @@ class Profile(tk.Frame):
         self.address_text = tk.Text(self,height=5,width=40)
         self.address_text.insert('end',self.address)
         self.address_text.pack()
+        
         
         self.order_title = tk.Label(self,text="Order", font=('Arail',12,'bold'))
         self.order_title.pack()
