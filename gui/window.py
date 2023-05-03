@@ -525,6 +525,13 @@ class Window(tk.Tk):
         self.managecoupon_page.pack_forget()
         self.managewholesale_page.pack(fill=tk.BOTH, expand=1)
 
+def on_closing():
+    app.destroy()
+    print("Closing...")
+    r = requests.post('http://127.0.0.1:8000/logout')
+    print(r, r.json())
+
 if __name__ == "__main__":
     app = Window()
+    app.protocol("WM_DELETE_WINDOW", on_closing)
     app.mainloop()
