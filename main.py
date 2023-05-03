@@ -261,7 +261,8 @@ async def check_order(name:str)->dict:
             if customer.username == name:
                 my_order = customer.my_order
                 for order in my_order: 
-                    dict_sent[order.payment_id] = order.orders
+                    dict_sent[order.payment_id] = {"order":order.orders,"total price":order.total_price}
+                    # dict_sent2[order.payment_id] = order.total_price
                 return dict_sent
     return {"data":"Not found this order. Please try again"}    
 

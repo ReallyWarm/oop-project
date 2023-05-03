@@ -79,13 +79,19 @@ class Profile(tk.Frame):
                 name = user["username"]["user"]   
                 order = requests.get(f'http://127.0.0.1:8000/customer/order?name={name}').json()
                 print(order)
-                string_sent = ""
+                string_sent = "" 
                 for pay_id in order.keys(): 
+                        # totalprice = 0
                     string_sent  += "payment id :" + str(pay_id)
                     string_sent += "\n" 
-                    for tool in order[pay_id]: 
-                        string_sent += str(tool["_tool"]["_name"]) + " amount : " +str(tool['_buy_amount']) + " price_per_unit  " +str(tool["_tool"]["_price"]) +" item_price " +str(tool['_items_price'])
-                        string_sent += "\n" 
+                    for key in order[pay_id]:  
+                        if key == "order":
+                            for tool in order[pay_id]["order"] :
+                                string_sent += str(tool["_tool"]["_name"]) + " amount : " +str(tool['_buy_amount']) + " price_per_unit  " +str(tool["_tool"]["_price"]) +" item_price " +str(tool['_items_price'])
+                                string_sent += "\n" 
+                        if key == "total price":
+                            string_sent += "\n"
+                            string_sent += " total price " + str(order[pay_id]["total price"])
                     string_sent += "\n" + "\n"
                 return string_sent
         return {"data":"guest"}
