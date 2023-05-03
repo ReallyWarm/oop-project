@@ -23,7 +23,7 @@ class CartGui(tk.Frame):
         self.makepayment = MakePayment(master=self.master,submaster=self) 
         self.makepayment_button = tk.Button(self,text="Make Payment",command=self.make_payment)
         self.makepayment_button.pack()
-        self.makepayment_button.place(x=660,y=500)
+        self.makepayment_button.place(x=800,y=650)
     def make_payment(self):
         if(self.master.authority == "guest"):
             messagebox.showinfo(title="notification",message="Please login first")
