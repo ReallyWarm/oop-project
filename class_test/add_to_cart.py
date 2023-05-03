@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     # Add to Cart
     system.add_to_cart(testing, 10)
-    system.add_to_cart(faifa, 20)
+    system.add_to_cart(faifa, 12)
     print(system.get_active_cart().cart[0].tool.price)
     print(system.get_active_cart())
     print('----------------------------------------------------------------')
@@ -41,6 +41,12 @@ if __name__ == '__main__':
     print('----------------------------------------------------------------')
     # Same with system.get_active_cart()
     print(system.system_cart)
+    print('----------------------------------------------------------------')
+    test_drill.amount = 0
+    faifa_drill.amount = 5
+    s = system.get_active_cart().update_cart_items()
+    print(s)
+    print(system.get_active_cart())
 
 
 

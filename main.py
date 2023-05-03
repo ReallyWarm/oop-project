@@ -261,7 +261,8 @@ async def check_order(name:str)->dict:
             if customer.username == name:
                 my_order = customer.my_order
                 for order in my_order: 
-                    dict_sent[order.payment_id] = order.orders
+                    dict_sent[order.payment_id] = {"order":order.orders,"total price":order.total_price}
+                    # dict_sent2[order.payment_id] = order.total_price
                 return dict_sent
     return {"data":"Not found this order. Please try again"}    
 
@@ -339,6 +340,11 @@ async def delete_item(chosed_item:dict):
             system.get_active_cart().delete_item(tool_in_system[chosed_item['tool_name']])
             return {'DELETE ITEM':"delete item successfully"}
     return {'DELETE ITEM':"Invalid Tool"}
+
+@app.post("/system/shopping_cart/refresh", tags = ['shopping_cart'])
+async def update_cart_item():
+    status = system.get_active_cart().update_cart_items()
+    return status
 
 # wishlist
 @app.post("/system/wishlist/", tags = ['wishlist'])
