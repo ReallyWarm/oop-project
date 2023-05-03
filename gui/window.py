@@ -200,6 +200,13 @@ class Window(tk.Tk):
             row = 220 * (i//4)
             widget.set_coords(start_x+col, start_y+row)
 
+    def delete_tool_widget(self, tool_name):
+        self.hide_tool_widget()
+        for widget in self.tool_widgets:
+            if widget.name == tool_name:
+                self.tool_widgets.remove(widget)
+                return
+
     def show_home_widget(self):
         self.update_home_name()
         self.place_cart_button()

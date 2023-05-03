@@ -386,7 +386,7 @@ class ManageTool(tk.Frame):
         elif respon == {'DELETE Tool':'Invalid Tool'}:
             tk.messagebox.showinfo(title="DELETE_TOOL Response", message="WRONG NAME INPUT")
 
-    
+        self.master.delete_tool_widget(self.tool_name)
 
     def Back(self): 
         self.master.show_admin()
