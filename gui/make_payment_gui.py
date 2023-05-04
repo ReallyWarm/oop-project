@@ -91,7 +91,6 @@ class MakePayment(tk.Frame):
 
 
     def update_payment(self):
-        # print(self.choose_address)
         self.get_cart_data()
         self.destroy_widget()
         self.clear_item()
@@ -105,22 +104,15 @@ class MakePayment(tk.Frame):
 
     def get_cart_data(self):
         r = requests.get(f'http://127.0.0.1:8000/system/shopping_cart/')
-        # print("-------------------------------------------------------")
-        # print("get_cart_data pass")
-        # print(r.json())
-        # print("--------------------------------------------------")
-        self.in_cart = r.json()['_cart'] # got list // dict
-        # self.item_info = self.in_cart[0] # got dict tool with info
+        self.in_cart = r.json()['_cart']
         self.get_info_in_list()
         self.total_price = r.json()['_total_price']
         self.shipping_cost = r.json()['_shipping_price']
         self.final_price = r.json()['_final_price']
 
     def get_info_in_list(self):
-        # print("get_info_in_list pass")
         self.list_tool = []
         for item in range(len(self.in_cart)):
-            # print(item) 
             list_components= []
             self.item_info = self.in_cart[item]
             self.get_tool_info = self.item_info['_tool']
@@ -154,15 +146,13 @@ class MakePayment(tk.Frame):
         
 
     def get_coupon_info(self): 
-        user = requests.get("http://127.0.0.1:8000/me").json()
-        # print(user) 
+        user = requests.get("http://127.0.0.1:8000/me").json() 
         self.coupon_list = []
         self.number_click =[]
         for key in user.keys(): 
             if key == 'username': 
                 username = user["username"]["user"]
                 coupon = requests.get(f"http://127.0.0.1:8000/coupons/active_coupon/?username={username}").json()
-                # print(coupon)
                 for key in coupon.keys(): 
                     self.code_coupon.append(key)
                     component_list = []   
@@ -197,7 +187,6 @@ class MakePayment(tk.Frame):
                 check2 = 1
         if check2==0 :
             self.to_unuse_coupon()
-        # print(self.number_click)
             
     def to_use_coupon(self,discount_value): 
         self.final_show = self.final_price - discount_value
@@ -207,7 +196,7 @@ class MakePayment(tk.Frame):
         self.final_price_label = tk.Label(self, text="final price             {}".format(self.final_show))
         self.final_price_label.pack()
         self.final_price_label.place(x=50, y=650)
-        # self.show_final_price()
+
     def to_unuse_coupon(self): 
         self.final_show = self.final_price
         self.final_price_label = tk.Label(self, text="final price                               ")
@@ -216,7 +205,6 @@ class MakePayment(tk.Frame):
         self.final_price_label = tk.Label(self, text="final price             {}".format(self.final_show))
         self.final_price_label.pack()
         self.final_price_label.place(x=50, y=650)
-        # self.show_final_price()
 
     def on_click_address(self,index): 
         dict_add,list_add = self.get_address() 
@@ -246,14 +234,14 @@ class MakePayment(tk.Frame):
             self.address_button = tk.Button(self,text=f"{address[0]} {address[1]} {address[3]} {address[4]} {address[5]}",command = lambda x = i: self.on_click_address(x))
             self.address_button.pack()
             self.address_button.place(x=600,y=350+20*i)
+
     def get_address(self): 
         user =requests.get("http://127.0.0.1:8000/me").json()  
         addresses = []
         for key in user.keys(): 
             if key == 'username': 
                 name = user["username"]["user"]   
-                username = requests.get(f'http://127.0.0.1:8000/user//?username={name}').json()
-                # print(username['first_name']['_addresses']) 
+                username = requests.get(f'http://127.0.0.1:8000/user//?username={name}').json() 
                 for com in username['first_name']['_addresses'] :
                     component = []
                     component.append(com["_company"])
@@ -263,9 +251,9 @@ class MakePayment(tk.Frame):
                     component.append(com["_address"])
                     component.append(com["_postal_code"]) 
                     addresses.append(component)
-                # print(addresses)
                 return username['first_name']['_addresses'],addresses
         return {"data":"guest"}
+    
     def confirm_button(self):   
         user =requests.get("http://127.0.0.1:8000/me").json()  
         check = 0

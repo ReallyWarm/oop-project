@@ -32,7 +32,6 @@ class WishlistGui(tk.Frame):
             self.destroy_widget()
         self.widget.destroy()
         self.get_wishlist_data()
-        #self.get_info_in_list()
         self.show_item_widget()
         self.show_total_price_widget()
 
@@ -125,9 +124,9 @@ class WishlistGui(tk.Frame):
 
     def get_image(self,url,width,height) -> ImageTk.PhotoImage: 
         with urllib.request.urlopen(url) as u:
-            raw_data = u.read()  # read the image data from the URL
+            raw_data = u.read()
 
-        im = Image.open(io.BytesIO(raw_data))  # create a PIL Image object from the image data
+        im = Image.open(io.BytesIO(raw_data))
         im = im.resize((width,height))
         return ImageTk.PhotoImage(im)
 

@@ -16,8 +16,6 @@ from admin_gui import AdminGui
 import random
 import requests
 from profile_page import ProfileGUI
-# # from tkinter import messagebox
-# # from tkinter import ttk
 import io
 import urllib.request
 
@@ -40,8 +38,6 @@ class Window(tk.Tk):
         pages_menu = tk.Menu(menubar, tearoff=0)
         pages_menu.add_command(label="Home", command=self.show_home)
         pages_menu.add_command(label="Search", command=self.show_search)
-        # pages_menu.add_command(label="Create Address",command=self.show_create_address)
-        # pages_menu.add_command(label="Edit and delete address",command=self.show_edit_address)
         pages_menu.add_command(label="Profile",command=self.show_profile)
         menubar.add_cascade(label="Pages", menu=pages_menu)
 
@@ -244,9 +240,9 @@ class Window(tk.Tk):
 
     def get_image(self,url,width,height) -> ImageTk.PhotoImage: 
         with urllib.request.urlopen(url) as u:
-            raw_data = u.read()  # read the image data from the URL
+            raw_data = u.read()
 
-        im = Image.open(io.BytesIO(raw_data))  # create a PIL Image object from the image data
+        im = Image.open(io.BytesIO(raw_data))
         im = im.resize((width,height))
         return ImageTk.PhotoImage(im)
     
@@ -259,7 +255,6 @@ class Window(tk.Tk):
     def show_home(self):  
         self.first_name = self.first_name_user()["first_name"]
         self.show_home_widget()
-        # self.make_all_tool_widget(self.get_tool_data())
         self.tool_page.pack_forget()
         self.search_page.pack_forget()
         self.login_page.pack_forget()

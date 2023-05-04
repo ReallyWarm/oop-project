@@ -16,6 +16,12 @@ class ManageCoupon(tk.Frame):
         self.get_coupon_info()
         self.do_dropdown()
 
+    def validate_num(self, char):
+        if char.isdigit():
+            return True
+        else:
+            return False
+
     def create_widget(self):  
         tk.Label(self,text="manage coupon", font=("Helvetica", 18)).place(x=290,y=30)
         
@@ -32,7 +38,6 @@ class ManageCoupon(tk.Frame):
             components.append(coupon_all[key]['name']) 
             components.append(coupon_all[key]['discount_value'])
             self.coupon_list.append(components) 
-        # print(self.coupon_list)
 
     def create_getcoupon_widget(self): 
         self.get_couponwidget = [] 
@@ -44,7 +49,8 @@ class ManageCoupon(tk.Frame):
         self.code_label = tk.Label(self, text="Code:") 
         self.code_label_input = tk.Entry(self)
         self.discount_label = tk.Label(self, text="Discount Value:")
-        self.discount_label_input = tk.Entry(self) 
+        self.discount_label_input = tk.Entry(self, validate="key")
+        self.discount_label_input['validatecommand'] = (self.discount_label_input.register(self.validate_num), '%S') 
         self.name_label = tk.Label(self, text="Name:")
         self.name_label_input = tk.Entry(self)   
         self.title = tk.Label(self, text="Add coupon")
@@ -73,25 +79,22 @@ class ManageCoupon(tk.Frame):
             messagebox.showinfo(title="notification",message="discount_value must be integer")
             return
         
-        if int(discount_value) <= 0 : 
+        if float(discount_value) <= 0 or float(discount_value) > 100: 
             messagebox.showinfo(title="notification",message="discount_value must be positive integer") 
             return
         dict_put = {code:{"name":name,"discount_value":discount_value}}
         message = requests.put("http://127.0.0.1:8000/coupons/all",data=json.dumps(dict_put))
-        # print(message.json())
+
         self.mname_label_input.delete(0,tk.END)
         self.mdiscount_label_input.delete(0,tk.END) 
         self.get_coupon_info()
         self.handle_selection(self.event)
 
-        # print(code,name,discount_value)
     def delete_button(self,code):  
         dict_delete = {"code":code}
         message = requests.delete("http://127.0.0.1:8000/coupons/all",data=json.dumps(dict_delete))
         self.get_coupon_info()
         self.handle_selection(self.event)
-        # print(message.json())
-        # print("hi2",code)
 
     def submit_button(self):  
         name = self.name_label_input.get() 
@@ -100,8 +103,8 @@ class ManageCoupon(tk.Frame):
         if not discount_value.isdigit(): 
             messagebox.showinfo(title="notification",message="discount_value must be integer")
             return 
-        if int(discount_value) <= 0 : 
-            messagebox.showinfo(title="notification",message="discount_value must be positive integer") 
+        if float(discount_value) <= 0 or float(discount_value) > 100: 
+            messagebox.showinfo(title="notification",message="discount_value must be 0 - 100") 
             return
         dict_add = {code:{"name":name, "discount_value":discount_value}}
         for coupon in self.coupon_list:  
@@ -112,14 +115,13 @@ class ManageCoupon(tk.Frame):
         self.name_label_input.delete(0,tk.END) 
         self.code_label_input.delete(0,tk.END) 
         self.discount_label_input.delete(0,tk.END)
-        self.get_coupon_info()
-        # print(message)
-    
+        self.get_coupon_info()   
     
     def create_modify_widget(self,code,name,discount_value): 
 
         self.mdiscount_label = tk.Label(self, text="Discount Value:")
-        self.mdiscount_label_input = tk.Entry(self) 
+        self.mdiscount_label_input = tk.Entry(self, validate="key")
+        self.mdiscount_label_input['validatecommand'] = (self.mdiscount_label_input.register(self.validate_num), '%S')  
         self.mdiscount_label_input.insert(0,discount_value)
         self.mname_label = tk.Label(self, text="Name:")
         self.mname_label_input = tk.Entry(self)  

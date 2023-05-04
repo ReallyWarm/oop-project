@@ -126,7 +126,6 @@ class CartGui(tk.Frame):
         self.total_price = r.json()['_total_price']
         self.shipping_cost = r.json()['_shipping_price']
         self.final_price = r.json()['_final_price']
-        #print(self.in_cart)
 
     def clear_cart(self):
         requests.delete(f'http://127.0.0.1:8000/system/shopping_cart/delete_cart/')
@@ -159,16 +158,14 @@ class CartGui(tk.Frame):
             list_components.append(self.amount) 
             list_components.append(self.total_price)
             self.list_tool.append(list_components)
-
-        # print(self.list_tool)
         return status
         
 
     def get_image(self,url,width,height) -> ImageTk.PhotoImage: 
         with urllib.request.urlopen(url) as u:
-            raw_data = u.read()  # read the image data from the URL
+            raw_data = u.read()
 
-        im = Image.open(io.BytesIO(raw_data))  # create a PIL Image object from the image data
+        im = Image.open(io.BytesIO(raw_data))
         im = im.resize((width,height))
         return ImageTk.PhotoImage(im)
 

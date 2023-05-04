@@ -35,7 +35,6 @@ class Tool_GUI(tk.Frame) :
         self.decrease_amount_button = tk.Button(self,text="-",command=self.decrease_amount, font=("Helvetica", 24))
         self.decrease_amount_button.pack()
         self.decrease_amount_button.place(x=310,y=400)
-        # self.get_tool_details()
 
     def show_amount(self):
         self.chosen_amount_lable = tk.Label(self, text=self.chosen_amount, font=("Helvetica", 24))
@@ -113,23 +112,18 @@ class Tool_GUI(tk.Frame) :
 
             self.tool_review_label_reviewer = tk.Label(self, text=self.tool_review[amount]['_user_name'], font=("Helvetica", 12))
             review_details.append(self.tool_review_label_reviewer)
-            # self.tool_review_label_reviewer.place(x=50, y=250+((amount-1))*60)
 
             self.tool_review_label_score = tk.Label(self, text=self.tool_review[amount]['_rating'], font=("Helvetica", 12))
             review_details.append(self.tool_review_label_score)
-            # self.tool_review_label_score.place(x=50, y=280)
 
             self.tool_review_label_date = tk.Label(self, text=self.tool_review[amount]['_date_of_review'], font=("Helvetica", 12))
             review_details.append(self.tool_review_label_date)
-            # self.tool_review_label_date.place(x=50, y=310)
 
             self.tool_review_label_head_review = tk.Label(self, text=self.tool_review[amount]['_head_of_review'], font=("Helvetica", 12))
             review_details.append(self.tool_review_label_head_review)
-            # self.tool_review_label_head_review.place(x=150, y=250)
 
             self.tool_review_label_detail = tk.Label(self, text=self.tool_review[amount]['_comment'], font=("Helvetica", 12))
             review_details.append(self.tool_review_label_detail)
-            # self.tool_review_label_detail.place(x=150, y=280)
 
             review_list.append(review_details)
 
@@ -187,9 +181,9 @@ class Tool_GUI(tk.Frame) :
     
     def get_image(self,url,width,height) -> ImageTk.PhotoImage: 
         with urllib.request.urlopen(url) as u:
-            raw_data = u.read()  # read the image data from the URL
+            raw_data = u.read()
 
-        im = Image.open(io.BytesIO(raw_data))  # create a PIL Image object from the image data
+        im = Image.open(io.BytesIO(raw_data))
         im = im.resize((width,height))
         return ImageTk.PhotoImage(im)
     

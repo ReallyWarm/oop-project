@@ -81,7 +81,6 @@ class Profile(tk.Frame):
                 print(order)
                 string_sent = "" 
                 for pay_id in order.keys(): 
-                        # totalprice = 0
                     string_sent  += "payment id :" + str(pay_id)
                     string_sent += "\n" 
                     for key in order[pay_id]:  

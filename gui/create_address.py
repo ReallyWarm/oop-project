@@ -10,6 +10,11 @@ class CreateAddressGUI(tk.Frame):
         self.create_widget()
         self.create_button()
     
+    def validate_num(self, char):
+        if char.isdigit():
+            return True
+        else:
+            return False
     
     def create_widget(self):
             # create label for page title
@@ -63,7 +68,8 @@ class CreateAddressGUI(tk.Frame):
         self.phone_label = tk.Label(self, text="Phone number:", font=("Arial", 12))
         self.phone_label.grid(row=7, column=0, padx=10, pady=5, sticky=tk.E)
        
-        self.phone_entry = tk.Entry(self, width=30)
+        self.phone_entry = tk.Entry(self, width=30, validate="key")
+        self.phone_entry['validatecommand'] = (self.phone_entry.register(self.validate_num), '%S')
         self.phone_entry.grid(row=7, column=1, padx=10, pady=5)
      
             
@@ -71,6 +77,7 @@ class CreateAddressGUI(tk.Frame):
         self.postal_label.grid(row=8, column=0, padx=10, pady=5, sticky=tk.E)
     
         self.postal_entry = tk.Entry(self, width=30)
+        self.postal_entry['validatecommand'] = (self.postal_entry.register(self.validate_num), '%S')
         self.postal_entry.grid(row=8, column=1, padx=10, pady=5)
    
       
@@ -111,7 +118,6 @@ class CreateAddressGUI(tk.Frame):
         # show message box indicating changes have been saved
         if  res1 == {"data":'Unable to create the address.'}:
             messagebox.showinfo(title='Error',message="You don't have account in this system. Please try again")
-            # print(r1.json())
         else:
             messagebox.showinfo(title='Notice',message="Success creating the address")
             print(r1.json())

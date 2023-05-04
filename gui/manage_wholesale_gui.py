@@ -16,6 +16,12 @@ class ManageWholesale(tk.Frame):
         self.get_wholesale_info()
         self.do_dropdown()
 
+    def validate_num(self, char):
+        if char.isdigit():
+            return True
+        else:
+            return False
+
     def create_widget(self):  
         tk.Label(self,text="manage wholesale", font=("Helvetica", 18)).place(x=290,y=30)
         
@@ -45,9 +51,11 @@ class ManageWholesale(tk.Frame):
         self.code_label = tk.Label(self, text="Code:") 
         self.code_label_input = tk.Entry(self)
         self.amount_label = tk.Label(self, text="Amount:")
-        self.amount_label_input = tk.Entry(self) 
+        self.amount_label_input = tk.Entry(self, validate="key")
+        self.amount_label_input['validatecommand'] = (self.amount_label_input.register(self.validate_num), '%S') 
         self.discount_label = tk.Label(self, text="Discount value:")
-        self.discount_label_input = tk.Entry(self)   
+        self.discount_label_input = tk.Entry(self, validate="key")
+        self.discount_label_input['validatecommand'] = (self.discount_label_input.register(self.validate_num), '%S')    
         self.title = tk.Label(self, text="Add wholesale")
         self.summit_button_label = tk.Button(self,text="summit",command=self.submit_button)
         self.add_wholesalewidget = [self.code_label,self.code_label_input,self.amount_label,self.amount_label_input,self.discount_label,self.discount_label_input,self.title,self.summit_button_label]
@@ -122,15 +130,15 @@ class ManageWholesale(tk.Frame):
         self.discount_label_input.delete(0,tk.END)
         self.get_wholesale_info() 
 
-    
-    
     def create_modify_widget(self,code,amount,discount_value): 
 
         self.mdiscount_label = tk.Label(self, text="Discount Value:")
-        self.mdiscount_label_input = tk.Entry(self) 
+        self.mdiscount_label_input = tk.Entry(self, validate="key")
+        self.mdiscount_label_input['validatecommand'] = (self.mdiscount_label_input.register(self.validate_num), '%S')  
         self.mdiscount_label_input.insert(0,discount_value)
         self.mamount_label = tk.Label(self, text="Amount:")
-        self.mamount_label_input = tk.Entry(self)  
+        self.mamount_label_input = tk.Entry(self, validate="key")
+        self.mamount_label_input['validatecommand'] = (self.mamount_label_input.register(self.validate_num), '%S')  
         self.mamount_label_input.insert(0,amount)
         self.mtitle = tk.Label(self, text="mofidy")
         self.modify_button_label = tk.Button(self,text="update",command= lambda x=code : self.update_wholesale(x))

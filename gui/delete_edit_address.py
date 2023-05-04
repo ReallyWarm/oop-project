@@ -245,7 +245,6 @@ class EditDeleteAddressGUI(tk.Frame):
             res2 = json.loads(r2.text)
             messagebox.showinfo(
                 title='Notice', message=f"Success edit the address {res2['data']}")
-            # print(r2.json())
 
     def delete_changes(self):
         # save changes to user information

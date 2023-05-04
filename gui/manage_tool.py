@@ -14,8 +14,12 @@ class ManageTool(tk.Frame):
         self.todo_dropdown()
         self.back_button()
         self.show_now = 0
-        # self.status = "empty"
-        # self.create_widget()
+
+    def validate_num(self, char):
+        if char.isdigit():
+            return True
+        else:
+            return False
 
     def todo_dropdown(self):
         self.choice = tk.StringVar(self, value="chose to do")
@@ -50,8 +54,6 @@ class ManageTool(tk.Frame):
                 self.delete_widget()
                 self.create_add_tool_widget()
                 self.show_now = 1
-
-
 
     def back_button(self):
         self.back_to_home_button = tk.Button(self,text="back",command=self.Back)
@@ -92,7 +94,8 @@ class ManageTool(tk.Frame):
         self.text6 =  tk.Label(self, text="tool_amount:", font=("Helvetica", 12))
         self.text6.pack()
         self.text6.place(x=50, y=300)
-        self.ent5 = tk.Entry(self, font=("Helvetica", 12), bd=1, relief=tk.SOLID)
+        self.ent5 = tk.Entry(self, font=("Helvetica", 12), bd=1, relief=tk.SOLID, validate="key")
+        self.ent5['validatecommand'] = (self.ent5.register(self.validate_num), '%S')  
         self.ent5.place(x=50, y=330, width=400)
 
         self.text7 =  tk.Label(self, text="tool_image:", font=("Helvetica", 12))
@@ -104,7 +107,8 @@ class ManageTool(tk.Frame):
         self.text8 =  tk.Label(self, text="tool_price:", font=("Helvetica", 12))
         self.text8.pack()
         self.text8.place(x=50, y=420)
-        self.ent7 = tk.Entry(self, font=("Helvetica", 12), bd=1, relief=tk.SOLID)
+        self.ent7 = tk.Entry(self, font=("Helvetica", 12), bd=1, relief=tk.SOLID, validate="key")
+        self.ent7['validatecommand'] = (self.ent7.register(self.validate_num), '%S') 
         self.ent7.place(x=50, y=450, width=400)
 
         self.text9 =  tk.Label(self, text="tool_category:", font=("Helvetica", 12))
@@ -118,31 +122,33 @@ class ManageTool(tk.Frame):
         self.button.place(x=180, y=550)
 
     def add_tool(self):
-        
-        if self.ent1.get() != '' and self.ent2.get() != '' and  self.ent3.get() != '' and  self.ent4.get() \
-            != '' and  self.ent5.get() != '' and  self.ent6.get() != '' and  self.ent7.get() != '' \
-            and  self.ent8.get() != '':
-        
-            input_data = {
-                "product_code": self.ent1.get(),
-	            "tool_name":self.ent2.get(),
-	            "tool_description": self.ent3.get(),
-	            "tool_brand": self.ent4.get(),
-	            "tool_amount": int(self.ent5.get()),
-	            "tool_image": self.ent6.get(),
-	            "tool_price": float(self.ent7.get()),
-	            "tool_category": self.ent8.get()
-            }
+        if (int(self.ent5.get()) and float(self.ent7.get())) > 0 :
+            if self.ent1.get() != '' and self.ent2.get() != '' and  self.ent3.get() != '' and  self.ent4.get() \
+                != '' and  self.ent5.get() != '' and  self.ent6.get() != '' and  self.ent7.get() != '' \
+                and  self.ent8.get() != '':
+            
+                input_data = {
+                    "product_code": self.ent1.get(),
+                    "tool_name":self.ent2.get(),
+                    "tool_description": self.ent3.get(),
+                    "tool_brand": self.ent4.get(),
+                    "tool_amount": int(self.ent5.get()),
+                    "tool_image": self.ent6.get(),
+                    "tool_price": float(self.ent7.get()),
+                    "tool_category": self.ent8.get()
+                }
 
-            r = requests.post("http://127.0.0.1:8000/system/category/subtype/tools/", json=input_data)
-            respon = json.loads(r.text)
-            if respon == {'ADD Tool':"add tool successfully"}:
-                tk.messagebox.showinfo(title="ADD_TOOL Response", message="ADD Tool successfully added")
-                self.master.make_tool_widget(self.ent2.get(), self.ent6.get())
-            elif respon =={'ADD Tool':"Already have this Tool"}:
-                tk.messagebox.showinfo(title="ADD_TOOL Response", message="Already have this Tool")
-        else :
-            tk.messagebox.showinfo(title="ADD_TOOL Response", message="Need more information")
+                r = requests.post("http://127.0.0.1:8000/system/category/subtype/tools/", json=input_data)
+                respon = json.loads(r.text)
+                if respon == {'ADD Tool':"add tool successfully"}:
+                    tk.messagebox.showinfo(title="ADD_TOOL Response", message="ADD Tool successfully added")
+                    self.master.make_tool_widget(self.ent2.get(), self.ent6.get())
+                elif respon =={'ADD Tool':"Already have this Tool"}:
+                    tk.messagebox.showinfo(title="ADD_TOOL Response", message="Already have this Tool")
+            else :
+                tk.messagebox.showinfo(title="ADD_TOOL Response", message="Need more information")
+        else:
+            tk.messagebox.showinfo(title="ADD_TOOL Response", message="price and amount must > 0")
 
     def delete_widget(self):
         self.text1.destroy()
@@ -167,15 +173,10 @@ class ManageTool(tk.Frame):
             self.ent6.destroy()
 
         if self.show_now == 2 or self.show_now == 3:
-            # if self.status == "writed":
-            #     pass
-            # else:
             self.search.destroy()
             self.search_ent.destroy()
             self.search_button.destroy()
         
-        # self.status = "empty"
-
 # ---------------------------------------------------------------- modify tool -------------------------------------------------------------
 
     def search_to_modify(self):
@@ -192,14 +193,6 @@ class ManageTool(tk.Frame):
         self.search_button.pack()
         self.search_button.place(x=500, y=300)
 
-    # for write again
-    # def manage_tool_status_check(self):
-    #     if self.status == "writed":
-    #         self.delete_widget()
-    #         self.manage_tool_widget()
-    #     else:
-    #         self.manage_tool_widget()
-
     def manage_tool_widget(self):
         self.input_name = self.search_ent.get()
         if ' ' in self.input_name : 
@@ -212,10 +205,8 @@ class ManageTool(tk.Frame):
         self.tool_name = r.json()['tool name']
         self.tool_description = r.json()['tool description']
         self.tool_brand = r.json()['tool brand']
-        self.tool_price = r.json()['tool price']
+        self.tool_price = int(r.json()['tool price'])
         self.tool_category = r.json()['tool category']
-
-        
 
         self.text2 =  tk.Label(self, text="product code:", font=("Helvetica", 12))
         self.text2.pack()
@@ -248,7 +239,8 @@ class ManageTool(tk.Frame):
         self.text8 =  tk.Label(self, text="tool_price:", font=("Helvetica", 12))
         self.text8.pack()
         self.text8.place(x=50, y=300)
-        self.ent7 = tk.Entry(self, font=("Helvetica", 12), bd=1, relief=tk.SOLID)
+        self.ent7 = tk.Entry(self, font=("Helvetica", 12), bd=1, relief=tk.SOLID , validate="key")
+        self.ent7['validatecommand'] = (self.ent7.register(self.validate_num), '%S') 
         self.ent7.insert(0, self.tool_price)
         self.ent7.place(x=50, y=330, width=400)
 
@@ -263,28 +255,30 @@ class ManageTool(tk.Frame):
         self.button.pack()
         self.button.place(x=180, y=550)
 
-        # self.status = "writed"
-
     def modify_tool(self):
-        if self.ent1.get() != '' and self.ent2.get() != '' and  self.ent3.get() != '' and  self.ent4.get() != '' and  self.ent7.get() != ''  and  self.ent8.get() != '':
-        
-            input_data = {
-                "product_code": self.ent1.get(),
-	            "tool_name":self.ent2.get(),
-	            "tool_description": self.ent3.get(),
-	            "tool_brand": self.ent4.get(),
-	            "tool_price": float(self.ent7.get()),
-	            "tool_category": self.ent8.get()
-            }
+        if float(self.ent7.get()) > 0 :
+            if self.ent1.get() != '' and self.ent2.get() != '' and  self.ent3.get() != '' and  self.ent4.get() != '' and  self.ent7.get() != ''  and  self.ent8.get() != '':
+            
+                input_data = {
+                    "product_code": self.ent1.get(),
+                    "tool_name":self.ent2.get(),
+                    "tool_description": self.ent3.get(),
+                    "tool_brand": self.ent4.get(),
+                    "tool_price": float(self.ent7.get()),
+                    "tool_category": self.ent8.get()
+                }
 
-            r = requests.put("http://127.0.0.1:8000/system/category/subtype/tools/", json=input_data)
-            respon = json.loads(r.text)
-            if respon == {"MODIFY Tool": "change tool infomation successfully"}:
-                tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="MODIFY Tool successfully")
-            elif respon == {'MODIFY Tool':'do not have this subtype of tool'}:
-                tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="do not have this subtype of tool")
-        else :
-            tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="Need more information")
+                r = requests.put("http://127.0.0.1:8000/system/category/subtype/tools/", json=input_data)
+                respon = json.loads(r.text)
+                if respon == {"MODIFY Tool": "change tool infomation successfully"}:
+                    tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="MODIFY Tool successfully")
+                elif respon == {'MODIFY Tool':'do not have this subtype of tool'}:
+                    tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="do not have this subtype of tool")
+            else :
+                tk.messagebox.showinfo(title="MANAGE_TOOL Response", message="Need more information")
+        else:
+            tk.messagebox.showinfo(title="ADD_TOOL Response", message="price and amount must > 0")
+
 
     #-------------------------------------------------------------------- delete tool -----------------------------------------------------------
 
@@ -302,16 +296,7 @@ class ManageTool(tk.Frame):
         self.search_button.pack()
         self.search_button.place(x=500, y=300)
 
-    # def delete_tool_status_check(self):
-    #     if self.status == "writed":
-    #         self.delete_widget()
-    #         self.delete_tool_widget()
-    #     else:
-    #         self.delete_tool_widget()
-
     def delete_tool_widget(self):
-        # if self.status == "writed":
-        #     self.delete_widget()
         self.input_name = self.search_ent.get()
         if ' ' in self.input_name : 
             self.input_name = self.input_name.replace(' ','%20')
@@ -375,8 +360,6 @@ class ManageTool(tk.Frame):
         self.button = tk.Button(self, text="delete modified tool", font=("Helvetica", 12, "bold"), bg="#333", fg="#fff", command=self.delete_tool)
         self.button.pack()
         self.button.place(x=180, y=550)
-
-        # self.status = "writed"
 
     def delete_tool(self):
         r = requests.delete(f'http://127.0.0.1:8000/system/category/subtype/tools/?deleting_tool={self.tool_name}')
