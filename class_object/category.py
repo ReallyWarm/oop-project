@@ -39,7 +39,7 @@ class Category:
         subtype_of_tool = self.search_by_subtype(subtype_name)[subtype_name]
         self.subtype_add_tool(subtype_of_tool, tool)
 
-    def subtype_add_tool(self, subtype_of_tool:'SubtypeOfTool', tool:Tool) -> None:
+    def subtype_add_tool(self, subtype_of_tool:SubtypeOfTool, tool:Tool) -> None:
         subtype_of_tool.add_tool(tool)
         self._all_tools.append(tool)
 
@@ -61,9 +61,9 @@ class Category:
 
         return searched
 
-    def search_by_name(self, name:str) -> dict:
+    def search_by_name(self, tool_name:str) -> dict:
         searched = { }
-        name_lower = name.lower()
+        name_lower = tool_name.lower()
         for tool in self._all_tools:
             if name_lower in tool.name.lower():
                 searched[tool.name] = tool
