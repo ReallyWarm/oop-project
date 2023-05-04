@@ -50,9 +50,6 @@ class CustomerInfo(User):
         address = self.get_address(name)
         self.address.remove(address)
 
-    def get_ShoppingCart(self) -> ShoppingCart:
-        return self.my_shoppingcart
-
     def create_review(self, tool:Tool, head_of_review:str, comment:str, rating:float, date_of_review:str) -> None:
         review = Review(self._first_name, head_of_review, comment, date_of_review, rating)
         self._my_review.append(review)
