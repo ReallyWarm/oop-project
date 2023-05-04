@@ -18,7 +18,7 @@ class Tool:
           self._image = [image_url]
           self._wholesale = [ ]
           self._rating = 0.00
-          self.__n_review = 0.00
+          self.__count_review = 0.00
           self.__rated_review = 0.00
 
     @property
@@ -66,9 +66,9 @@ class Tool:
     
     def add_review(self, review:Review) -> None:
         self._reviews.append(review)
-        self.__n_review += 1
+        self.__count_review += 1
         self.__rated_review += review._rating
-        self._rating = self.__rated_review / self.__n_review
+        self._rating = self.__rated_review / self.__count_review
 
     @property
     def rating(self) -> float:
