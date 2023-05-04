@@ -168,11 +168,11 @@ class System():
                 self._server_coupons.remove(coupon) 
                 return
             
-    def create_tool(self, product_code, tool_name, tool_description, tool_brand, tool_amount, tool_image, tool_price, subtype_of_tool) -> None:
+    def create_tool(self, product_code:str, tool_name:str, tool_description:str, tool_brand:str, tool_amount:int, tool_image:str, tool_price:float, subtype_of_tool:str) -> None:
         new_tool = Tool(product_code, tool_name, tool_description, tool_brand, tool_amount, tool_image, tool_price, subtype_of_tool)
         self._category.subtype_name_add_tool(subtype_of_tool, new_tool)
         
-    def delete_tool(self, tool) -> None:
+    def delete_tool(self, tool:Tool) -> None:
         for tool_in_list in self._category._all_tools: 
             if tool_in_list.name == tool.name:
                 self._category._all_tools.remove(tool_in_list)
