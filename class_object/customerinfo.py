@@ -40,7 +40,6 @@ class CustomerInfo(User):
                 return print('Unvailable to create a new address. Please check your name isn\'t duplicate.')
         self.address.append(new_address)        
             
-            
     def get_address(self, name) -> Address:
         for i in self.address:
             if i.name == name:

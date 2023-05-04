@@ -53,4 +53,3 @@ class Wholesale:
     def discount_value(self, value:int) -> None:
         self._discount_value = value
     
-        

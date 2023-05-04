@@ -29,12 +29,6 @@ class Address:
     @property
     def address(self) -> str:
         return self._address
-    
-    def get_address(self):
-        pass
-
-    def update_address(self):
-        pass
 
     def edit_address(self, name:str=None, company:str=None, country:str=None, state:str=None, city:str=None ,address:str=None, phone_number:str=None, postal_code:str=None) -> None:
         if name is not None :
@@ -53,7 +47,6 @@ class Address:
             self._phone_number = phone_number
         if postal_code is not None :
             self._postal_code = postal_code
-
             
     def __repr__(self) -> str:
         return "{}".format(self._name +','+"{}".format(self._company)+','+"{}".format(self._country)+','+"{}".format(self._state)+
