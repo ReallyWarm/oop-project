@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 import requests, json
 
 class LoginPage(tk.Frame):
@@ -35,12 +36,16 @@ class LoginPage(tk.Frame):
         if r.status_code == 200:
             for entry in self.all_entry: 
                 entry.delete(0, 'end')
+            messagebox.showinfo(title="notification",message=f"Logged in!")
             self.master.show_home()
+        else:
+            messagebox.showinfo(title="notification",message=r.json().get('detail'))
 
     def do_logout(self):
         r = requests.post('http://127.0.0.1:8000/logout')
         print(r, r.json())
         if r.status_code == 200:
+            messagebox.showinfo(title="notification",message=f"Logged out!")
             self.master.show_home()
 
 class SignupPage(tk.Frame):
@@ -105,4 +110,7 @@ class SignupPage(tk.Frame):
         if r.status_code == 200:
             for entry in self.all_entry: 
                 entry.delete(0, 'end')
+            messagebox.showinfo(title="notification",message=f"Account created!")
             self.master.show_home()
+        else:
+            messagebox.showinfo(title="notification",message=r.json().get('detail'))
