@@ -13,7 +13,7 @@ class Tool:
           self._brand = brand
           self._amount = amount
           self._price = price
-          self._category = type_of_tool
+          self._type_of_tool = type_of_tool
           self._reviews = [ ]
           self._image = [image_url]
           self._wholesale = [ ]
@@ -76,7 +76,7 @@ class Tool:
     
     @property
     def type_of_tool(self) -> str:
-        return self._category
+        return self._type_of_tool
     
     def change_name(self,new_name:str) -> None:
         self._name = new_name
@@ -94,7 +94,7 @@ class Tool:
         self._code = new_code
 
     def change_type_of_tool(self, new_type_of_tool:None) -> None:
-        self._category = new_type_of_tool
+        self._type_of_tool = new_type_of_tool
 
     def __str__(self) -> str:
         return str(self.__class__)+'\n'+', '.join(f'{key} : {value}' for key, value in self.__dict__.items())
