@@ -171,6 +171,8 @@ class Tool_GUI(tk.Frame) :
         input_data = {"tool_name": self.tool_name, "quantity": self.chosen_amount}
         r = requests.post(f'http://127.0.0.1:8000/system/wishlist/', json=input_data)
         print(r, r.json())
+        if (r.json().get('ADD TO WISHLIST') == 'Add to wishlist failed'):
+            messagebox.showinfo(title = "notification",message="You must log in first!")
         self.delete_amount()
         self.chosen_amount = 1
         self.show_amount()
