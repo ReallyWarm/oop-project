@@ -1,3 +1,7 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from address import Address
 import datetime
 import random
 import string
@@ -37,7 +41,7 @@ class Payment:
     def payment_id(self) -> str:
         return self.__id
         
-    def make_payment(self):
+    def make_payment(self) -> str:
         if( not self.check_valid_card(self.__card)): 
             return "Invalid card" 
         status = self.perform_payment() 
@@ -55,5 +59,5 @@ class Payment:
         ''' do payment stuff here but we this is just for demo purposes'''
         return True
         
-    def create_order(self, order_items, address) -> 'Order':
+    def create_order(self, order_items:list, address:Address) -> Order:
         return Order(order_items, self.__id, self.__date_create, self.__total_price, self.__shipping_price, self.__discount_price, self.__final_price, address)

@@ -96,14 +96,14 @@ class System():
                 return True
         return False
 
-    def add_to_cart(self, tool:Tool, buy_amount:int) -> None:
+    def add_to_cart(self, tool:Tool, buy_amount:int) -> str:
         active_cart = self.get_active_cart()
         if tool.amount < buy_amount:
             return "Item amount exceeds the available tool in stock"
         else:
             active_cart.add_item(tool, buy_amount)
 
-    def add_to_wishlist(self, tool:Tool, buy_amount:int):
+    def add_to_wishlist(self, tool:Tool, buy_amount:int) -> str:
         customer_wishlist = self.get_wishlist()
         if customer_wishlist is None:
             return "Can not get wishlist"
@@ -124,8 +124,8 @@ class System():
     def add_customerinfo(self, customer:CustomerInfo) -> None:
         self._customerinfos.append(customer)
 
-    def add_wholesale(self, code:str, amount:int, discount_value:int) -> None: 
-        wholesale = Wholesale(code,amount,discount_value)
+    def add_wholesale(self, wholesale_code:str, amount:int, discount_value:int) -> None: 
+        wholesale = Wholesale(wholesale_code,amount,discount_value)
         self._wholesales.append(wholesale)
 
     def modify_wholesale(self, wholesale_code:str, new_amount:int = None, new_discount_value:int = None) -> None:
@@ -149,8 +149,8 @@ class System():
                 del wholesale 
                 return
 
-    def add_coupon(self, code:str, discount_value:int, name:str) -> None:  
-        new_coupon = Coupon(code,discount_value,name)
+    def add_coupon(self, coupon_code:str, discount_value:int, name:str) -> None:  
+        new_coupon = Coupon(coupon_code,discount_value,name)
         self._server_coupons.append(new_coupon)
 
     def modify_coupon(self, coupon_code:str, new_discount_value:int = None, new_name:int = None) -> None:
@@ -168,9 +168,9 @@ class System():
                 self._server_coupons.remove(coupon) 
                 return
             
-    def create_tool(self, product_code:str, tool_name:str, tool_description:str, tool_brand:str, tool_amount:int, tool_image:str, tool_price:float, subtype_of_tool:str) -> None:
-        new_tool = Tool(product_code, tool_name, tool_description, tool_brand, tool_amount, tool_image, tool_price, subtype_of_tool)
-        self._category.subtype_name_add_tool(subtype_of_tool, new_tool)
+    def create_tool(self, product_code:str, tool_name:str, tool_description:str, tool_brand:str, tool_amount:int, tool_image:str, tool_price:float, type_of_tool:str) -> None:
+        new_tool = Tool(product_code, tool_name, tool_description, tool_brand, tool_amount, tool_image, tool_price, type_of_tool)
+        self._category.subtype_name_add_tool(type_of_tool, new_tool)
         
     def delete_tool(self, tool:Tool) -> None:
         for tool_in_list in self._category._all_tools: 
@@ -183,7 +183,7 @@ class System():
                     if tool_in_subtype.name == tool.name:
                         subtype.tools_list.remove(tool_in_subtype)
 
-    def modify_tool(self, tool, name:str=None, description:str=None, brand:str=None, price:float=None, code:str=None ,type_of_tool:str=None) -> None:
+    def modify_tool(self, tool:Tool, name:str=None, description:str=None, brand:str=None, price:float=None, code:str=None ,type_of_tool:str=None) -> None:
         if name is not None :
             tool.change_name(name)
         if description is not None :
@@ -201,7 +201,7 @@ class System():
             self.delete_tool(tool)
             self._category.subtype_add_tool(selected_type, tool)
 
-    def make_payment(self,card:str, current_user:CustomerInfo, address_name:str, coupon_code:str = None):
+    def make_payment(self, card:str, current_user:CustomerInfo, address_name:str, coupon_code:str = None) -> str:
         shoppingcart = current_user.my_shoppingcart
         total_price = shoppingcart.total_price
         if total_price <= 0:

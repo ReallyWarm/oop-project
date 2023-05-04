@@ -435,7 +435,7 @@ async def login_for_access_token(form_data: HTTPBasicCredentials = Depends()):
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect username or password")
     
-    access_token = system.auth.create_access_token(data={"sub": this_user.username})
+    access_token = system.auth.create_access_token(user_data={"sub": this_user.username})
     return {"access_token": access_token, "token_type": "bearer"}
 
 @app.post("/logout", summary="Delete access tokens", response_model=dict)

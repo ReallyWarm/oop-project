@@ -27,7 +27,7 @@ class CustomerInfo(User):
                 return True
         return False
 
-    def store_used_coupon(self, coupon:Coupon):
+    def store_used_coupon(self, coupon:Coupon) -> None:
         self._used_coupon.append(coupon)
 
     def store_order(self, order:Order) -> None:
@@ -40,12 +40,12 @@ class CustomerInfo(User):
                 return print('Unvailable to create a new address. Please check your name isn\'t duplicate.')
         self.address.append(new_address)        
             
-    def get_address(self, name) -> Address:
+    def get_address(self, name:str) -> Address:
         for i in self.address:
             if i.name == name:
                 return i        
 
-    def delete_address(self, name) -> None:
+    def delete_address(self, name:str) -> None:
         address = self.get_address(name)
         self.address.remove(address)
 
