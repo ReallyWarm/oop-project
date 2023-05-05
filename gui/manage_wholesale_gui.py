@@ -41,13 +41,17 @@ class ManageWholesale(tk.Frame):
             self.wholesale_list.append(components) 
 
 
-    def create_getwholesale_widget(self): 
+    def create_getwholesale_widget(self):  
+        for item in self.get_wholesalewidget: 
+            item.destroy()
         self.get_wholesalewidget = [] 
         for wholesale in self.wholesale_list: 
             self.button_widget = tk.Button(self,text=f"{wholesale[0]} {wholesale[2]} {wholesale[1]}",command = lambda x=wholesale[0],y=wholesale[2],z=wholesale[1]:self.modify_wholesale(x,y,z))
             self.get_wholesalewidget.append(self.button_widget) 
 
     def add_wholesale(self): 
+        for item in self.add_wholesalewidget: 
+            item.destroy()
         self.code_label = tk.Label(self, text="Code:") 
         self.code_label_input = tk.Entry(self)
         self.amount_label = tk.Label(self, text="Amount:")
@@ -131,7 +135,8 @@ class ManageWholesale(tk.Frame):
         self.get_wholesale_info() 
 
     def create_modify_widget(self,code,amount,discount_value): 
-
+        for item in self.modify_wholesalewidget: 
+            item.destroy()
         self.mdiscount_label = tk.Label(self, text="Discount Value:")
         self.mdiscount_label_input = tk.Entry(self, validate="key")
         self.mdiscount_label_input['validatecommand'] = (self.mdiscount_label_input.register(self.validate_num), '%S')  
@@ -166,16 +171,16 @@ class ManageWholesale(tk.Frame):
     def show_selected(self,event):
         self.event = event
         if self.choice.get() == "modify wholesale":
-            self.create_getwholesale_widget()
-            self.show_getwidget()
             self.hide_add_wholesale() 
             self.hide_modify()
+            self.create_getwholesale_widget()
+            self.show_getwidget()
         
         elif self.choice.get() == "add wholesale":
             self.hide_getwidget() 
+            self.hide_modify()
             self.add_wholesale() 
             self.show_add_wholesale()
-            self.hide_modify()
 
     def show_getwidget(self): 
         for i,wholesale in enumerate(self.get_wholesalewidget):

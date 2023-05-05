@@ -40,12 +40,16 @@ class ManageCoupon(tk.Frame):
             self.coupon_list.append(components) 
 
     def create_getcoupon_widget(self): 
+        for item in self.get_couponwidget : 
+            item.destroy()
         self.get_couponwidget = [] 
         for coupon in self.coupon_list: 
             self.button_widget = tk.Button(self,text=f"{coupon[0]} {coupon[1]} {coupon[2]}",command = lambda x=coupon[0],y=coupon[1],z=coupon[2]:self.modify_coupon(x,y,z))
             self.get_couponwidget.append(self.button_widget) 
 
     def add_coupon(self): 
+        for item in self.add_couponwidget : 
+            item.destroy()
         self.code_label = tk.Label(self, text="Code:") 
         self.code_label_input = tk.Entry(self)
         self.discount_label = tk.Label(self, text="Discount Value:")
@@ -118,7 +122,8 @@ class ManageCoupon(tk.Frame):
         self.get_coupon_info()   
     
     def create_modify_widget(self,code,name,discount_value): 
-
+        for item in self.modify_couponwidget : 
+            item.destroy()
         self.mdiscount_label = tk.Label(self, text="Discount Value:")
         self.mdiscount_label_input = tk.Entry(self, validate="key")
         self.mdiscount_label_input['validatecommand'] = (self.mdiscount_label_input.register(self.validate_num), '%S')  
@@ -151,17 +156,17 @@ class ManageCoupon(tk.Frame):
     def handle_selection(self,event):
         self.event = event
         print(self.choice.get())
-        if self.choice.get() == "modify coupon":
+        if self.choice.get() == "modify coupon": 
+            self.hide_add_coupon()
+            self.hide_modify()
             self.create_getcoupon_widget()
             self.show_getwidget()
-            self.hide_add_coupon() 
-            self.hide_modify()
         
         elif self.choice.get() == "add coupon":
             self.hide_getwidget() 
+            self.hide_modify()
             self.add_coupon() 
             self.show_add_coupon()
-            self.hide_modify()
 
     def show_getwidget(self): 
         for i,coupon in enumerate(self.get_couponwidget):
