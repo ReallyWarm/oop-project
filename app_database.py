@@ -17,9 +17,9 @@ def add_database_users(system:'System'):
                 ]
 
     # Customer addresses
-    customers[0].create_address('NorNor','จารย์แดง จำกัด','Thailand','Udon Thani','-','-','0210567473','10010')
-    customers[1].create_address('พรี่โอมใจเกเร','ใจเกเร จำกัด','Thailand','Udon Thani','-','-','0810567473','10010')
-    customers[2].create_address('Prakrittipon','KMIL','Thailand','Bangkok','Pha ya tai','sol.12 24/89','0901276842','11120')
+    customers[0].create_address('NorNor007','จารย์แดง จำกัด','Thailand','Udon Thani','-','-','0210567473','10010')
+    customers[1].create_address('PreeOhm','ใจเกเร จำกัด','Thailand','Udon Thani','-','-','0810567473','10010')
+    customers[2].create_address('KorphaiSK','KMIL','Thailand','Bangkok','Pha ya tai','sol.12 24/89','0901276842','11120')
 
     for customer in customers:
         system.add_customerinfo(customer)
@@ -62,8 +62,9 @@ def add_database_system(system:'System'):
     faifa_drill.add_wholesale(system.search_wholesale('01w'))
 
     # System Coupon
-    system.add_coupon("1234",20,"สว่านใหม่ เจาะทะลุทะลวง ดุดันไม่เกรงใจใคร")
-
+    system.add_coupon("1234",20,"โปรลด 20 เปอร์เซ็นต์ผู้ใช้งานใหม่")
+    system.add_coupon("4567",50,"โปรลด 50 เปอร์เซ็นต์วันคริตมาส")
+    system.add_coupon("1120",80,"โปรลด 80 เปอร์เซ็นต์วันสถาปนา")
 def add_database_userdata(system:'System'):
     test_drill = system.category.search_by_name('Testing drill')['Testing drill']
     system.customerinfos[2].create_review(test_drill, "test_review1", "good_tool", 4.5, "4/1/2023")

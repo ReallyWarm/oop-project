@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from tool import Tool
@@ -15,30 +16,30 @@ class Category:
         return self._types_of_tool
     
     @staticmethod
-    def get_subtypes_list(type_of_tool:'TypeOfTool') -> list:
+    def get_subtypes_list(type_of_tool:TypeOfTool) -> list:
         return type_of_tool.subtypes_of_tool
     
     @staticmethod
-    def get_tools_list(subtype_of_tool:'SubtypeOfTool') -> list:
+    def get_tools_list(subtype_of_tool:SubtypeOfTool) -> list:
         return subtype_of_tool.tools_list
 
-    def add_type(self, type_of_tool:'TypeOfTool') -> None:
+    def add_type(self, type_of_tool:TypeOfTool) -> None:
         self.types_of_tool.append(type_of_tool)
         self._all_types.append(type_of_tool)
 
-    def type_name_add_subtype(self, type_name:str, subtype_of_tool:'SubtypeOfTool') -> None:
+    def type_name_add_subtype(self, type_name:str, subtype_of_tool:SubtypeOfTool) -> None:
         type_of_tool = self.search_by_category(type_name)[type_name]
         self.type_add_subtype(type_of_tool, subtype_of_tool)
 
-    def type_add_subtype(self, type_of_tool:'TypeOfTool', subtype_of_tool:'SubtypeOfTool') -> None:
+    def type_add_subtype(self, type_of_tool:TypeOfTool, subtype_of_tool:SubtypeOfTool) -> None:
         type_of_tool.add_subtype(subtype_of_tool)
         self._all_subtypes.append(subtype_of_tool)
 
-    def subtype_name_add_tool(self, subtype_name:str, tool:'Tool') -> None:
-        subtype_of_tool = self.search_by_category(subtype_name)[subtype_name]
+    def subtype_name_add_tool(self, subtype_name:str, tool:Tool) -> None:
+        subtype_of_tool = self.search_by_subtype(subtype_name)[subtype_name]
         self.subtype_add_tool(subtype_of_tool, tool)
 
-    def subtype_add_tool(self, subtype_of_tool:'SubtypeOfTool', tool:'Tool') -> None:
+    def subtype_add_tool(self, subtype_of_tool:SubtypeOfTool, tool:Tool) -> None:
         subtype_of_tool.add_tool(tool)
         self._all_tools.append(tool)
 
@@ -48,16 +49,21 @@ class Category:
         for type in self._all_types:
             if category_name_lower in type.typename.lower():
                 searched[type.typename] = type
-            
+
+        return searched
+
+    def search_by_subtype(self, subtype_name:str) -> dict:
+        searched = { }
+        subtype_name_lower = subtype_name.lower()  
         for subtype in self._all_subtypes:
-            if category_name_lower in subtype.subtypename.lower():
+            if subtype_name_lower in subtype.subtypename.lower():
                 searched[subtype.subtypename] = subtype
 
         return searched
 
-    def search_by_name(self, name:str) -> dict:
+    def search_by_name(self, tool_name:str) -> dict:
         searched = { }
-        name_lower = name.lower()
+        name_lower = tool_name.lower()
         for tool in self._all_tools:
             if name_lower in tool.name.lower():
                 searched[tool.name] = tool
@@ -83,7 +89,7 @@ class TypeOfTool:
     def subtypes_of_tool(self) -> list:
         return self._subtypes_of_tool
 
-    def add_subtype(self, subtype_of_tool:'SubtypeOfTool') -> None:
+    def add_subtype(self, subtype_of_tool:SubtypeOfTool) -> None:
         self._subtypes_of_tool.append(subtype_of_tool)
 
     def __str__(self) -> str:
@@ -105,7 +111,7 @@ class SubtypeOfTool:
     def tools_list(self) -> list:
         return self._tools_list
 
-    def add_tool(self, tool:'Tool') -> list:
+    def add_tool(self, tool:Tool) -> list:
         self._tools_list.append(tool)
 
     def __str__(self) -> str: 

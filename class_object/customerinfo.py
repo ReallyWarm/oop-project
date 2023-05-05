@@ -1,13 +1,14 @@
-from user import User
-from wishlish import Wishlist
-from shoppingcart import ShoppingCart
-from address import Address
-from review import Review
+from __future__ import annotations
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from tool import Tool
     from order import Order
     from discount import Coupon
+from user import User
+from wishlist import Wishlist
+from shoppingcart import ShoppingCart
+from address import Address
+from review import Review
 
 class CustomerInfo(User):
     def __init__(self, username:str, hashed_password:str, first_name:str, last_name:str, email:str, company_name:str) -> None:
@@ -26,10 +27,10 @@ class CustomerInfo(User):
                 return True
         return False
 
-    def store_used_coupon(self, coupon:'Coupon'):
+    def store_used_coupon(self, coupon:Coupon) -> None:
         self._used_coupon.append(coupon)
 
-    def store_order(self, order:'Order') -> None:
+    def store_order(self, order:Order) -> None:
         self._my_order.append(order)
 
     def create_address(self, name:str, company:str, country:str, state:str, city:str, address:str, phone_number:str, postal_code:str) -> None:
@@ -37,22 +38,18 @@ class CustomerInfo(User):
         for address in self.address:
             if address.name == new_address.name:
                 return print('Unvailable to create a new address. Please check your name isn\'t duplicate.')
-            
         self.address.append(new_address)        
             
-    def get_address(self, name) -> 'Address':
+    def get_address(self, name:str) -> Address:
         for i in self.address:
             if i.name == name:
                 return i        
 
-    def delete_address(self, name) -> None:
+    def delete_address(self, name:str) -> None:
         address = self.get_address(name)
         self.address.remove(address)
 
-    def get_ShoppingCart(self) -> 'ShoppingCart':
-        return self.my_shoppingcart
-
-    def create_review(self, tool:'Tool', head_of_review:str, comment:str, rating:float, date_of_review:str) -> None:
+    def create_review(self, tool:Tool, head_of_review:str, comment:str, rating:float, date_of_review:str) -> None:
         review = Review(self._first_name, head_of_review, comment, date_of_review, rating)
         self._my_review.append(review)
         tool.add_review(review)
@@ -66,11 +63,11 @@ class CustomerInfo(User):
         return self._my_order
     
     @property
-    def my_wishlist(self) -> 'Wishlist':
+    def my_wishlist(self) -> Wishlist:
         return self._my_wishlist
     
     @property
-    def my_shoppingcart(self) -> 'ShoppingCart':
+    def my_shoppingcart(self) -> ShoppingCart:
         return self._my_shoppingcart
     
     @property

@@ -1,6 +1,6 @@
 import sys
 sys.path.append('./class_object/')
-from wishlish import Wishlist
+from wishlist import Wishlist
 from category import TypeOfTool, SubtypeOfTool
 from tool import Tool
 from system import System 
@@ -29,33 +29,32 @@ if __name__ == '__main__':
     # add to wishlist
 
     wishlist.add_item(test_drill, 10)
-    print(wishlist.wish_product)
+    print(wishlist)
 
     # add to cart 
-    wishlist.add_item(wishlist.get_item(test_drill).tool, 20) 
-    print(wishlist.wish_product)
+    wishlist.set_item_amount(test_drill, 20) 
+    print(wishlist)
 
      # remove product 
     wishlist.delete_item(test_drill) 
-    print(wishlist.wish_product)
+    print(wishlist)
 
     # ------------- manage wishlist by customer ------------- # 
     customer = CustomerInfo("unused","unused","kelvin","Lim","Kelvin1521@gmail.com","holly wood")
 
     # add to wishlist
     customer.my_wishlist.add_item(test_drill, 5) 
-
-    # add to cart
+    # add same one
     customer.my_wishlist.add_item(customer.my_wishlist.get_item(test_drill).tool, 1)
-    print(customer.my_wishlist.wish_product[0])
+    print(customer.my_wishlist)
 
     # remove product 
     customer.my_wishlist.delete_item(test_drill)
-    print(customer.my_wishlist._wish_product)
+    print(customer.my_wishlist)
 
     customer.my_wishlist.add_item(test_drill, 10)
-    print(customer.my_wishlist._wish_product)
+    print(customer.my_wishlist)
 
     customer.my_wishlist.send_to_cart(system.get_active_cart())
-    print(customer.my_wishlist.wish_product)
+    print(customer.my_wishlist)
     print(system.get_active_cart())
