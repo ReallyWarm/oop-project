@@ -91,7 +91,7 @@ class Profile(tk.Frame):
                         if key == "total price":
                             string_sent += "\n"
                             string_sent += " total price " + str(order[pay_id]["total price"])
-                    string_sent += "\n" + "\n"
+                    string_sent += "\n"+"----------------------------------------"+"\n"
                 return string_sent
         return {"data":"guest"}
      
